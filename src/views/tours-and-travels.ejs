@@ -1,0 +1,101 @@
+<div class="container my-5" >
+    <div class="main-content">
+      <h1 class="text-center">Places to Visit in Uttarakhand</h1>
+      <!-- Places card -->
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" id="placesContainer" ></div>
+    </div>
+  
+    <!-- Bootstrap Modal -->
+    <div class="modal fade" id="placeModal" tabindex="-1" aria-labelledby="placeModalLabel" aria-hidden="true">
+      <div class="modal-dialog" style="max-width: 80%;">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="placeModalLabel"></h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <img id="modalImage" class="img-fluid mb-3 d-block mx-auto" src="" alt="" style="border-radius: 20px;">
+                  <div id="modalDescription"></div>
+              </div>
+          </div>
+      </div>
+  </div>
+  
+    <!-- Tour a Taxi & Book a Guide Buttons -->
+    <div class="container mt-3">
+      <div class="card p-3">
+        <div class="row">
+          <div class="col-md-6 col-sm-12 mb-3">
+            <a href="taxi.html" class="text-decoration-none">
+              <div class="single-service text-center rounded p-3">
+                <h4 class="mt-3">Tour a Taxi</h4>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-6 col-sm-12 mb-3">
+            <a href="tour.html" class="text-decoration-none">
+              <div class="single-service text-center rounded p-3">
+                <h4 class="mt-3">Book a Guide</h4>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- <h1 class="mt-5 text-center">Gallery</h1> -->
+  
+    <!-- Banner Section -->
+    <div class="container-fluid p-0 mt-4" >
+      <div class="banner position-relative text-center text-white bg-dark py-5" style="background-image: url('https://img.freepik.com/free-photo/smiling-asian-traveller-tourist-girl-face-mask-standing-near-suitcase-with-two-tickets-passpo_1258-143605.jpg?ga=GA1.1.325852307.1733735080&semt=ais_hybrid');min-height: 230px;background-size: cover;background-position: center;background-repeat: no-repeat;">
+        <div class="banner-content container">
+          <h1 class="fs-bold" style="font-family: 'Arial', sans-serif;color: orangered;">Book your own private tour guide in India</h1>
+          <p class="fs-5" style="font-family: 'Arial', sans-serif; color: orangered;">
+            Whatever your passion, there’s a private guide who’s perfect for you. Our India tour guides can create a 100% personalized tour to match your wishes. Just get in touch!
+          </p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Become a Guide Section -->
+    <div class="container-fluid p-0 mt-4" >
+      <div class="banner position-relative text-center text-white bg-dark py-5" style="background-image: url('https://img.freepik.com/free-photo/full-length-shot-happy-asian-girl-going-vacation-tourist-with-suitcase-smiling-looking-upbeat_1258-143615.jpg?ga=GA1.1.325852307.1733735080&semt=ais_hybrid');min-height: 230px;background-size: cover;background-position: center;background-repeat: no-repeat;">
+        <div class="banner-content container">
+          <h1 class="fw-bold" style="font-family: 'Arial', sans-serif;color: orangered;">Become a <i>guide</i></h1>
+          <p style="font-family: 'Arial', sans-serif;color: orangered;">
+            We're trail breakers, change-makers, storytellers, and side-street takers, and we’re here for those who want to travel differently. If you’re ready to join a network of creative local tour guides who thrive on providing visitors with truly memorable experiences, we’d love to hear from you.
+          </p>
+          <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#applyModal">
+            Apply Now
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Apply Modal -->
+    <div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="applyModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="applyModalLabel" style="font-family: 'Arial', sans-serif;">Apply Now</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form class="text-start">
+              <div class="mb-3">
+                <label for="name" class="form-label" style="font-family: 'Arial', sans-serif;">Your Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Enter your name">
+              </div>
+              <div class="mb-3">
+                <label for="phone" class="form-label" style="font-family: 'Arial', sans-serif;">Phone Number</label>
+                <input type="tel" class="form-control" id="phone" placeholder="Enter your phone number">
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

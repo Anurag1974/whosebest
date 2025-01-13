@@ -1,0 +1,58 @@
+<div class="container my-5">
+    <div>
+        <h1>Businesses</h1>
+
+        <form id="sortForm">
+            <label for="sortBy">Sort By:</label>
+            <select id="sortBy" name="sortBy" onchange="submitSort()">
+                <option value="rating" <%= sortBy === 'rating' ? 'selected' : '' %>>Rating</option>
+                <option value="totalRatings" <%= sortBy === 'totalRatings' ? 'selected' : '' %>>Total Ratings</option>
+            </select>
+        </form>
+    </div>
+    <h1 class="text-center mb-4">List of Businesses</h1>
+    <div class="row">
+        <% if (businesses && businesses.length > 0) { %>
+            <% businesses.forEach(business => { %>
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="<%= business.image_source %>" class="card-img-top" alt="Business Image" loading="lazy">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= business.business_name %></h5>
+                            <h5 class="card-text">
+                                <strong>Address:</strong> <%= business.address %><br>
+                                <!-- <% if (business.phone) { %>
+                                <strong>Phone:</strong> <%= business.phone %>
+                                <% } %> -->
+                            </h5>
+                            <!-- View Details Button -->
+                            <a href="business-details/<%= business.id %>" class="btn btn-primary btn-sm">View Details</a>
+                            <!-- Rating Button aligned at the bottom -->
+                            <button class="btn btn-outline-secondary btn-sm rating-button"><%= business.rating %>⭐</button>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="col-12">
+                <p class="text-center">No businesses found.</p>
+            </div>
+        <% } %>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination mt-4">
+        <% if (currentPage > 1) { %>
+            <a href="/search-category?category=<%= category %>&sortBy=<%= sortBy %>&page=<%= currentPage - 1 %>" class="btn btn-outline-primary btn-sm">Previous</a>
+        <% } %>
+        <% for (let i = 1; i <= totalPages; i++) { %>
+            <a href="/search-category?category=<%= category %>&sortBy=<%= sortBy %>&page=<%= i %>" 
+               class="btn <%= i === currentPage ? 'btn-primary' : 'btn-outline-primary' %> btn-sm">
+                <%= i %>
+            </a>
+        <% } %>
+        <% if (currentPage < totalPages) { %>
+            <a href="/search-category?category=<%= category %>&sortBy=<%= sortBy %>&page=<%= currentPage + 1 %>" class="btn btn-outline-primary btn-sm">Next</a>
+        <% } %>
+    </div>
+</div>
