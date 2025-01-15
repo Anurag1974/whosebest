@@ -6,10 +6,7 @@ import { generateToken } from '../utils/jwt.js';
 
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 export default class BusinessController {
-    async showBusinessBasedOnCategory(req, res) {
-        const businesses = await BusinessModel.getAllBusinessDetails();
-        res.render('list-of-businesses', { detail: businesses, user: req.user });
-    }
+
     async showOwnListedBusinessList(req, res) {
         if (!req.user) {
             return res.status(401).send('Unauthorized');
@@ -29,10 +26,31 @@ export default class BusinessController {
         }
         res.render('enter-your-details', { user: req.user });
     }
+    showRatePage(req, res) {
+        // if (!req.user) {
+        //     return res.redirect('/login');
+        // }
+
+        res.render('rate', { user: req.user });
+    }
+    async submitReview(req, res) {
+        const { rating } = req.body;
+
+        if (!req.user) {
+            return res.status(401).json({ message: 'User not logged in' });
+        }
+
+        try {
+            await RatingModel.saveRating(req.user.id, req.businessId, rating);
+            res.status(200).json({ message: 'Rating submitted successfully' });
+        } catch (error) {
+            res.status(500).json({ message: 'Error saving rating', error: error.message });
+        }
+    }
     async showHome(req, res) {
         console.log(`User: ${req.user}`);
         const paidAdvertisements = await BusinessModel.getPaidAdvertisements();
-        res.render('home', { user: req.user || null, paidAdvertisements: null });
+        res.render('home', { user: req.user || null, paidAdvertisements: paidAdvertisements || 1 });
 
 
 
@@ -108,11 +126,7 @@ export default class BusinessController {
 
 
     }
-    getVerifyOtpPage(req, res) {
 
-        const email = req.session.email;
-        res.render('verify', { email, user: null });
-    }
     async showManageBusiness(req, res) {
         if (!req.user) {
             return res.status(401).send('Unauthorized3');
@@ -352,6 +366,7 @@ export default class BusinessController {
         }
     }
     async searchCategory(req, res) {
+        console.log(`user id ${req.user}`)
         const category = req.query.category;
         const sortBy = req.query.sortBy || 'rating';
         const page = parseInt(req.query.page) || 1; // Default to page 1
@@ -393,6 +408,32 @@ export default class BusinessController {
             res.status(500).json({ error: "Failed to search business details" });
         }
     }
+
+    // reviewsss===========================================================================
+
+    async addReview(req, res) {
+        const { businessId, userId, rating, review } = req.body;
+
+        if (rating < 1 || rating > 5) {
+            return res.status(400).json({ message: "Rating must be between 1 and 5" });
+        }
+
+        try {
+            await Reviews.addReview(businessId, userId, rating, review);
+            res.status(201).json({ message: "Review added successfully!" });
+        } catch (err) {
+            res.status(500).json({ message: "Error adding review", error: err.message });
+        }
+
+
+    }
+    updateToggle(req, res) {
+        req.session.toggle = req.body.toggle;
+        res.json({ message: 'Toggle value updated in session' });
+
+    }
+
+
 
 
 }

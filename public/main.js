@@ -510,3 +510,4 @@ function submitSort() {
 function setModalImage(imageSrc) {
     document.getElementById('modalImage').src = imageSrc;
 }
+

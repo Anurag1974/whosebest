@@ -1,0 +1,27 @@
+<h1>Rate This Business</h1>
+
+<form id="ratingForm" method="POST" action="/submit-rating/<%= businessId %>">
+    <div class="rating">
+        <% for (let i=1; i <=5; i++) { %>
+            <span class="star" data-value="<%= i %>">★</span>
+            <% } %>
+    </div>
+    <input type="hidden" name="rating" id="rating" value="0">
+    <textarea class="form-control mt-3" placeholder="Write a review..." name="review" id="review"></textarea>
+    <button type="submit" class="btn btn-primary mt-3">Submit Review</button>
+</form>
+
+<script>
+    document.querySelectorAll('.star').forEach(star => {
+        star.addEventListener('click', (event) => {
+            const rating = event.target.getAttribute('data-value');
+            document.getElementById('rating').value = rating;
+            document.querySelectorAll('.star').forEach(s => {
+                s.classList.remove('filled');
+            });
+            for (let i = 0; i < rating; i++) {
+                document.querySelectorAll('.star')[i].classList.add('filled');
+            }
+        });
+    });
+</script>

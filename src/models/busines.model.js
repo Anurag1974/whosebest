@@ -85,12 +85,13 @@ export default class BusinessModel {
     }
 
     static async getBusinessesByCategoryAndSort(category, sortBy, limit, offset) {
+        
         const validSortOptions = {
             rating: 'rating DESC',
             totalRatings: 'total_ratings DESC',
         };
         const orderBy = validSortOptions[sortBy] || validSortOptions.rating;
-    
+        
         const query = `
             SELECT SQL_CALC_FOUND_ROWS *
             FROM business_detail
