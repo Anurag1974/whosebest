@@ -1,4 +1,6 @@
 import db from "../config/db.js";
+import GlobalToggleService from '../services/globalToggleService.js';
+
 
 export default class BusinessModel {
     static async getUserByEmail(email) {
@@ -74,17 +76,9 @@ export default class BusinessModel {
         const [rows] = await db.execute('SELECT * FROM business_details');
         return rows;
     }
-    static async getBusinessDetailsById(id) {
-        try {
-            const [rows] = await db.execute('SELECT * FROM business_detail WHERE id = ?', [id]);
-            return rows.length > 0 ? rows[0] : "null";
-        } catch (error) {
-            console.error('Error fetching businesses by category:', error);
-            throw error; // Propagate the error
-        }
-    }
+    
 
-    static async getBusinessesByCategoryAndSort(category, sortBy, limit, offset) {
+    static async getBusinessesByCategoryAndSort(category, sortBy, limit, offset, toggle) {
         
         const validSortOptions = {
             rating: 'rating DESC',
@@ -92,13 +86,15 @@ export default class BusinessModel {
         };
         const orderBy = validSortOptions[sortBy] || validSortOptions.rating;
         
-        const query = `
-            SELECT SQL_CALC_FOUND_ROWS *
+        const query = toggle ? `SELECT SQL_CALC_FOUND_ROWS *
+            FROM business_detail
+            WHERE category = ? AND ev_station = true
+            ORDER BY ${orderBy}
+            LIMIT ? OFFSET ?`: `SELECT SQL_CALC_FOUND_ROWS *
             FROM business_detail
             WHERE category = ? 
             ORDER BY ${orderBy}
-            LIMIT ? OFFSET ?
-        `;
+            LIMIT ? OFFSET ? `;
         try {
             const [results] = await db.execute(query, [category, limit, offset]);
             const [[{ total }]] = await db.query('SELECT FOUND_ROWS() AS total');
@@ -121,15 +117,64 @@ export default class BusinessModel {
 
     }
 
+    static async saveRating(userId, businessId, rating, review) {
+        try {
+            // Insert the rating into the database
+            const [result] = await db.execute(
+                'INSERT INTO reviews (user_id, business_id, rating, review) VALUES (?, ?, ?, ?)',
+                [userId, businessId, rating, review]
+            );
+    
+            // Return a success response with the inserted record's ID
+            return {
+                success: true,
+                message: 'Rating saved successfully',
+                insertedId: result.insertId, // The ID of the newly inserted record
+            };
+        } catch (error) {
+            // Log the error for debugging
+            console.error('Error saving rating:', error);
+    
+            // Return a failure response with the error details
+            return {
+                success: false,
+                message: 'Failed to save rating',
+                error: error.message, // Include error message for debugging
+            };
+        }
+    }
+    static async getBusinessDetailsById(id) {
+        try {
+            const [businessRows] = await db.execute('SELECT * FROM business_detail  WHERE id = ? ', [id]);
+            const [reviewRows] = await db.execute('SELECT * FROM reviews WHERE business_id = ?', [id]);
+            if(businessRows.length>0){
+                const businessDetails = businessRows[0];
+                businessDetails.reviews = reviewRows;
+
+                console.log(businessDetails)
+                return businessDetails;
+
+            }
+            else{
+                return null;
+            }
+        } catch (error) {
+            console.error('Error fetching businesses by category:', error);
+            throw error; // Propagate the error
+        }
+    }
+    
+
 
 }
 
-// (async () => {
-//     const email = 'jankiv1980@gmail.com';
-//     const user = await BusinessModel.getUserByEmail(email);
-//     if (user) {
-//         console.log(`User ID: ${user.user_id}, User Type: ${user.user_type}`);
-//     } else {
-//         console.log(`No user found with email: ${email}`);
-//     }
-// })();
+(async () => {
+    const id = 1; // Replace with the desired ID
+    const businessDetails = await BusinessModel.getBusinessDetailsById(id);
+
+    if (businessDetails && businessDetails.message !== "No business found with the provided ID") {
+        console.log("Business Details from IIFE: ", businessDetails);
+    } else {
+        console.log("No business found with the given ID.");
+    }
+})();

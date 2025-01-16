@@ -33,7 +33,7 @@ router.post('/send-otp', businessController.sendOtp);
 router.post('/verify-otp', businessController.verifyOtpHandler);
 router.post('/verify-otp-pop', businessController.verifyOtpHandlerPopupPage);
 router.post('/list-business',authMiddleware, businessController.addBusinessDetails);
-router.post('/submit-rating/:businessId', businessController.submitReview);
+router.post('/submit-rating/:businessId',authMiddleware,  businessController.submitReview);
 router.post('/update-toggle', businessController.updateToggle);
 
 export default router;

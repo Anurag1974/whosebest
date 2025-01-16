@@ -3,6 +3,7 @@ import session from 'express-session';
 import nodemailer from 'nodemailer';
 import BusinessModel from '../models/busines.model.js';
 import { generateToken } from '../utils/jwt.js';
+import GlobalToggleService from '../services/globalToggleService.js';
 
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 export default class BusinessController {
@@ -30,27 +31,46 @@ export default class BusinessController {
         // if (!req.user) {
         //     return res.redirect('/login');
         // }
-
-        res.render('rate', { user: req.user });
+        const businessId = req.params.id;
+        res.render('rate', { user: req.user , businessId, toggle:null});
     }
     async submitReview(req, res) {
-        const { rating } = req.body;
+        const { rating, review } = req.body;
+        const businessId = req.params.businessId;
+
+        if(!rating || !review){
+
+        }
 
         if (!req.user) {
             return res.status(401).json({ message: 'User not logged in' });
         }
 
         try {
-            await RatingModel.saveRating(req.user.id, req.businessId, rating);
-            res.status(200).json({ message: 'Rating submitted successfully' });
+            // Save the rating and review using the model
+            const result = await BusinessModel.saveRating(req.user.id, businessId, rating, review);
+    
+            if (result.success) {
+                // Redirect to business details page
+                return res.redirect(`/business-details/${businessId}`);
+            } else {
+                return res.status(500).json({
+                    message: result.message,
+                    error: result.error,
+                });
+            }
         } catch (error) {
-            res.status(500).json({ message: 'Error saving rating', error: error.message });
+            console.error('Error in submitReview:', error); // Log the error for debugging
+            return res.status(500).json({
+                message: 'An unexpected error occurred while submitting the review.',
+                error: error.message,
+            });
         }
     }
     async showHome(req, res) {
         console.log(`User: ${req.user}`);
         const paidAdvertisements = await BusinessModel.getPaidAdvertisements();
-        res.render('home', { user: req.user || null, paidAdvertisements: paidAdvertisements || 1 });
+        res.render('home', { user: req.user || null, toggle: req.session.toggle ,  paidAdvertisements: paidAdvertisements || 1 });
 
 
 
@@ -341,6 +361,10 @@ export default class BusinessController {
     }
     async showBusinessDetails(req, res) {
         const businessId = req.params.id;
+        if (!id) {
+            return res.status(400).send('Query parameter is required');
+        }
+    
         try {
             const business = await BusinessModel.getBusinessDetailsById(businessId);
         }
@@ -378,11 +402,12 @@ export default class BusinessController {
         }
 
         try {
-            const { businesses, total } = await BusinessModel.getBusinessesByCategoryAndSort(category, sortBy, limit, offset);
+            const { businesses, total } = await BusinessModel.getBusinessesByCategoryAndSort(category, sortBy, limit, offset, req.session.toggle);
 
             const totalPages = Math.ceil(total / limit);
             res.render('list-of-businesses', {
                 user: req.user,
+                toggle: req.session.toggle,
                 businesses,
                 category,
                 sortBy,
@@ -401,11 +426,16 @@ export default class BusinessController {
         }
         try {
             const businessDetails = await BusinessModel.getBusinessDetailsById(id);
-            // console.log(businessDetails);            
-            res.render('business-details', { user: req.user, businessDetails });
+    
+            if (businessDetails && businessDetails.message !== "No business found with the provided ID") {
+                console.log("Business Details for Rendering: ", businessDetails);
+                res.render('business-details', { user: req.user, businessDetails, toggle: req.session.toggle });
+            } else {
+                res.status(404).send("No business found with the given ID.");
+            }
         } catch (error) {
             console.error('Database error:', error);
-            res.status(500).json({ error: "Failed to search business details" });
+            res.status(500).json({ error: "Failed to fetch business details" });
         }
     }
 
@@ -428,8 +458,14 @@ export default class BusinessController {
 
     }
     updateToggle(req, res) {
-        req.session.toggle = req.body.toggle;
+        const { toggle } = req.body;
+        req.session.toggle = toggle;
+        console.log(req.session.toggle);
+        if(toggle){
+
+        }
         res.json({ message: 'Toggle value updated in session' });
+
 
     }
 

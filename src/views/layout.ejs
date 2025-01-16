@@ -78,7 +78,7 @@
                     <div class="collapse navbar-collapse" id="navbar-menu">
                         <div class="container mt-5 text-center">
                             <label class="toggle-switch">
-                                <input type="checkbox" id="evToggle">
+                                <input type="checkbox" id="evToggle" <%=toggle ? 'checked' : '' %>>
                                 <span class="slider"></span>
                             </label>
                         </div>
@@ -289,6 +289,7 @@
             // ṭoggle================================================
 
             document.getElementById('evToggle').addEventListener('change', function () {
+                console.log("toggle function hit");
                 const toggleValue = this.checked; // Get toggle value (true/false)
 
                 // Send the value to the server using Fetch API or AJAX
@@ -300,6 +301,9 @@
                     .then(response => response.json())
                     .then(data => {
                         console.log('Toggle updated:', data.message);
+                        
+                            window.location.reload();
+                        
                     })
                     .catch(error => console.error('Error:', error));
             });

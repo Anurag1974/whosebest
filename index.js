@@ -6,6 +6,7 @@ import route from './src/routes/routes.js'
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import { initializeToggle } from "./src/middleware/toggleMiddleware.js";
 
 
 const server = express();
@@ -27,6 +28,7 @@ server.set('view engine', 'ejs');
 server.set('views', path.join(path.resolve(), 'src', 'views'))
 server.use(ejsLayouts);
 server.use(express.json());
+server.use(initializeToggle);
 
 const businessController = new BusinessController();
 
