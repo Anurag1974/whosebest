@@ -426,10 +426,12 @@ export default class BusinessController {
         }
         try {
             const businessDetails = await BusinessModel.getBusinessDetailsById(id);
+            const hasReviewed = await BusinessModel.hasUserReviewed(req.user.id, id);
     
             if (businessDetails && businessDetails.message !== "No business found with the provided ID") {
                 console.log("Business Details for Rendering: ", businessDetails);
-                res.render('business-details', { user: req.user, businessDetails, toggle: req.session.toggle });
+                
+                res.render('business-details', { user: req.user, businessDetails, toggle: req.session.toggle,  hasReviewed : hasReviewed });
             } else {
                 res.status(404).send("No business found with the given ID.");
             }

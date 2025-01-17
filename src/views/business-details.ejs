@@ -154,8 +154,9 @@
           
           <!-- Display Average Rating -->
           <div class="display-4 mb-2 btn btn-primary"><%= businessDetails.rating || "No Ratings Yet" %></div>
+          <% if(hasReviewed){ %>
           <a href="/rate/<%= businessDetails.id %>" class="btn btn-primary">Rate this business</a>
-      
+            <% } %>
           <!-- Rating Trend -->
           <h5>Recent Reviews Trend</h5>
           <!-- <div class="d-flex gap-2 mb-4">
@@ -189,8 +190,10 @@
                 <p><%= review.review || "No comment provided." %></p>
                 <div class="d-flex gap-3">
                   <a href="#" class="text-muted">Helpful</a>
-                  <a href="#" class="text-muted">Comment</a>
-                  <a href="#" class="text-muted" data-bs-toggle="modal" data-bs-target="#shareModal">Share</a>
+
+                  <% if(review.user_id == user.id  ){ %>
+                  <a href="#" class="text-muted">delete</a>
+                  <% } %>
                 </div>
               </div>
             </div>

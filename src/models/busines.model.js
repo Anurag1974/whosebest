@@ -163,6 +163,10 @@ export default class BusinessModel {
             throw error; // Propagate the error
         }
     }
+    static async hasUserReviewed(id, userId) {
+        const [rows] = await db.execute('SELECT * FROM reviews WHERE business_id = ? AND user_id = ?', [id, userId]);
+        return rows.length > 0;
+    }
     
 
 
