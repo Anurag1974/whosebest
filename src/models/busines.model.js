@@ -147,6 +147,7 @@ export default class BusinessModel {
         try {
             const [businessRows] = await db.execute('SELECT * FROM business_detail  WHERE id = ? ', [id]);
             const [reviewRows] = await db.execute('SELECT * FROM reviews WHERE business_id = ?', [id]);
+         
             if(businessRows.length>0){
                 const businessDetails = businessRows[0];
                 businessDetails.reviews = reviewRows;
@@ -163,8 +164,15 @@ export default class BusinessModel {
             throw error; // Propagate the error
         }
     }
-    static async hasUserReviewed(id, userId) {
-        const [rows] = await db.execute('SELECT * FROM reviews WHERE business_id = ? AND user_id = ?', [id, userId]);
+    static async deleteReviewById(reviewId) {
+        const sql = "DELETE FROM reviews WHERE review_id = ?";
+        const [result] = await db.execute(sql, [reviewId]);
+        return result; // Returns affectedRows to check if deletion was successful
+    }
+    static async hasUserReviewed(businessId, userId) {
+        console.log(`businessid is ${businessId} and userID is ${userId}`)
+        const [rows] = await db.execute('SELECT * FROM reviews WHERE business_id = ? AND user_id = ?', [businessId, userId]);
+        console.log(`the hasuserreviewed status is ${rows}`);
         return rows.length > 0;
     }
     

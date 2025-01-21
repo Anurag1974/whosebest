@@ -67,6 +67,25 @@ export default class BusinessController {
             });
         }
     }
+    async deleteReview(req, res){
+        try {
+            const { id } = req.params;
+
+            console.log('in the controller of delete review')
+            
+            // Call model function to delete the review
+            const result = await BusinessModel.deleteReviewById(id);
+    
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ message: "Review not found" });
+            }
+    
+            res.json({ message: "Review deleted successfully" });
+        } catch (error) {
+            console.error("Error deleting review:", error);
+            res.status(500).json({ message: "Internal Server Error" });
+        }
+    }
     async showHome(req, res) {
         console.log(`User: ${req.user}`);
         const paidAdvertisements = await BusinessModel.getPaidAdvertisements();
@@ -420,18 +439,25 @@ export default class BusinessController {
         }
     }
     async showBusinessDetailsById(req, res) {
-        const id = req.params.id;
-        if (!id) {
+        const {businessId} = req.params;
+        if (!businessId) {
             return res.status(400).send('Query parameter is required');
         }
         try {
-            const businessDetails = await BusinessModel.getBusinessDetailsById(id);
-            const hasReviewed = await BusinessModel.hasUserReviewed(req.user.id, id);
+            
+            const businessDetails = await BusinessModel.getBusinessDetailsById(businessId);
+            let hasReviewed = null;
+            if(req.user){
+                console.log(`the user id is ${businessId}`)
+                hasReviewed = await BusinessModel.hasUserReviewed( businessId, req.user.id);
+                console.log(`review status is ${hasReviewed}`)
+            }
+            
     
             if (businessDetails && businessDetails.message !== "No business found with the provided ID") {
                 console.log("Business Details for Rendering: ", businessDetails);
                 
-                res.render('business-details', { user: req.user, businessDetails, toggle: req.session.toggle,  hasReviewed : hasReviewed });
+                res.render('business-details', { user: req.user || null, businessDetails, toggle: req.session.toggle,  hasReviewed : hasReviewed || null });
             } else {
                 res.status(404).send("No business found with the given ID.");
             }

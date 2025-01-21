@@ -541,3 +541,37 @@ async function updateUserInformation(name, phone_number) {
         alert('Failed to update user information');
     }
 }
+
+// opening modal from rate
+ 
+document.getElementById("openModalBtn").addEventListener("click", function () {
+    var myModal = new bootstrap.Modal(document.getElementById("loginModal"));
+    myModal.show();
+});
+
+// document.addEventListener("DOMContentLoaded", () => {
+//     const deleteButton = document.getElementById("delete-review-btn");
+
+//     if (deleteButton) {
+//         deleteButton.addEventListener("click", async function () {
+//             console.log('Delete review button clicked ==========================');
+//             const reviewId = this.getAttribute("data-id");
+
+//             if (!confirm("Are you sure you want to delete this review?")) return;
+
+//             try {
+//                 const response = await fetch(`/reviews/delete/${reviewId}`, {
+//                     method: "DELETE",
+//                 });
+
+//                 const data = await response.json();
+//                 alert(data.message);
+//                 location.reload(); // Refresh the page after deletion
+//             } catch (error) {
+//                 console.error("Error:", error);
+//             }
+//         });
+//     } else {
+//         console.log("Delete button not found.");
+//     }
+// });

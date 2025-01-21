@@ -30,6 +30,12 @@ server.use(ejsLayouts);
 server.use(express.json());
 server.use(initializeToggle);
 
+server.use((req, res, next) => {
+    console.log(`Request URL: ${req.url}`);
+    next();
+});
+
+
 const businessController = new BusinessController();
 
 server.use('/', route);
