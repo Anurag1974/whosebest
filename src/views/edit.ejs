@@ -9,7 +9,7 @@
             <!-- Profile Image -->
             <div class="text-center mb-4">
                 <img src="https://via.placeholder.com/100" alt="Profile Picture" class="rounded-circle mb-3" style="width: 80px; height: 80px;">
-                <p class="fw-bold text-dark"><%= user.name || 'No name provided' %></p>
+                <p class="fw-bold text-dark"><%= userDetails.name  %></p>
             </div>
 
             <!-- Navigation Links -->
@@ -68,10 +68,10 @@
                     <div class="col-md-6 mb-4">
                         <h3>Account Details</h3>
                         <form>
-                            <div class="mb-3">
+                            <!-- <div class="mb-3">
                                 <label for="email" class="form-label">Email Address</label>
                                 <input type="email" class="form-control" id="email" placeholder="Email Address"  value="<%= userDetails.email%>">
-                            </div>
+                            </div> -->
                             <div class="mb-3">
                                 <label for="phone_number" class="form-label">Phone Number</label>
                                 <input type="number" class="form-control" id="phone_number" placeholder="Phone Number" value="<%= userDetails.phone_number %>" >

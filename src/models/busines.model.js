@@ -177,8 +177,7 @@ export default class BusinessModel {
     //         throw error;
     //     }
     // }
-
-    
+     
     static async getUserByUserId(userId) {
         try {
         
@@ -192,11 +191,6 @@ export default class BusinessModel {
     }
     
     
-    
-  
-    
-
-
     // async  getAllUsersOrderedByName() {
     //     try {
     //         const [rows] = await db.query('SELECT * FROM users ORDER BY name' );
@@ -206,6 +200,19 @@ export default class BusinessModel {
     //         throw error;
     //     }
     // }
+    
+    // user update information name,phone_number
+    static async updateInformation(name, phone_number, callback) {
+        try {
+            const [results] = await db.query(
+                'UPDATE users SET name = ? WHERE phone_number = ?',
+                [name, phone_number]
+            );
+            callback(null, results);
+        } catch (err) {
+            callback(err, null);
+        }
+    }
     
 
 

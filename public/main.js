@@ -511,3 +511,33 @@ function setModalImage(imageSrc) {
     document.getElementById('modalImage').src = imageSrc;
 }
 
+// Update fetch api
+
+async function updateUserInformation(name, phone_number) {
+    const name = document.getElementById('user-name').value;
+    const phone_number = document.getElementById('phone_number').value;
+    try {
+        const response = await fetch('/update-user', {
+            method: 'POST',  // Use POST for updating data
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: name,
+                phone_number: phone_number
+            }),
+        });
+
+        // Handling the response
+        if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log('Success:', data);
+        alert('User information updated successfully');
+    } catch (error) {
+        console.error('Error updating user:', error);
+        alert('Failed to update user information');
+    }
+}

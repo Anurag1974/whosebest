@@ -505,6 +505,8 @@ export default class BusinessController {
             res.status(500).json({ message: `Server error: ${error.message}` });
         }
     }
+
+
     
 
    
@@ -540,6 +542,30 @@ export default class BusinessController {
     //         res.status(500).json({ error: "Failed to fetch business details" });
     //     }
     // }
+
+    // user update information name 
+
+    async updateInformation(req, res) {
+        const { name, phone_number } = req.body;
+
+        // Check if required fields are provided
+        if (!phone_number || !name) {
+            return res.status(400).json({ error: 'Phone number and name are required' });
+        }
+
+        // Call the model function to update user information
+        User.updateInformation(name, phone_number, (err, result) => {
+            if (err) {
+                return res.status(500).json({ error: 'Database update failed', details: err });
+            }
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            res.status(200).json({ message: 'User information updated successfully' });
+        });
+    }
 
        
 

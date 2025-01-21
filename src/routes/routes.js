@@ -26,7 +26,6 @@ router.get('/search-category', authMiddleware, businessController.searchCategory
 router.get('/book-your-taxi', businessController.showTaxiPage)
 router.get('/tours-and-travels', businessController.showToursAndTravelsPage)
 router.get('/rate/:id',authMiddleware, businessController.showRatePage)
-
 // Route to get business details by ID
 router.get('/edit',authMiddleware, businessController.showEditUser);
 
@@ -40,5 +39,7 @@ router.post('/list-business',authMiddleware, businessController.addBusinessDetai
 router.post('/submit-rating/:businessId',authMiddleware,  businessController.submitReview);
 router.post('/update-toggle', businessController.updateToggle);
 
+// update user information
+router.post('/update-user', businessController.updateInformation);
 
 export default router;
