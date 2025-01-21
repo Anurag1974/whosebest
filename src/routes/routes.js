@@ -28,7 +28,7 @@ router.get('/tours-and-travels', businessController.showToursAndTravelsPage)
 router.get('/rate/:id',authMiddleware, businessController.showRatePage)
 
 // Route to get business details by ID
-router.get('/edit/:id',authMiddleware, businessController.editUser);
+router.get('/edit/:id/:name',authMiddleware, businessController.editUser)
 
 
 router.post('/enter-your-details', businessController.addNameDetails)

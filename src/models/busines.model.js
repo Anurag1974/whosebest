@@ -168,45 +168,20 @@ export default class BusinessModel {
         return rows.length > 0;
     }
     
-     // edit
-     async getBusinessDetailsById(id) {
+    // edit id sa render name,phone
+    static async getUserById(id, name) {
         try {
-            const [rows] = await db.query('SELECT * FROM businesses WHERE id = ?', [id]);
+            // Query the database to fetch a user by id and user_id
+            const [rows] = await db.query('SELECT * FROM users WHERE `name` = ? AND `user_id` = ?', [id, name]);
+            
+            // If the user is found, return the first row, otherwise return null
             return rows.length > 0 ? rows[0] : null;
         } catch (error) {
-            throw error;
+            // Throw an error if the query fails
+            throw new Error(`Error fetching user by ID and user_id: ${error.message}`);
         }
     }
 
-    // name edit
-    async getUsersByUserId(user_id) {
-        try {
-            // Query to fetch users where the user_id matches the provided value
-            const [rows] = await db.query('SELECT * FROM users WHERE user_id = ?', [user_id]);
-            console.log(rows);
-            return rows;
-        } catch (error) {
-            console.error('Error fetching users by user_id:', error);
-            throw error;
-        }
-    }
-    
-    
-    
-  
-    
-
-
-    // async  getAllUsersOrderedByName() {
-    //     try {
-    //         const [rows] = await db.query('SELECT * FROM users ORDER BY name' );
-    //         return rows;
-    //     } catch (error) {
-    //         console.error('Error fetching users:', error);
-    //         throw error;
-    //     }
-    // }
-    
 
 
 }
