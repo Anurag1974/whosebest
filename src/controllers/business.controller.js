@@ -494,7 +494,7 @@ export default class BusinessController {
 
     }
 
-     // in edit page =========
+    //  in edit page =========
 
     
      async showEditUser(req, res) {
@@ -524,33 +524,47 @@ export default class BusinessController {
                 toggle 
             });
         } catch (error) {
-            console.error('Database error:', error);
-            res.status(500).json({ error: "Failed to fetch business details" });
+            // Send an error response if something goes wrong
+            res.status(500).json({ message: `Server error: ${error.message}` });
         }
     }
+    
 
-    //  name edit
-    // async  getUserByName(req, res) {
-    //     const { name } = req.params; // Extract 'name' from the URL params
+   
+
+    //  async editUser(req, res) {
+    //     const id = req.params.id;
+    
+    //     // Check if ID is provided
+    //     if (!id) {
+    //         return res.status(400).send('Query parameter is required');
+    //     }
     
     //     try {
-    //         // Call the model function to get users by name
-    //         const users = await getUsersByName(name);
-            
-    //         if (users.length === 0) {
-    //             // No users found
-    //             return res.status(404).send('No users found');
+    //         // Fetch business details by ID
+    //         const businessDetails = await BusinessModel.getBusinessDetailsById(id);
+    
+    //         if (!businessDetails) {
+    //             return res.status(404).send('Business not found');
     //         }
     
-    //         // Render the 'users' view and pass the users data
-    //         res.render('users', { users });
+    //         // Assuming the business details contain a toggle value
+    //         const toggle = req.session.toggle || businessDetails.toggle || false; // Use session toggle or the business-specific toggle
+    
+    //         // Render the edit page with business details and the toggle value
+    //         res.render('edit', { 
+    //             user: req.user,
+    //             // user:req.name, 
+    //             businessDetails, 
+    //             toggle 
+    //         });
     //     } catch (error) {
-    //         // Handle any errors during the process
-    //         console.error('Error fetching users by name:', error);
-    //         res.status(500).send('Error fetching users');
+    //         console.error('Database error:', error);
+    //         res.status(500).json({ error: "Failed to fetch business details" });
     //     }
     // }
 
+       
 
 
 }
