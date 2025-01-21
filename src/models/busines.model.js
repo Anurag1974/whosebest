@@ -173,6 +173,45 @@ export default class BusinessModel {
         return rows.length > 0;
     }
     
+     // edit
+    // static async getBusinessDyetailsById(id) {
+    //     try {
+    //         const [rows] = await db.query('SELECT * FROM businesses WHERE id = ?', [id]);
+    //         return rows.length > 0 ? rows[0] : null;
+    //     } catch (error) {
+    //         throw error;
+    //     }
+    // }
+
+    
+    static async getUserByUserId(userId) {
+        try {
+        
+            const [rows] = await db.query('SELECT * FROM users WHERE user_id = ?', [userId]);
+            console.log(rows[0]);
+            return rows? rows[0] : null;
+        } catch (error) {
+            console.error('Error fetching users by user_id:', error);
+            throw error;
+        }
+    }
+    
+    
+    
+  
+    
+
+
+    // async  getAllUsersOrderedByName() {
+    //     try {
+    //         const [rows] = await db.query('SELECT * FROM users ORDER BY name' );
+    //         return rows;
+    //     } catch (error) {
+    //         console.error('Error fetching users:', error);
+    //         throw error;
+    //     }
+    // }
+    
 
 
 }

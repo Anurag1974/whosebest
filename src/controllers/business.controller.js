@@ -494,6 +494,62 @@ export default class BusinessController {
 
     }
 
+     // in edit page =========
+
+    
+     async showEditUser(req, res) {
+        const userId = req.user.id;
+        
+    
+        // Check if ID is provided
+        if (!userId) {
+            return res.status(400).send('Query parameter is required');
+        }
+    
+        try {
+            // Fetch business details by ID
+            const userDetails = await BusinessModel.getUserByUserId(userId);
+    
+            if (!userDetails) {
+                return res.status(404).send('Business not found');
+            }
+    
+            // Assuming the business details contain a toggle value
+            const toggle = req.session.toggle || userDetails.toggle || false; // Use session toggle or the business-specific toggle
+    
+            // Render the edit page with business details and the toggle value
+            res.render('edit', { 
+                user: req.user,
+                userDetails, 
+                toggle 
+            });
+        } catch (error) {
+            console.error('Database error:', error);
+            res.status(500).json({ error: "Failed to fetch business details" });
+        }
+    }
+
+    //  name edit
+    // async  getUserByName(req, res) {
+    //     const { name } = req.params; // Extract 'name' from the URL params
+    
+    //     try {
+    //         // Call the model function to get users by name
+    //         const users = await getUsersByName(name);
+            
+    //         if (users.length === 0) {
+    //             // No users found
+    //             return res.status(404).send('No users found');
+    //         }
+    
+    //         // Render the 'users' view and pass the users data
+    //         res.render('users', { users });
+    //     } catch (error) {
+    //         // Handle any errors during the process
+    //         console.error('Error fetching users by name:', error);
+    //         res.status(500).send('Error fetching users');
+    //     }
+    // }
 
 
 
