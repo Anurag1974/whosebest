@@ -1,6 +1,7 @@
 <div class="container mt-4">
   <div class="row">
     <h2 class="text-center my-4">All Photos Restaurant</h2>
+ 
     <!-- Horizontal Scrollable Container -->
     <div class="d-flex overflow-auto align-items-center">
       <div class="flex-shrink-0 me-1">
@@ -79,7 +80,7 @@
 
   <!-- Tabs Section -->
   <ul style="position:sticky;
- top:72px;
+ top:99px;
  background-color: white;
  /* border-bottom: 1px solid black; */
  " class="nav nav-tabs mt-4 sticky-tabs p-2" id="myTab" role="tablist">
@@ -95,9 +96,9 @@
     <li class="nav-item" role="presentation">
       <a href="#services" class="nav-link" id="services-tab">Services</a>
     </li>
-    <li class="nav-item" role="presentation">
+    <!-- <li class="nav-item" role="presentation">
       <a href="#photos" class="nav-link" id="photos-tab">Photos</a>
-    </li>
+    </li> -->
     <li class="nav-item" role="presentation">
       <a href="#keyinsights" class="nav-link" id="keyinsights-tab">Key Insights</a>
     </li>
@@ -107,29 +108,31 @@
   </ul>
 
   <!-- Tab Content -->
-  <div class="tab-content mt-4 p-5" id="myTabContent">
+  <div class="tab-content mt-4 " id="myTabContent">
     <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
-      <h3>Overview</h3>
-      <p>Welcome to our restaurant! We offer the best culinary experience in Dehradun.</p>
+      <h4>Overview</h4>
+        <p>Welcome to our restaurant! We offer the best culinary experience in Dehradun.</p>
       <div class="row">
         <div class="col-md-4" id="catalogue">
-          <h3>Catalogue</h3>
+          <h4>Catalogue</h4>
           <p>Explore our diverse menu of delicious dishes.</p>
         </div>
         <div class="row">
-          <h2 id="quickinfo">Quick Info</h2>
+          <h4 id="quickinfo">Quick Info</h4>
           <p>Open hours: 10:00 AM - 9:30 PM</p>
           <p>Location: Dehradun</p>
         </div>
         <div class="row">
-          <h2 id="services">Services</h2>
-          <ul>
-            <li>Dine-in</li>
-            <li>Takeaway</li>
-            <li>Home Delivery</li>
-          </ul>
+          <h4 id="services">Services</h4>
+          <div>
+            <ul>
+              <li>Dine-in</li>
+              <li>Takeaway</li>
+              <li>Home Delivery</li>
+            </ul>
+          </div>
         </div>
-        <div class="row" id="photos">
+        <!-- <div class="row" id="photos">
           <h2>Photos</h2>
           <div class="col-md-4">
             <img src="" alt="Photos 1" class="img-fluid mb-3">
@@ -140,16 +143,16 @@
           <div class="col-md-4">
             <img src="" alt="Photos 3" class="img-fluid mb-3">
           </div>
-        </div>
+        </div> -->
       </div>
 
       <div class="mt-4" id="keyinsights">
-        <h2>Key Insights</h2>
+        <h4>Key Insights</h4>
         <p>We have been serving delicious meals for over 1 year!</p>
       </div>
 
       <div class="mt-4" id="reviews">
-        <h3>Reviews & Ratings</h3>
+        <h4>Reviews & Ratings</h4>
         <% if (businessDetails.reviews && businessDetails.reviews.length > 0) { %>
           
           <!-- Display Average Rating -->

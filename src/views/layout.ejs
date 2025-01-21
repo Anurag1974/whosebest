@@ -16,6 +16,46 @@
             height: 100%;
             margin: 0;
         }
+        /* start right side nav*/
+        .sidenav {
+           height: 100%;
+           width: 0;
+           position: fixed;
+           z-index: 1;
+           top: 0;
+           right: 0; /* Changed from 'left' to 'right' */
+           background-color: #111;
+           overflow-x: hidden;
+           transition: 0.5s;
+           padding-top: 20px;
+         }
+         
+         .sidenav a {
+           padding: 8px 8px 8px 32px;
+           text-decoration: none;
+           font-size: 25px;
+           color: #818181;
+           display: block;
+           transition: 0.3s;
+         }
+         
+         .sidenav a:hover {
+           color: #f1f1f1;
+         }
+         
+         .sidenav .closebtn {
+           position: absolute;
+           top: 0;
+           left: 120px; /* Changed from 'right' to 'left' */
+           font-size: 36px;
+           margin-left: 50px;
+         }
+         
+         @media screen and (max-height: 450px) {
+           .sidenav {padding-top: 15px;}
+           .sidenav a {font-size: 18px;}
+         }
+        /* endright side nav */
     </style>
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/responsive.css">
@@ -36,7 +76,7 @@
 
 </head>
 
-<body>
+<body> 
     <section class="top-area">
         <div class="header-area">
             <!-- Start Navigation -->
@@ -78,7 +118,7 @@
                     <div class="collapse navbar-collapse" id="navbar-menu">
                         <div class="container mt-5 text-center">
                             <label class="toggle-switch">
-                                <input type="checkbox" id="evToggle" <%=toggle ? 'checked' : '' %>>
+                                <input type="checkbox" id="evToggle" <%= toggle ? 'checked' : '' %>>
                                 <span class="slider"></span>
                             </label>
                         </div>
@@ -88,9 +128,39 @@
                                     <a class="nav-link" href="your-business">Manage Business</a>
 
                                 </li>
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <a class="nav-link" href="logout">Logout</a>
                                 </li>
+                                 -->
+                                <!--  start right nav bar  -->
+                                <div id="mySidenav" class="sidenav">
+                                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                                    <!-- <li class="nav-item">
+                                       <a class="nav-link" href="logout">Login</a>
+                                    </li>  -->
+                                    <li class="nav-item">
+                                       <a class="nav-link" href="/logout">Logout</a>
+                                    </li> 
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/edit/<%= user.id %>">Edit</a>
+                                    </li> 
+                                  </div>
+                                  
+                                  <span style=" padding:5px;margin:13px;cursor:pointer;" class="btn btn-primary" onclick="openNav()">user&#9776;</span>
+                                  
+                                  <script>
+                                  function openNav() {
+                                    document.getElementById("mySidenav").style.width = "250px";
+                                  }
+                                  
+                                  function closeNav() {
+                                    document.getElementById("mySidenav").style.width = "0";
+                                  }
+                                  </script>
+            
+                               <!--end right bar  -->
+
+                                
 
                                 <% } else{ %>
                                     <li class="nav-item">
@@ -150,6 +220,9 @@
                 </div>
             </div>
         </div>
+
+        
+
 
         <!-- Popper.js and Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
@@ -311,10 +384,10 @@
 
 
         </script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+//         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+//         <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 
-        <script src="main.js"></script>
-</body>
+//         <script src="main.js"></script>
+// </body>
 
-</html>
+// </html>

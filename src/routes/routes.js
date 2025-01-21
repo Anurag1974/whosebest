@@ -27,6 +27,10 @@ router.get('/book-your-taxi', businessController.showTaxiPage)
 router.get('/tours-and-travels', businessController.showToursAndTravelsPage)
 router.get('/rate/:id',authMiddleware, businessController.showRatePage)
 
+// Route to get business details by ID
+router.get('/edit/:id',authMiddleware, businessController.editUser);
+
+
 router.post('/enter-your-details', businessController.addNameDetails)
 router.post('/show-business', businessController.showBusiness)
 router.post('/send-otp', businessController.sendOtp);
@@ -35,5 +39,6 @@ router.post('/verify-otp-pop', businessController.verifyOtpHandlerPopupPage);
 router.post('/list-business',authMiddleware, businessController.addBusinessDetails);
 router.post('/submit-rating/:businessId',authMiddleware,  businessController.submitReview);
 router.post('/update-toggle', businessController.updateToggle);
+
 
 export default router;
