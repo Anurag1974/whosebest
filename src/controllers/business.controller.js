@@ -67,6 +67,25 @@ export default class BusinessController {
             });
         }
     }
+    async deleteReview(req, res){
+        try {
+            const { id } = req.params;
+
+            console.log('in the controller of delete review')
+            
+            // Call model function to delete the review
+            const result = await BusinessModel.deleteReviewById(id);
+    
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ message: "Review not found" });
+            }
+    
+            res.json({ message: "Review deleted successfully" });
+        } catch (error) {
+            console.error("Error deleting review:", error);
+            res.status(500).json({ message: "Internal Server Error" });
+        }
+    }
     async showHome(req, res) {
         console.log(`User: ${req.user}`);
         const paidAdvertisements = await BusinessModel.getPaidAdvertisements();
@@ -426,12 +445,16 @@ export default class BusinessController {
         }
         try {
             const businessDetails = await BusinessModel.getBusinessDetailsById(id);
-            const hasReviewed = await BusinessModel.hasUserReviewed(req.user.id, id);
+            let hasReviewed = null;
+            if(req.user){
+                hasReviewed = await BusinessModel.hasUserReviewed(req.user.id, id);
+            }
+            
     
             if (businessDetails && businessDetails.message !== "No business found with the provided ID") {
                 console.log("Business Details for Rendering: ", businessDetails);
                 
-                res.render('business-details', { user: req.user, businessDetails, toggle: req.session.toggle,  hasReviewed : hasReviewed });
+                res.render('business-details', { user: req.user || null, businessDetails, toggle: req.session.toggle,  hasReviewed : hasReviewed || null });
             } else {
                 res.status(404).send("No business found with the given ID.");
             }

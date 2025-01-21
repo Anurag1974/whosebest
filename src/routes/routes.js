@@ -36,4 +36,6 @@ router.post('/list-business',authMiddleware, businessController.addBusinessDetai
 router.post('/submit-rating/:businessId',authMiddleware,  businessController.submitReview);
 router.post('/update-toggle', businessController.updateToggle);
 
+router.delete("/delete/:id", businessController.deleteReview);
+
 export default router;

@@ -163,6 +163,11 @@ export default class BusinessModel {
             throw error; // Propagate the error
         }
     }
+    static async deleteReviewById(reviewId) {
+        const sql = "DELETE FROM reviews WHERE review_id = ?";
+        const [result] = await db.execute(sql, [reviewId]);
+        return result; // Returns affectedRows to check if deletion was successful
+    }
     static async hasUserReviewed(id, userId) {
         const [rows] = await db.execute('SELECT * FROM reviews WHERE business_id = ? AND user_id = ?', [id, userId]);
         return rows.length > 0;
