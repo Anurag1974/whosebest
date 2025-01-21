@@ -169,22 +169,22 @@ export default class BusinessModel {
     }
     
      // edit
-     async getBusinessDetailsById(id) {
-        try {
-            const [rows] = await db.query('SELECT * FROM businesses WHERE id = ?', [id]);
-            return rows.length > 0 ? rows[0] : null;
-        } catch (error) {
-            throw error;
-        }
-    }
+    // static async getBusinessDyetailsById(id) {
+    //     try {
+    //         const [rows] = await db.query('SELECT * FROM businesses WHERE id = ?', [id]);
+    //         return rows.length > 0 ? rows[0] : null;
+    //     } catch (error) {
+    //         throw error;
+    //     }
+    // }
 
-    // name edit
-    async getUsersByUserId(user_id) {
+    
+    static async getUserByUserId(userId) {
         try {
-            // Query to fetch users where the user_id matches the provided value
-            const [rows] = await db.query('SELECT * FROM users WHERE user_id = ?', [user_id]);
-            console.log(rows);
-            return rows;
+        
+            const [rows] = await db.query('SELECT * FROM users WHERE user_id = ?', [userId]);
+            console.log(rows[0]);
+            return rows? rows[0] : null;
         } catch (error) {
             console.error('Error fetching users by user_id:', error);
             throw error;

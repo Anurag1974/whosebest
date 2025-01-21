@@ -474,17 +474,18 @@ export default class BusinessController {
      // in edit page =========
 
     
-     async editUser(req, res) {
-        const id = req.params.id;
+     async showEditUser(req, res) {
+        const userId = req.user.id;
+        
     
         // Check if ID is provided
-        if (!id) {
+        if (!userId) {
             return res.status(400).send('Query parameter is required');
         }
     
         try {
             // Fetch business details by ID
-            const userDetails =await BusinessModel.getUsersByUserId(id);
+            const userDetails = await BusinessModel.getUserByUserId(userId);
     
             if (!userDetails) {
                 return res.status(404).send('Business not found');
@@ -496,7 +497,6 @@ export default class BusinessController {
             // Render the edit page with business details and the toggle value
             res.render('edit', { 
                 user: req.user,
-                // user:req.name, 
                 userDetails, 
                 toggle 
             });
