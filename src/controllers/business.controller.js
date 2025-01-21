@@ -473,26 +473,33 @@ export default class BusinessController {
 
     //  in edit page =========
 
-    static async editUser(req, res) {
+    
+     async showEditUser(req, res) {
+        const userId = req.user.id;
+        
+    
+        // Check if ID is provided
+        if (!userId) {
+            return res.status(400).send('Query parameter is required');
+        }
+    
         try {
-            // Extract id and name from request parameters
-            const { id, name } = req.params;
-            
-            // Validate the inputs: Ensure ID is a number and name is provided
-            if (!id || isNaN(Number(id)) || !name) {
-                return res.status(400).json({ message: 'Invalid user ID or name' });
+            // Fetch business details by ID
+            const userDetails = await BusinessModel.getUserByUserId(userId);
+    
+            if (!userDetails) {
+                return res.status(404).send('Business not found');
             }
-
-            // Fetch the user by both ID and user_id (name)
-            const user = await UserModel.getUserById(id, name);  // Ensure to call getUserById method
-
-            // If no user is found, send a 404 response
-            if (!user) {
-                return res.status(404).json({ message: 'User not found' });
-            }
-
-            // Render the EJS view and pass the user data
-            res.render('editUser', { user });  // 'editUser' is the name of your view file
+    
+            // Assuming the business details contain a toggle value
+            const toggle = req.session.toggle || userDetails.toggle || false; // Use session toggle or the business-specific toggle
+    
+            // Render the edit page with business details and the toggle value
+            res.render('edit', { 
+                user: req.user,
+                userDetails, 
+                toggle 
+            });
         } catch (error) {
             // Send an error response if something goes wrong
             res.status(500).json({ message: `Server error: ${error.message}` });

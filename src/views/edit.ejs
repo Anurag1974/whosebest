@@ -47,7 +47,7 @@
                         <form>
                             <div class="mb-2">
                                 <label for="name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="name" placeholder="Name" value="<%= user.name %>">
+                                <input type="text" class="form-control" id="name" placeholder="Name" value="<%= userDetails.name %>">
                             </div>
                             <!-- <div class="mb-2">
                                 <label for="middleName" class="form-label">Middle Name</label>
@@ -70,16 +70,11 @@
                         <form>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email Address</label>
-                                <input type="email" class="form-control" id="email" placeholder="Email Address"  value="<%= user.email%>">
+                                <input type="email" class="form-control" id="email" placeholder="Email Address"  value="<%= userDetails.email%>">
                             </div>
                             <div class="mb-3">
                                 <label for="phone_number" class="form-label">Phone Number</label>
-                                <input type="number" class="form-control" id="phone_number" placeholder="Phone Number"  >
-                            </div>
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="username" placeholder="Username">
-                                <button class="btn btn-outline-warning mt-2">Change</button>
+                                <input type="number" class="form-control" id="phone_number" placeholder="Phone Number" value="<%= userDetails.phone_number %>" >
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
