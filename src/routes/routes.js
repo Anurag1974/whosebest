@@ -21,7 +21,7 @@ router.get('/logout', businessController.logout)
 router.get('/enter-your-details',authMiddleware, businessController.showNamePage)
 router.get('your-business',authMiddleware, businessController.showOwnListedBusinessList)
 
-router.get('/business-details/:id', authMiddleware,  businessController.showBusinessDetailsById)
+router.get('/business-details/:businessId', authMiddleware,  businessController.showBusinessDetailsById)
 router.get('/search-category', authMiddleware, businessController.searchCategory);
 router.get('/book-your-taxi', businessController.showTaxiPage)
 router.get('/tours-and-travels', businessController.showToursAndTravelsPage)

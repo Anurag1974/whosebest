@@ -439,15 +439,18 @@ export default class BusinessController {
         }
     }
     async showBusinessDetailsById(req, res) {
-        const id = req.params.id;
-        if (!id) {
+        const {businessId} = req.params;
+        if (!businessId) {
             return res.status(400).send('Query parameter is required');
         }
         try {
-            const businessDetails = await BusinessModel.getBusinessDetailsById(id);
+            
+            const businessDetails = await BusinessModel.getBusinessDetailsById(businessId);
             let hasReviewed = null;
             if(req.user){
-                hasReviewed = await BusinessModel.hasUserReviewed(req.user.id, id);
+                console.log(`the user id is ${businessId}`)
+                hasReviewed = await BusinessModel.hasUserReviewed( businessId, req.user.id);
+                console.log(`review status is ${hasReviewed}`)
             }
             
     
