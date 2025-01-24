@@ -89,7 +89,8 @@ export default class BusinessController {
     async showHome(req, res) {
         console.log(`User: ${req.user}`);
         const paidAdvertisements = await BusinessModel.getPaidAdvertisements();
-        res.render('home', { user: req.user || null, toggle: req.session.toggle ,  paidAdvertisements: paidAdvertisements || 1 });
+        const businessCounts = await BusinessModel.getBusinessCount(req.session.toggle);
+        res.render('home', { user: req.user || null, toggle: req.session.toggle ,  paidAdvertisements: paidAdvertisements || 1, businessCounts });
 
 
 
@@ -106,10 +107,10 @@ export default class BusinessController {
         res.render('business', { location, business });
 
     }
-    businessLogin(req, res) {
+    showbusinessLogin(req, res) {
 
         // console.log(generateOTP());
-        res.render('business-login', { user: req.user, message: null })
+        res.render('business-login', { user: req.user, message: null,  toggle: req.session.toggle })
 
     }
     showTaxiPage(req, res) {
@@ -439,18 +440,15 @@ export default class BusinessController {
         }
     }
     async showBusinessDetailsById(req, res) {
-        const {businessId} = req.params;
+        const businessId = req.params.businessId;
         if (!businessId) {
             return res.status(400).send('Query parameter is required');
         }
         try {
-            
             const businessDetails = await BusinessModel.getBusinessDetailsById(businessId);
             let hasReviewed = null;
             if(req.user){
-                console.log(`the user id is ${businessId}`)
-                hasReviewed = await BusinessModel.hasUserReviewed( businessId, req.user.id);
-                console.log(`review status is ${hasReviewed}`)
+                hasReviewed = await BusinessModel.hasUserReviewed(req.user.id, businessId);
             }
             
     
@@ -483,7 +481,6 @@ export default class BusinessController {
             res.status(500).json({ message: "Error adding review", error: err.message });
         }
 
-
     }
     updateToggle(req, res) {
         const { toggle } = req.body;
@@ -501,7 +498,7 @@ export default class BusinessController {
 
     
      async showEditUser(req, res) {
-        const userId = req.user.id;
+        const userId = req.params.id;
         
     
         // Check if ID is provided
@@ -522,7 +519,7 @@ export default class BusinessController {
     
             // Render the edit page with business details and the toggle value
             res.render('edit', { 
-                user: req.user,
+                user: req.user || null,
                 userDetails, 
                 toggle 
             });

@@ -43,6 +43,27 @@ export default class BusinessModel {
             throw error;
         }
     }
+    static async getBusinessCount(toggle){
+        try {
+            // Define the query
+            const query = toggle
+  ? `SELECT category, COUNT(*) AS total_listings FROM business_detail WHERE ev_station = true GROUP BY category`
+  : `SELECT category, COUNT(*) AS total_listings FROM business_detail GROUP BY category`;
+
+            // Execute the query
+            const [results] = await db.execute(query); // Assuming you're using a promise-based DB connection like mysql2
+    
+            // Convert results into an object with category names as keys
+            const counts = results.reduce((acc, row) => {
+                acc[row.category] = row.total_listings;
+                return acc;
+            }, {});
+    
+            return counts; // Return the object
+        } catch (error) {
+            throw new Error(`Error fetching category counts: ${error.message}`);
+        }
+    }
     static async getEmail(email) {
         const [rows] = await db.execute('SELECT email FROM users WHERE email = ?', [email]);
         return rows.length > 0;
@@ -226,13 +247,13 @@ export default class BusinessModel {
 
 }
 
-(async () => {
-    const id = 1; // Replace with the desired ID
-    const businessDetails = await BusinessModel.getBusinessDetailsById(id);
+// (async () => {
+//     const id = 1; // Replace with the desired ID
+//     const businessDetails = await BusinessModel.getBusinessDetailsById(id);
 
-    if (businessDetails && businessDetails.message !== "No business found with the provided ID") {
-        console.log("Business Details from IIFE: ", businessDetails);
-    } else {
-        console.log("No business found with the given ID.");
-    }
-})();
+//     if (businessDetails && businessDetails.message !== "No business found with the provided ID") {
+//         console.log("Business Details from IIFE: ", businessDetails);
+//     } else {
+//         console.log("No business found with the given ID.");
+//     }
+// })();

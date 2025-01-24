@@ -513,41 +513,41 @@ function setModalImage(imageSrc) {
 
 // Update fetch api
 
-async function updateUserInformation(name, phone_number) {
-    const name = document.getElementById('user-name').value;
-    const phone_number = document.getElementById('phone_number').value;
-    try {
-        const response = await fetch('/update-user', {
-            method: 'POST',  // Use POST for updating data
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: name,
-                phone_number: phone_number
-            }),
-        });
+// async function updateUserInformation(name, phone_number) {
+//     const name = document.getElementById('user-name').value;
+//     const phone_number = document.getElementById('phone_number').value;
+//     try {
+//         const response = await fetch('/update-user', {
+//             method: 'POST',  // Use POST for updating data
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify({
+//                 name: name,
+//                 phone_number: phone_number
+//             }),
+//         });
 
-        // Handling the response
-        if (!response.ok) {
-            throw new Error(`Error: ${response.statusText}`);
-        }
+//         // Handling the response
+//         if (!response.ok) {
+//             throw new Error(`Error: ${response.statusText}`);
+//         }
 
-        const data = await response.json();
-        console.log('Success:', data);
-        alert('User information updated successfully');
-    } catch (error) {
-        console.error('Error updating user:', error);
-        alert('Failed to update user information');
-    }
-}
+//         const data = await response.json();
+//         console.log('Success:', data);
+//         alert('User information updated successfully');
+//     } catch (error) {
+//         console.error('Error updating user:', error);
+//         alert('Failed to update user information');
+//     }
+// }
 
 // opening modal from rate
  
-document.getElementById("openModalBtn").addEventListener("click", function () {
-    var myModal = new bootstrap.Modal(document.getElementById("loginModal"));
-    myModal.show();
-});
+// document.getElementById("openModalBtn").addEventListener("click", function () {
+//     var myModal = new bootstrap.Modal(document.getElementById("loginModal"));
+//     myModal.show();
+// });
 
 // document.addEventListener("DOMContentLoaded", () => {
 //     const deleteButton = document.getElementById("delete-review-btn");

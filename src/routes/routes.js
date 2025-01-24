@@ -12,7 +12,7 @@ router.get('/add-name', businessController.showNamePage)
 
 
 
-router.get('/business-login', businessController.businessLogin)
+router.get('/business-login',authMiddleware, businessController.showbusinessLogin)
 
 router.get('/manage-business/:id',authMiddleware, businessController.showManageBusiness)
 router.get('/enter-business-details',authMiddleware, businessController.showEnterBusinessDetails)
@@ -27,7 +27,7 @@ router.get('/book-your-taxi', businessController.showTaxiPage)
 router.get('/tours-and-travels', businessController.showToursAndTravelsPage)
 router.get('/rate/:id',authMiddleware, businessController.showRatePage)
 // Route to get business details by ID
-router.get('/edit',authMiddleware, businessController.showEditUser);
+router.get('/edit/:id',authMiddleware, businessController.showEditUser);
 
 
 router.post('/enter-your-details', businessController.addNameDetails)
