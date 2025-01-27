@@ -4,6 +4,7 @@ import nodemailer from 'nodemailer';
 import BusinessModel from '../models/busines.model.js';
 import { generateToken } from '../utils/jwt.js';
 import GlobalToggleService from '../services/globalToggleService.js';
+import uploadMiddleware from '../middleware/multerMiddleware.js';
 
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 export default class BusinessController {
@@ -14,7 +15,7 @@ export default class BusinessController {
         }
         try {
             const registeredBusiness = await BusinessModel.getRegisteredBusiness(req.user.id);
-            res.render('your-business', { user: req.user, registeredBusiness });
+            res.render('your-business', { user: req.user, registeredBusiness, toggle : req.session.toggle });
         }
         catch (error) {
             console.error('Database error:', error);
@@ -143,17 +144,27 @@ export default class BusinessController {
     async addBusinessDetails(req, res) {
         if (!req.user) {
             return res.status(401).send('Unauthorized2');
-        }
-        const { businessName, pincode, city, state, category, phone, latitudeInput, longitudeInput, website } = req.body;
-        if (!businessName || !pincode || !city || !state || !category || !phone || !latitudeInput || !longitudeInput) {
-            return res.status(400).send('All fields are required');
-        }
-        try {
-            const userId = await BusinessModel.addBusinessDetails(businessName, pincode, city, state, category, phone, latitudeInput, longitudeInput, website);
 
-            const email = req.session.email;
+        }
+       
+        // Extract business details from request body
+        const { businessName, pincode, address, category, phone, latitudeInput, longitudeInput , website = null} = req.body;
+        
+         // Handle uploaded images
+         const images = req.files ? req.files.map(file => file.filename) : [];
+         if (!businessName || !pincode || !address || !category || !phone || !latitude || !longitude) {
+            return res.status(400).json({ message: 'All required fields must be provided' });
+        }
+        const userId = req.user.id ;
+
+       
+        try {
+            const userId2 = await BusinessModel.addBusinessDetails(businessName, pincode, address, category, phone, latitudeInput, longitudeInput, website, userId);
+
+            const email = req.user.email;
+            console.log(`email in session is ${email}`)
             await BusinessModel.setOwner(email);
-            const redirectUrl = `/manage-business/${userId}`;
+            const redirectUrl = `/manage-business/${userId2}`;
 
 
 
@@ -166,6 +177,47 @@ export default class BusinessController {
 
 
     }
+    // async addBusinessDetails(req, res) {
+    //     // Use Multer middleware to handle file uploads
+    //     uploadMiddleware(req, res, async (err) => {
+    //         if (err) {
+    //             return res.status(400).send(err.message); // Handle file upload errors
+    //         }
+    
+            // if (!req.user) {
+            //     return res.status(401).send('Unauthorized'); // User not logged in
+            // }
+    
+            // // Extract business details from request body
+            // const { businessName, pincode, address, category, phone, latitudeInput, longitudeInput , website = null} = req.body;
+    
+    //         // Validate required fields
+    //         if (!businessName || !pincode || !address || !category || !phone || !latitudeInput || !longitudeInput ) {
+    //             return res.status(400).send('All fields are required');
+    //         }
+    
+    //         try {
+    //             // Get file paths of uploaded images
+    //             // const businessImages = req.files.map((file) => `/uploads/${file.filename}`);
+    
+    //             // Save business details and images to the database
+    //             const businessId = await BusinessModel.addBusinessDetails(
+    //                 businessName, pincode, address, category, phone, latitudeInput, longitudeInput, website
+    //             );
+    
+    //             // Redirect user after successful addition
+    //             const redirectUrl = `/manage-business/${businessId}`;
+    //             res.json({
+    //                 success: true,
+    //                 message: 'Business details added successfully',
+    //                 redirectUrl,
+    //             });
+    //         } catch (error) {
+    //             console.error('Database error:', error);
+    //             res.status(500).json({ success: false, message: 'Failed to add business' });
+    //         }
+    //     });
+    // }
 
     async showManageBusiness(req, res) {
         if (!req.user) {
@@ -173,14 +225,14 @@ export default class BusinessController {
         }
         const business = await BusinessModel.getBusinessDetailsById(req.params.id);
         console.log(business);
-        res.render('manage-business', { user: req.user, business: business, email: req.session.email || null });
+        res.render('manage-business', { user: req.user, business: business, email: req.session.email || null, toggle:req.session.toggle });
     }
     showEnterBusinessDetails(req, res) {
 
         if (!req.user) {
             return res.status(401).send('Unauthorized');
         }
-        res.render('enter-business-details', { user: req.user });
+        res.render('enter-business-details', { user: req.user, toggle: req.user.toggle });
     }
 
     async sendOtp(req, res) {

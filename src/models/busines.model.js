@@ -20,7 +20,7 @@ export default class BusinessModel {
     }
     static async getRegisteredBusiness(userId) {
         try {
-            const [rows] = await db.execute('SELECT * FROM business_details WHERE user_id = ?', [userId]);
+            const [rows] = await db.execute('SELECT * FROM business_detail WHERE user_id = ?', [userId]);
             return rows;
         }
         catch (error) {
@@ -77,22 +77,51 @@ export default class BusinessModel {
     //     return result.insertId;
     // }
     static async setOwner(email) {
+
+        console.log(`asdfa;slkdfj;lkasdflkjasd ${email}`)
         const [result] = await db.execute('UPDATE users SET user_type = "business_owner" WHERE email = ?', [email]);
+        
         return result;
     }
     static async insertNameDetails(name, email, phone, userType) {
         const [result] = await db.execute('INSERT INTO users (name,email, phone_number, user_type) VALUES (?,?,?,?)', [name, email, phone, userType]);
         return result;
     }
-    static async addBusinessDetails(businessName, pincode, city, state, category, phone, latitude, longitude, website) {
+    static async addBusinessDetails(businessName, pincode, address, category, phone, latitude, longitude, website, userId) {
         console.log('inside addBusinessDetails');
+        console.log({ businessName, pincode, address, category, phone, latitude, longitude, website, userId });
+    
         const [result] = await db.execute(
-            'INSERT INTO business_details (business_name, pincode, city, state, category, phone, latitude, longitude, website) VALUES (?,?,?,?,?,?,?,?,?)',
-            [businessName, pincode, city, state, category, phone, latitude, longitude, website || null]
+            'INSERT INTO business_detail (business_name, address, category, phone, latitude, longitude, website, user_id) VALUES (?,?,?,?,?,?,?,?)',
+            [businessName, address, category, phone, latitude, longitude, website, userId]
         );
-        const userId = result.insertId;
-        return userId;
+    
+        const userId2 = result.insertId;
+        return userId2;
     }
+    static async addBusinessImages(businessId, images) {
+        const values = images.map(image => [businessId, image]);
+        await db.query(
+            `INSERT INTO business_images (business_id, image_path) VALUES ?`,
+            [values]
+        );
+    }
+    
+    // static async addBusinessDetails(businessName, pincode, city, state, category, phone, latitude, longitude, website, imag) {
+    //     try {
+    //         // Insert business details into the database
+    //         const [result] = await db.execute(
+    //             `INSERT INTO businesses (business_name, pincode, city, state, category, phone, latitude, longitude, website, images)
+    //              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    //             [businessName, pincode, city, state, category, phone, latitude, longitude, website, JSON.stringify(images)]
+    //         );
+    
+    //         return result.insertId; // Return the new business ID
+    //     } catch (error) {
+    //         console.error('Database error:', error);
+    //         throw error;
+    //     }
+    // }
     static async getAllBusinessDetails() {
         const [rows] = await db.execute('SELECT * FROM business_details');
         return rows;

@@ -1,21 +1,26 @@
 import express from "express";
 import ejsLayouts from "express-ejs-layouts";
 import path from 'path';
-import BusinessController from "./src/controllers/business.controller.js"
+
 import route from './src/routes/routes.js'
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import { initializeToggle } from "./src/middleware/toggleMiddleware.js";
+import multer from 'multer';
 
 
 const server = express();
 const PORT = process.env.PORT || "3100";
 
 // middleware
+const upload = multer({dest: 'uploads/'});
+
 server.use(cookieParser());
 server.use(express.static('public'));
 server.use(express.urlencoded({ extended: true }));
+
+
 
 server.use(session({
     secret: process.env.SESSION_SECRET,       // Replace with a secure key
@@ -36,7 +41,6 @@ server.use((req, res, next) => {
 });
 
 
-const businessController = new BusinessController();
 
 server.use('/', route);
 

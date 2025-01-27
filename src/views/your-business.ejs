@@ -1,5 +1,6 @@
 <div class="container my-5">
     <h1 class="text-center mb-4">Your Listed Businesses</h1>
+    <a href="/enter-business-details" class="btn-primary">Enter Business Details</a>
     <div class="row">
         <% if (registeredBusiness && registeredBusiness.length > 0) { %>
             <% registeredBusiness.forEach(business => { %>
@@ -14,6 +15,7 @@
                                 <p class="card-text"><strong>Website:</strong> <a href="<%= business.website %>" target="_blank"><%= business.website %></a></p>
                             <% } %>
                             <p class="card-text"><strong>Coordinates:</strong> <%= business.latitude %>, <%= business.longitude %></p>
+                            <a href="/manage-business/<%= business.id %>">Edit</a>
                         </div>
                     </div>
                 </div>
@@ -21,6 +23,7 @@
         <% } else { %>
             <div class="col-12">
                 <p class="text-center">No registered businesses found.</p>
+                <a href="/enter-business-details" class="btn-primary">Enter Business Details</a>
             </div>
         <% } %>
     </div>

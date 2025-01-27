@@ -449,8 +449,8 @@ async function addName() {
 async function addBusinessDetails() {
     const businessName = document.getElementById('business-name').value;
     const pincode = document.getElementById('pincode').value;
-    const city = document.getElementById('city').value;
-    const state = document.getElementById('state').value;
+    
+    const address = document.getElementById('address').value;
 
     const category = document.getElementById('business-category').value;
 
@@ -462,13 +462,15 @@ async function addBusinessDetails() {
     const latitudeInput = document.getElementById('latitude').value;
     const longitudeInput = document.getElementById('longitude').value;
     const website = document.getElementById('website').value;
+    
+    
     console.log('latitude================')
 
-    if (!businessName|| !pincode || !city || !state || !category || !phone || !latitudeInput || !longitudeInput) {
+    if (!businessName|| !latitudeInput || !longitudeInput || !pincode || !address || !phone  || !category ) {
         alert('All fields are required except website');
         return;
     }
-    const requestBody  = { businessName, pincode, city, state, category, phone, latitudeInput, longitudeInput};
+    const requestBody  = { businessName, pincode, address, category, phone, latitudeInput, longitudeInput};
     if (website) {
         requestBody.website = website;
     }
