@@ -91,11 +91,11 @@ export default class BusinessController {
         console.log(`User: ${req.user}`);
         const paidAdvertisements = await BusinessModel.getPaidAdvertisements();
         const businessCounts = await BusinessModel.getBusinessCount(req.session.toggle);
-        res.render('home', { user: req.user || null, toggle: req.session.toggle, paidAdvertisements: paidAdvertisements || 1, businessCounts });
 
+        // top rated business
 
-
-
+        const topRatedBusinesses = await BusinessModel.getTopRatedBusinessPerCategory();
+        res.render('home', { user: req.user || null, toggle: req.session.toggle ,  paidAdvertisements: paidAdvertisements || 1, businessCounts , topRatedBusinesses: topRatedBusinesses || [] });
     }
     logout(req, res) {
         res.clearCookie('token');
@@ -105,7 +105,7 @@ export default class BusinessController {
         const { location, business } = req.body;
         console.log(location, business)
 
-        res.render('business', { location, business });
+        res.render('show-business', { location, business,toggle: req.session.toggle,user: req.user });
 
     }
     showbusinessLogin(req, res) {
@@ -115,10 +115,18 @@ export default class BusinessController {
 
     }
     showTaxiPage(req, res) {
-        res.render('book-your-taxi', { user: req.user || null });
+        res.render('book-your-taxi', { user: req.user || null, toggle: req.user ? req.user.toggle : null });
     }
+    // Method to render the "Book Your Guide" form
+    async bookguide (req, res)  {
+        // Check if user is logged in and if there's any specific data to pass to the view
+        res.render('book-your-guide', { 
+          user: req.user || null, // Passing user if exists
+          toggle: req.user ? req.user.toggle : null // Conditionally passing toggle if the user exists
+        });
+      };
     showToursAndTravelsPage(req, res) {
-        res.render('tours-and-travels', { user: req.user || null });
+        res.render('tours-and-travels', { user: req.user || null ,toggle: req.user ? req.user.toggle : null });
     }
     async addNameDetails(req, res) {
         const { name, phone, userType } = req.body;
@@ -142,57 +150,37 @@ export default class BusinessController {
 
     }
     async addBusinessDetails(req, res) {
+        if (!req.user) {
+            return res.status(401).send('Unauthorized2');
+
+        }
+       
+        // Extract business details from request body
+        const { businessName, pincode, address, category, phone, latitudeInput, longitudeInput , website = null} = req.body;
+        
+         // Handle uploaded images
+         const images = req.files ? req.files.map(file => file.filename) : [];
+         if (!businessName || !pincode || !address || !category || !phone || !latitude || !longitude) {
+            return res.status(400).json({ message: 'All required fields must be provided' });
+        }
+        const userId = req.user.id ;
+
+       
         try {
-            console.log('Inside addBusinessDetails controller');
-            const {
-                businessName,
+            const userId2 = await BusinessModel.addBusinessDetails(businessName, pincode, address, category, phone, latitudeInput, longitudeInput, website, userId);
 
-                address,
-                category,
-                phone,
-                latitudeInput,
-                longitudeInput,
-                website,
-                evCharging
-            } = req.body;
+            const email = req.user.email;
+            console.log(`email in session is ${email}`)
+            await BusinessModel.setOwner(email);
+            const redirectUrl = `/manage-business/${userId2}`;
 
-            // Handle uploaded images
-            const images = req.files ? req.files.map(file => file.filename) : [];
 
-            if (!businessName || !address || !category || !phone || !latitudeInput || !longitudeInput ) {
-                return res.status(400).json({ message: 'All required fields must be provided except website' });
-            }
 
-            // Assuming the user is authenticated and `req.user` is populated
-            const userId = req.user ? req.user.id : null;
-
-            // Save business details
-            const businessId = await BusinessModel.addBusinessDetails(
-                businessName,
-
-                address,
-                category,
-                phone,
-                latitudeInput,
-                longitudeInput,
-                website || null,
-                 
-                evCharging,
-                userId
-            );
-
-            // Save images to the database (if any)
-            if (images.length > 0) {
-                await BusinessModel.addBusinessImages(businessId, images);
-            }
-
-            res.status(201).json({
-                message: 'Business details added successfully',
-                redirectUrl: '/', // Update with your desired redirect route
-            });
-        } catch (error) {
-            console.error('Error adding business details:', error);
-            res.status(500).json({ message: 'Internal Server Error', error: error.message });
+            res.json({ redirectUrl, success: true, message: 'Business details added successfully', });
+        }
+        catch (error) {
+            console.error('Database error:', error);
+            res.status(500).json({ success: false, message: 'Failed to add business' });
         }
 
 
@@ -688,5 +676,89 @@ export default class BusinessController {
 
 
 
+    //rendering footer-review-form
+    async formfooter (req, res) {
+        try {
+          res.render('form', {
+            title: 'Your Form Page',
+            user: req.user,          // Passing user info from the request
+            toggle: req.user?.toggle // Optional chaining to avoid errors if user is undefined
+          });
+        } catch (error) {
+          res.status(500).send('Error rendering the form');
+        }
+      }; 
 
+
+    // Method to search for businesses based on location and category
+    async searchBusiness(req, res) {
+        
+        const query = req.query.location;  // Location query parameter from the request
+        const category = req.query.category; // Category query parameter from the request
+        const toggle = req.session.toggle || false; // Retrieve toggle state from session (if any)
+
+        // Check if either location or category is provided
+        if (!query && !category) {
+            return res.status(400).json({ error: "At least one of location or category must be provided" });
+        }
+
+        try {
+            // Fetch businesses based on location and/or category
+            const businesses = await BusinessModel.filterBusiness(query, category);
+            console.log(businesses)
+            // Render the results or return the data
+            res.render('show-business', {
+                businesses: businesses,  // Businesses fetched from the model
+                category: category,      // Category from query (if provided)
+                query: query,            // Location query from the search
+                user: req.user,          // User information from session (if available)
+                toggle: toggle           // Toggle value from session (if available)
+            });
+
+        } catch (error) {
+            console.error("Error fetching businesses:", error);
+            res.status(500).json({ error: "Failed to fetch businesses" });
+        }
+    }
+//show what we do function 
+    async showWhatWeDo(req,res){
+        const toggle = req.session.toggle || false;
+
+        res.render('what-we-do', {
+                   // Pass the list of services to the view
+            toggle , // Pass session toggle state
+            user: req.user       // Pass user details (logged-in user)
+        });
+
+    }
+    async findWhatYouWant(req,res){
+        const toggle = req.session.toggle || false;
+
+        res.render('find-what-you-want', {
+                   // Pass the list of services to the view
+            toggle , // Pass session toggle state
+            user: req.user       // Pass user details (logged-in user)
+        });
+
+    }
+    async setupYourBusiness(req,res){
+        const toggle = req.session.toggle || false;
+
+        res.render('setup-your-business', {
+                   // Pass the list of services to the view
+            toggle , // Pass session toggle state
+            user: req.user       // Pass user details (logged-in user)
+        });
+
+    }
 }
+
+
+
+
+
+ // Export the controller as an instance for usage in routes
+
+
+
+

@@ -529,6 +529,77 @@ function setModalImage(imageSrc) {
     document.getElementById('modalImage').src = imageSrc;
 }
 
+//set current location 
+
+// Function to set current location
+function setCurrentLocation() {
+    try {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    } catch (error) {
+        alert("Error getting geolocation: " + error.message);
+    }
+}
+
+// Success callback for geolocation
+function onSuccess(position) {
+    try {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        // Set latitude and longitude fields
+        document.getElementById('latitude').value = latitude;
+        document.getElementById('longitude').value = longitude;
+
+        // Get the address from the latitude and longitude using OpenCage API
+        getAddressFromLatLng(latitude, longitude);
+    } catch (error) {
+        alert("Error in processing geolocation data: " + error.message);
+    }
+}
+
+// Error callback for geolocation
+function onError(error) {
+    try {
+        alert(`Error getting location: ${error.message}`);
+    } catch (error) {
+        alert("Error in handling geolocation error: " + error.message);
+    }
+}
+
+// Function to get address from latitude and longitude using OpenCage API
+function getAddressFromLatLng(latitude, longitude) {
+    try {
+        const apiKey = 'a1ccc097b7de4e0cb0a15bcd6e1364c2'; // Replace with your OpenCage API key
+        const url = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}&language=en&pretty=1`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                try {
+                    if (data.results.length > 0) {
+                        const address = data.results[0].formatted;
+                        // Set address field with the formatted address
+                        document.getElementById('address').value = address;
+                    } else {
+                        alert('No address found for this location.');
+                    }
+                } catch (error) {
+                    alert('Error processing API response: ' + error.message);
+                }
+            })
+            .catch(error => {
+                alert('Error fetching address: ' + error.message);
+            });
+    } catch (error) {
+        alert("Error in the geocode API request: " + error.message);
+    }
+}
+
+
 
 // Update fetch api
 

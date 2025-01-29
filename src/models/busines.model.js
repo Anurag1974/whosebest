@@ -303,6 +303,94 @@ export default class BusinessModel {
     }
     
 
+    static async filterBusiness(query, category) {
+        // OpenCage API URL
+        const apiKey = "d9a0d19eb39945f98c94b9138eb8d6d0";
+        
+        // Initialize the base SQL query
+        let sqlQuery = "SELECT * FROM business_detail WHERE 1=1";
+        
+        // Initialize parameters for SQL query
+        let queryParams = [];
+
+        try {
+            // Case 1: If location (query) is provided, fetch latitude and longitude from the API
+            if (query) {
+                const apiUrl = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(query)}&key=${apiKey}&limit=5&countrycode=IN`;
+                
+                // Fetching data from OpenCage API
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                // Extracting latitude and longitude from the API response
+                const lat = data.results[0].geometry.lat;
+                const lng = data.results[0].geometry.lng;
+
+                // Calculating the latitude and longitude range (±1 degree for simplicity)
+                const latitudeRange = [lat - 1, lat + 1];
+                const longitudeRange = [lng - 1, lng + 1];
+
+                // Update SQL query to include latitude and longitude range
+                sqlQuery += " AND latitude BETWEEN ? AND ? AND longitude BETWEEN ? AND ?";
+                queryParams.push(latitudeRange[0], latitudeRange[1], longitudeRange[0], longitudeRange[1]);
+            }
+
+            // Case 2: If category is provided, filter by category as well
+            if (category) {
+                sqlQuery += " AND category = ?";
+                queryParams.push(category);
+            }
+
+            // Fetching businesses from the database with updated query
+            const [business_detail] = await db.execute(sqlQuery, queryParams);
+
+            // Returning the businesses
+            return business_detail;
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            throw new Error("Failed to fetch location or businesses");
+        }
+    }
+
+    static async getTopRatedBusinessPerCategory() {
+        const query = `
+            WITH ranked_businesses AS (
+                SELECT 
+                    business_detail.id, 
+                    business_detail.business_name, 
+                    business_detail.address, 
+                    business_detail.image_source, 
+                    business_detail.category, 
+                    AVG(reviews.rating) AS average_rating,
+                    ROW_NUMBER() OVER (PARTITION BY business_detail.category ORDER BY AVG(reviews.rating) DESC) AS rank
+                FROM 
+                    business_detail
+                JOIN
+                    reviews ON business_detail.id = reviews.business_id
+                GROUP BY 
+                    business_detail.id, business_detail.category
+            )
+            SELECT 
+                id, 
+                business_name, 
+                address, 
+                image_source, 
+                category, 
+                average_rating
+            FROM 
+                ranked_businesses
+            WHERE 
+                rank = 1;
+        `;
+        
+        try {
+            const [businesses] = await db.execute(query);  // Assuming `db.execute` works similarly to your MySQL connection
+            return businesses;
+        } catch (error) {
+            console.error('Error fetching top-rated businesses:', error);
+            throw new Error("Failed to fetch top-rated businesses per category");
+        }
+    }
 
 }
 

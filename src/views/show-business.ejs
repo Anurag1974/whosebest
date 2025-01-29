@@ -1,16 +1,6 @@
 <div class="container my-5">
-    <div>
-        <h1>Businesses</h1>
-
-        <form id="sortForm">
-            <label for="sortBy">Sort By:</label>
-            <select id="sortBy" name="sortBy" onchange="submitSort()">
-                <option value="rating" <%= sortBy === 'rating' ? 'selected' : '' %>>Rating</option>
-                <option value="totalRatings" <%= sortBy === 'totalRatings' ? 'selected' : '' %>>Total Ratings</option>
-            </select>
-        </form>
-    </div>
-    <h1 class="text-center mb-4">List of Businesses</h1>
+    
+    <h1 class="text-center mb-4">List of Businesses :<%=category%></h1>
     <div class="row">
         <% if (businesses && businesses.length > 0) { %>
             <% businesses.forEach(business => { %>
@@ -69,19 +59,5 @@
         <% } %>
     </div>
 
-    <!-- Pagination Controls -->
-    <div class="pagination mt-4">
-        <% if (currentPage > 1) { %>
-            <a href="/search-category?category=<%= category %>&sortBy=<%= sortBy %>&page=<%= currentPage - 1 %>" class="btn btn-outline-primary btn-sm">Previous</a>
-        <% } %>
-        <% for (let i = 1; i <= totalPages; i++) { %>
-            <a href="/search-category?category=<%= category %>&sortBy=<%= sortBy %>&page=<%= i %>" 
-               class="btn <%= i === currentPage ? 'btn-primary' : 'btn-outline-primary' %> btn-sm">
-                <%= i %>
-            </a>
-        <% } %>
-        <% if (currentPage < totalPages) { %>
-            <a href="/search-category?category=<%= category %>&sortBy=<%= sortBy %>&page=<%= currentPage + 1 %>" class="btn btn-outline-primary btn-sm">Next</a>
-        <% } %>
-    </div>
+    
 </div>
