@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import { initializeToggle } from "./src/middleware/toggleMiddleware.js";
 import multer from 'multer';
+import { name } from "ejs";
 
 
 const server = express();
@@ -66,7 +67,7 @@ server.get('/api/location', async (req, res) => {
             lat: result.geometry.lat,
             lng: result.geometry.lng,
         }));
-
+        
         res.json(suggestions);
     } catch (error) {
         console.error("Error fetching data:", error);

@@ -26,14 +26,23 @@ router.get('/your-business/:id',authMiddleware, initializeToggle,  businessContr
 router.get('/business-details/:businessId', authMiddleware,  businessController.showBusinessDetailsById)
 router.get('/search-category', authMiddleware, businessController.searchCategory);
 router.get('/book-your-taxi', businessController.showTaxiPage)
+// Render the Book Your Guide form
+router.get('/book-your-guide', businessController.bookguide);
+
 router.get('/tours-and-travels', businessController.showToursAndTravelsPage)
 router.get('/rate/:id',authMiddleware, businessController.showRatePage)
 // Route to get business details by ID
 router.get('/edit/:id',authMiddleware, businessController.showEditUser);
+router.get('/show-business', businessController.searchBusiness)
+router.get('/what-we-do',businessController.showWhatWeDo);
+router.get('/find-what-you-want',businessController.findWhatYouWant);
+router.get('/setup-your-business',businessController.setupYourBusiness);
+router.get('/form', businessController.formfooter);
+
 
 
 router.post('/enter-your-details', businessController.addNameDetails)
-router.post('/show-business', businessController.showBusiness)
+//router.post('/show-business', businessController.showBusiness)
 router.post('/send-otp', businessController.sendOtp);
 router.post('/verify-otp', businessController.verifyOtpHandler);
 router.post('/verify-otp-pop', businessController.verifyOtpHandlerPopupPage);

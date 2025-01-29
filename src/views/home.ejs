@@ -151,6 +151,31 @@
         </div> <!-- .row -->
     </div> <!-- .container -->
 </section>
+
+
+<!-- best rated category section -->
+
+<div class="container mt-5">
+    <div class="row g-4">
+        <% topRatedBusinesses.forEach((business) => { %>
+        <div class="col-md-3">
+            <div class="card h-100">
+                <img src="<%= business.image_source %>" class="card-img-top" alt="card">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <!-- Updated font size for the business name -->
+                    <h6 class="card-title small" style="font-size: 0.9rem;"><%= business.business_name %></h6>
+                    <h6 class="card-title small mt-3 style="font-size: 0.9rem; "><%= business.category%></h6>
+                    <a href="business-details/<%= business.id %>" class="btn btn-primary mt-3 align-self-center">View details </a>
+                </div>
+            </div>
+        </div>
+        <% }) %>
+    </div>
+</div>
+
+
+
+<!-- how it work section -->
 <section class="works">
     <div class="container">
         <div class="section-header">
@@ -166,15 +191,14 @@
                             <i class="flaticon-lightbulb-idea fs-1"></i>
                         </div>
                         <h2 class="mb-3">
-                            <a href="#" class="text-decoration-none ">
+                            <a href="/what-we-do" class="text-decoration-none ">
                                 Choose What to Do
                             </a>
                         </h2>
                         <p>
-                            Lorem ipsum dolor sit amet, consecte adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore magna aliqua.
+                            We offer a business listing service to help your business get noticed, showcase your products and services, and drive growth.
                         </p>
-                        <button class="btn btn-primary mt-3" onclick="window.location.href='#'">
+                        <button class="btn btn-primary mt-3" onclick="window.location.href='/what-we-do'">
                             Read More
                         </button>
                     </div>
@@ -185,15 +209,14 @@
                             <i class="flaticon-networking fs-1"></i>
                         </div>
                         <h2 class="mb-3">
-                            <a href="#" class="text-decoration-none ">
+                            <a href="/find-what-you-want" class="text-decoration-none ">
                                 Find What You Want
                             </a>
                         </h2>
                         <p>
-                            Lorem ipsum dolor sit amet, consecte adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore magna aliqua.
+                            On this platform, easily search and discover a wide range of businesses and services to meet your needs and preferences.
                         </p>
-                        <button class="btn btn-primary mt-3 " onclick="window.location.href='#'">
+                        <button class="btn btn-primary mt-3 " onclick="window.location.href='/find-what-you-want'">
                             Read More
                         </button>
                     </div>
@@ -204,15 +227,14 @@
                             <i class="flaticon-location-on-road fs-1"></i>
                         </div>
                         <h2 class="mb-3">
-                            <a href="#" class="text-decoration-none ">
-                                Explore Amazing Places
+                            <a href="/setup-your-business" class="text-decoration-none ">
+                                Setup Your Business
                             </a>
                         </h2>
                         <p>
-                            Lorem ipsum dolor sit amet, consecte adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore magna aliqua.
+                            Setup your business with us, we are here to help you grow, succeed, and achieve your goals with expert guidance and support.
                         </p>
-                        <button class="btn btn-primary mt-3" onclick="window.location.href='#'">
+                        <button class="btn btn-primary mt-3" onclick="window.location.href='/setup-your-business'">
                             Read More
                         </button>
                     </div>
@@ -222,7 +244,7 @@
         </div>
     </div>
 </section>
-<h1>this is<%= console.log(paidAdvertisements)%></h1>
+<!-- <h1>this is<%= console.log(paidAdvertisements)%></h1> -->
 <% if(paidAdvertisements){%>
     
     
