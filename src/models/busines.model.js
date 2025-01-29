@@ -99,6 +99,41 @@ export default class BusinessModel {
         const userId2 = result.insertId;
         return userId2;
     }
+
+    //update new business
+
+    static async updateBusinessDetails(businessId, businessName, address, category, phone, website, state, city) {
+        console.log('Updating Business Details:', { businessId, businessName, address, category, phone, website, state, city });
+
+        try {
+            const [result] = await db.execute(
+                `UPDATE business_detail 
+                SET business_name = ?, address = ?, category = ?, phone = ?, website = ?, state = ?, city = ? 
+                WHERE id = ?`,
+                [businessName, address, category, phone, website, state, city, businessId]
+            );
+
+            return result.affectedRows > 0; // Return true if update is successful
+        } catch (error) {
+            console.error('Database Update Error:', error);
+            throw error;
+        }
+    }
+
+     // Fetch Business Details by ID
+     static async getBusinessById(businessId) {
+        try {
+            const [result] = await db.execute(
+                'SELECT * FROM business_detail WHERE id = ?',
+                [businessId]
+            );
+            return result.length ? result[0] : null;
+        } catch (error) {
+            console.error('Database Fetch Error:', error);
+            throw error;
+        }
+    }
+
     static async addBusinessImages(businessId, images) {
         const values = images.map(image => [businessId, image]);
         await db.query(`INSERT INTO business_images (business_id, image_path) VALUES ?`, [values]);
@@ -303,52 +338,83 @@ export default class BusinessModel {
     }
     
 
-    static async filterBusiness(query, category) {
-        // OpenCage API URL
-        const apiKey = "d9a0d19eb39945f98c94b9138eb8d6d0";
+    // static async filterBusiness(query, category) {
+    //     // OpenCage API URL
+    //     const apiKey = "d9a0d19eb39945f98c94b9138eb8d6d0";
         
+    //     // Initialize the base SQL query
+    //     let sqlQuery = "SELECT * FROM business_detail WHERE 1=1";
+        
+    //     // Initialize parameters for SQL query
+    //     let queryParams = [];
+
+    //     try {
+    //         // Case 1: If location (query) is provided, fetch latitude and longitude from the API
+    //         if (query) {
+    //             const apiUrl = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(query)}&key=${apiKey}&limit=5&countrycode=IN`;
+                
+    //             // Fetching data from OpenCage API
+    //             const response = await fetch(apiUrl);
+    //             const data = await response.json();
+
+    //             // Extracting latitude and longitude from the API response
+    //             const lat = data.results[0].geometry.lat;
+    //             const lng = data.results[0].geometry.lng;
+
+    //             // Calculating the latitude and longitude range (±1 degree for simplicity)
+    //             const latitudeRange = [lat - 1, lat + 1];
+    //             const longitudeRange = [lng - 1, lng + 1];
+
+    //             // Update SQL query to include latitude and longitude range
+    //             sqlQuery += " AND latitude BETWEEN ? AND ? AND longitude BETWEEN ? AND ?";
+    //             queryParams.push(latitudeRange[0], latitudeRange[1], longitudeRange[0], longitudeRange[1]);
+    //         }
+
+    //         // Case 2: If category is provided, filter by category as well
+    //         if (category) {
+    //             sqlQuery += " AND category = ?";
+    //             queryParams.push(category);
+    //         }
+
+    //         // Fetching businesses from the database with updated query
+    //         const [business_detail] = await db.execute(sqlQuery, queryParams);
+
+    //         // Returning the businesses
+    //         return business_detail;
+    //     } catch (error) {
+    //         console.error("Error fetching data:", error);
+    //         throw new Error("Failed to fetch location or businesses");
+    //     }
+    // }
+
+    static async filterBusiness(city, category) {
         // Initialize the base SQL query
         let sqlQuery = "SELECT * FROM business_detail WHERE 1=1";
         
         // Initialize parameters for SQL query
         let queryParams = [];
-
+    
         try {
-            // Case 1: If location (query) is provided, fetch latitude and longitude from the API
-            if (query) {
-                const apiUrl = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(query)}&key=${apiKey}&limit=5&countrycode=IN`;
-                
-                // Fetching data from OpenCage API
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-
-                // Extracting latitude and longitude from the API response
-                const lat = data.results[0].geometry.lat;
-                const lng = data.results[0].geometry.lng;
-
-                // Calculating the latitude and longitude range (±1 degree for simplicity)
-                const latitudeRange = [lat - 1, lat + 1];
-                const longitudeRange = [lng - 1, lng + 1];
-
-                // Update SQL query to include latitude and longitude range
-                sqlQuery += " AND latitude BETWEEN ? AND ? AND longitude BETWEEN ? AND ?";
-                queryParams.push(latitudeRange[0], latitudeRange[1], longitudeRange[0], longitudeRange[1]);
+            // Case 1: If city is provided, filter by city
+            if (city) {
+                sqlQuery += " AND city = ?";
+                queryParams.push(city);
             }
-
+    
             // Case 2: If category is provided, filter by category as well
             if (category) {
                 sqlQuery += " AND category = ?";
                 queryParams.push(category);
             }
-
+    
             // Fetching businesses from the database with updated query
             const [business_detail] = await db.execute(sqlQuery, queryParams);
-
+    
             // Returning the businesses
             return business_detail;
         } catch (error) {
             console.error("Error fetching data:", error);
-            throw new Error("Failed to fetch location or businesses");
+            throw new Error("Failed to fetch businesses");
         }
     }
 

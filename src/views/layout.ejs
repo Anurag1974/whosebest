@@ -8,6 +8,11 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Kumar+One&display=swap" rel="stylesheet">
+
+    
 
     <!-- Optional custom styles -->
     <style>
@@ -71,9 +76,6 @@
     <!-- slick.js -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
-
-    
-
 </head>
 
 <body> 
@@ -82,7 +84,7 @@
             <!-- Start Navigation -->
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container mb-2 mt-2">
-                    <a class="navbar-brand" href="/">Who's<span> best</span></a>
+                    <a class="navbar-brand" href="/">Who's<span> Best</span></a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
                         aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -92,8 +94,8 @@
                     <div class="input-search-container">
                         <form class="d-flex "action="/show-business" method="get">
                             <div class="input-group">
-                                <input class="form-control me-2 location-input" type="text" placeholder="Enter Location"
-                                    id="locationBox" name="location">
+                                <input class="form-control me-2 location-input" type="text" placeholder="Search with city"
+                                    id="city" name="city">
                                 <!-- <div id="suggestions-box">
                                     <button>location</button>
                                 </div> -->
@@ -143,7 +145,7 @@
                                        <a class="nav-link" href="/logout">Logout</a>
                                     </li> 
                                     <li class="nav-item">
-                                        <a class="nav-link" href="/edit">Edit</a>
+                                        <a class="nav-link" href="/edit/<%= user.id %>">Edit</a>
                                     </li> 
                                   </div>
                                   
@@ -315,143 +317,143 @@
         </script>
 
         <script>
-           const locationInputs = document.querySelectorAll('.location-input');
+//            const locationInputs = document.querySelectorAll('.location-input');
 
-// Add event listener to each input field
-locationInputs.forEach(locationInput => {
-    // Create the suggestions box
-    const suggestionsBox = document.createElement('div');
-    suggestionsBox.classList.add('suggestions-box');
-    locationInput.parentNode.appendChild(suggestionsBox);
+// // Add event listener to each input field
+// locationInputs.forEach(locationInput => {
+//     // Create the suggestions box
+//     const suggestionsBox = document.createElement('div');
+//     suggestionsBox.classList.add('suggestions-box');
+//     locationInput.parentNode.appendChild(suggestionsBox);
 
-    // Create the "Get current location" button
-    const getLocationBtn = document.createElement('button');
-    getLocationBtn.textContent = "Get current location";
-    getLocationBtn.classList.add('get-location-btn');
-    getLocationBtn.style.display = "none";
+//     // Create the "Get current location" button
+//     const getLocationBtn = document.createElement('button');
+//     getLocationBtn.textContent = "Get current location";
+//     getLocationBtn.classList.add('get-location-btn');
+//     getLocationBtn.style.display = "none";
 
-    getLocationBtn.addEventListener('click', async (e) => {
-        e.preventDefault();
+//     getLocationBtn.addEventListener('click', async (e) => {
+//         e.preventDefault();
 
-        if (!navigator.geolocation) {
-            alert('Geolocation is not supported by your browser.');
-            return;
-        }
+//         if (!navigator.geolocation) {
+//             alert('Geolocation is not supported by your browser.');
+//             return;
+//         }
 
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
-                console.log('Location accessed:', { latitude, longitude });
+//         navigator.geolocation.getCurrentPosition(
+//             (position) => {
+//                 const latitude = position.coords.latitude;
+//                 const longitude = position.coords.longitude;
+//                 console.log('Location accessed:', { latitude, longitude });
 
-                // Get the address from latitude and longitude
-                getAddressFromLatLng(latitude, longitude);
-            },
-            (error) => {
-                switch (error.code) {
-                    case error.PERMISSION_DENIED:
-                        alert('Please allow location permission.');
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        alert('Location information is unavailable.');
-                        break;
-                    case error.TIMEOUT:
-                        alert('Request to get location timed out.');
-                        break;
-                    default:
-                        alert('An unknown error occurred while accessing location.');
-                }
-            }
-        );
-    });
+//                 // Get the address from latitude and longitude
+//                 getAddressFromLatLng(latitude, longitude);
+//             },
+//             (error) => {
+//                 switch (error.code) {
+//                     case error.PERMISSION_DENIED:
+//                         alert('Please allow location permission.');
+//                         break;
+//                     case error.POSITION_UNAVAILABLE:
+//                         alert('Location information is unavailable.');
+//                         break;
+//                     case error.TIMEOUT:
+//                         alert('Request to get location timed out.');
+//                         break;
+//                     default:
+//                         alert('An unknown error occurred while accessing location.');
+//                 }
+//             }
+//         );
+//     });
 
-    // Append the button to the suggestions box initially
-    suggestionsBox.appendChild(getLocationBtn);
+//     // Append the button to the suggestions box initially
+//     suggestionsBox.appendChild(getLocationBtn);
 
-    // Show the suggestions box and button when the input is focused
-    locationInput.addEventListener('focus', () => {
-        suggestionsBox.style.display = 'block';
-        getLocationBtn.style.display = 'inline-block';
-    });
+//     // Show the suggestions box and button when the input is focused
+//     locationInput.addEventListener('focus', () => {
+//         suggestionsBox.style.display = 'block';
+//         getLocationBtn.style.display = 'inline-block';
+//     });
 
-    // Fetch and display suggestions on input
-    locationInput.addEventListener('input', async () => {
-        const query = locationInput.value.trim();
-        if (query.length < 3) {
-            suggestionsBox.style.display = 'none'; // Hide if query is too short
-            clearSuggestions();
-            return;
-        }
+//     // Fetch and display suggestions on input
+//     locationInput.addEventListener('input', async () => {
+//         const query = locationInput.value.trim();
+//         if (query.length < 3) {
+//             suggestionsBox.style.display = 'none'; // Hide if query is too short
+//             clearSuggestions();
+//             return;
+//         }
 
-        try {
-            const response = await fetch(`/api/location?q=${encodeURIComponent(query)}`);
-            const suggestions = await response.json();
-            console.log('Suggestions:', suggestions);
+//         try {
+//             const response = await fetch(`/api/location?q=${encodeURIComponent(query)}`);
+//             const suggestions = await response.json();
+//             console.log('Suggestions:', suggestions);
 
-            clearSuggestions(); // Clear previous suggestions while preserving the button
+//             clearSuggestions(); // Clear previous suggestions while preserving the button
 
-            if (suggestions.length > 0) {
-                suggestionsBox.style.display = 'block'; // Show dropdown
+//             if (suggestions.length > 0) {
+//                 suggestionsBox.style.display = 'block'; // Show dropdown
 
-                suggestions.forEach(suggestion => {
-                    const div = document.createElement('div');
-                    div.textContent = suggestion.address; // Show address in the dropdown
-                    div.classList.add('suggestion-item');
-                    div.addEventListener('click', () => {
-                        locationInput.value = suggestion.address; // Set address in the input field
-                        console.log('Selected Location:', {
-                            name: suggestion.address,
-                            latitude: suggestion.lat,
-                            longitude: suggestion.lng,
-                        });
-                        suggestionsBox.style.display = 'none';
-                        clearSuggestions();
-                    });
-                    suggestionsBox.appendChild(div);
-                });
-            } else {
-                suggestionsBox.style.display = 'none'; // Hide if no suggestions
-            }
-        } catch (error) {
-            console.error('Error fetching suggestions:', error);
-        }
-    });
+//                 suggestions.forEach(suggestion => {
+//                     const div = document.createElement('div');
+//                     div.textContent = suggestion.address; // Show address in the dropdown
+//                     div.classList.add('suggestion-item');
+//                     div.addEventListener('click', () => {
+//                         locationInput.value = suggestion.address; // Set address in the input field
+//                         console.log('Selected Location:', {
+//                             name: suggestion.address,
+//                             latitude: suggestion.lat,
+//                             longitude: suggestion.lng,
+//                         });
+//                         suggestionsBox.style.display = 'none';
+//                         clearSuggestions();
+//                     });
+//                     suggestionsBox.appendChild(div);
+//                 });
+//             } else {
+//                 suggestionsBox.style.display = 'none'; // Hide if no suggestions
+//             }
+//         } catch (error) {
+//             console.error('Error fetching suggestions:', error);
+//         }
+//     });
 
-    // Hide suggestions box when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!suggestionsBox.contains(e.target) && e.target !== locationInput) {
-            suggestionsBox.style.display = 'none';
-            clearSuggestions();
-        }
-    });
+//     // Hide suggestions box when clicking outside
+//     document.addEventListener('click', (e) => {
+//         if (!suggestionsBox.contains(e.target) && e.target !== locationInput) {
+//             suggestionsBox.style.display = 'none';
+//             clearSuggestions();
+//         }
+//     });
 
-    // Function to clear suggestions but preserve the button
-    function clearSuggestions() {
-        suggestionsBox.innerHTML = '';
-        suggestionsBox.appendChild(getLocationBtn);
-    }
+//     // Function to clear suggestions but preserve the button
+//     function clearSuggestions() {
+//         suggestionsBox.innerHTML = '';
+//         suggestionsBox.appendChild(getLocationBtn);
+//     }
 
-    // Function to get address from latitude and longitude using OpenCage API
-    function getAddressFromLatLng(latitude, longitude) {
-        const apiKey = 'd9a0d19eb39945f98c94b9138eb8d6d0'; // Your OpenCage API key
-        const url = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}&language=en&pretty=1`;
+//     // Function to get address from latitude and longitude using OpenCage API
+//     function getAddressFromLatLng(latitude, longitude) {
+//         const apiKey = 'd9a0d19eb39945f98c94b9138eb8d6d0'; // Your OpenCage API key
+//         const url = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}&language=en&pretty=1`;
 
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                if (data.results.length > 0) {
-                    const address = data.results[0].formatted;
-                    locationInput.value = address; // Update the input field with the address
-                    console.log('Address from coordinates:', address);
-                } else {
-                    alert('No address found for this location.');
-                }
-            })
-            .catch(error => {
-                alert('Error fetching address: ' + error.message);
-            });
-    }
-});
+//         fetch(url)
+//             .then(response => response.json())
+//             .then(data => {
+//                 if (data.results.length > 0) {
+//                     const address = data.results[0].formatted;
+//                     locationInput.value = address; // Update the input field with the address
+//                     console.log('Address from coordinates:', address);
+//                 } else {
+//                     alert('No address found for this location.');
+//                 }
+//             })
+//             .catch(error => {
+//                 alert('Error fetching address: ' + error.message);
+//             });
+//     }
+// });
 
             // ṭoggle================================================
 

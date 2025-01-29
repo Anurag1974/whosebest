@@ -40,7 +40,10 @@ router.get('/find-what-you-want',businessController.findWhatYouWant);
 router.get('/setup-your-business',businessController.setupYourBusiness);
 router.get('/form', businessController.formfooter);
 
+// Use PUT instead of POST
+router.get('/business/:businessId', BusinessController.getBusinessById);
 
+router.put('/update-business', BusinessController.updateBusinessDetails); 
 
 router.post('/enter-your-details', businessController.addNameDetails)
 //router.post('/show-business', businessController.showBusiness)

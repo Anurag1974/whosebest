@@ -148,20 +148,20 @@ async function fetchLocationDetails(pincode) {
     }
 }
 
-pincodeInput.addEventListener('input', async () => {
-    console.log('keuy is pressed')
-    const pincode = pincodeInput.value.trim();
-    if (pincode) {
-        const { city, state, latitude, longitude } = await fetchLocationDetails(pincode);
-        cityInput.value = city;
-        stateInput.value = state;
-        latitudeInput.value = latitude;
-        longitudeInput.value = longitude;
-        additionalFields.classList.remove('d-none');
-    } else {
-        additionalFields.classList.add('d-none');
-    }
-});
+// pincodeInput.addEventListener('input', async () => {
+//     console.log('keuy is pressed')
+//     const pincode = pincodeInput.value.trim();
+//     if (pincode) {
+//         const { city, state, latitude, longitude } = await fetchLocationDetails(pincode);
+//         cityInput.value = city;
+//         stateInput.value = state;
+//         latitudeInput.value = latitude;
+//         longitudeInput.value = longitude;
+//         additionalFields.classList.remove('d-none');
+//     } else {
+//         additionalFields.classList.add('d-none');
+//     }
+// });
 
 // send otp
 async function sendOtp() {
@@ -465,11 +465,13 @@ async function addBusinessDetails() {
     const evCharging = document.getElementById('ev-charging').value;
     const images = document.getElementById('images').files;
 
+    const state=document.getElementById('add-state').value;
+    const city=document.getElementById('add-city').value;
     
     
     console.log('latitude================')
 
-    if (!businessName|| !latitudeInput || !longitudeInput || !address || !phone  || !category ) {
+    if (!businessName|| !latitudeInput || !longitudeInput || !address || !phone  || !category   ) {
         alert('All fields are required except website');
         return;
     }
@@ -516,6 +518,70 @@ async function addBusinessDetails() {
 
 
 }
+
+async function updateBusinessDetails(){
+    document.getElementById('updateBusinessForm').addEventListener('submit', async function (event) {
+        event.preventDefault(); // Prevent default form submission
+    
+        // Get business ID (Ensure it's being retrieved correctly)
+        const businessId = document.getElementById('businessId').value;
+        if (!businessId) {
+            alert('Business ID is missing!');
+            return;
+        }
+    
+        // Get form data
+        const businessName = document.getElementById('businessName').value;
+        const address = document.getElementById('businessAddress').value;
+        const category = document.getElementById('businessCategory').value;
+        const phone = document.getElementById('businessPhone').value;
+        const website = document.getElementById('businessWebsite').value;
+        const city = document.getElementById('businessCity').value;
+        const state = document.getElementById('businessState').value;
+    
+        // Validate required fields
+        if (!businessName || !address || !category || !phone || !city || !state) {
+            alert('All fields are required except website.');
+            return;
+        }
+    
+        const requestBody = {
+            businessId, // Ensure businessId is passed
+            businessName,
+            address,
+            category,
+            phone,
+            city,
+            state,
+            website
+        };
+    
+        console.log('Sending Update Request:', requestBody);
+    
+        try {
+            const response = await fetch('/update-business', {
+                method: 'PUT',  // Use PUT method for updating
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestBody)
+            });
+    
+            const data = await response.json();
+    
+            if (response.ok) {
+                alert('Business details updated successfully');
+                window.location.reload(); // Refresh page to show updated details
+            } else {
+                alert(`Failed to update business: ${data.message}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while updating business details.');
+        }
+    });
+    
+    
+}
+
 function submitSort() {
     const form = document.getElementById('sortForm');
     const sortBy = document.getElementById('sortBy').value;
