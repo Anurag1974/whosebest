@@ -626,6 +626,8 @@ async function updateUserInformation() {
         const data = await response.json();
         console.log('Success:', data);
         alert('User information updated successfully');
+        window.location.reload();
+        
     } catch (error) {
         console.error('Error updating user:', error);
         alert('Failed to update user information');

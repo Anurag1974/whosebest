@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 import { initializeToggle } from "./src/middleware/toggleMiddleware.js";
 import multer from 'multer';
 import { name } from "ejs";
+import { fileURLToPath } from "url";  
 
 
 const server = express();
@@ -17,8 +18,15 @@ const PORT = process.env.PORT || "3100";
 // middleware
 const upload = multer({dest: 'uploads/'});
 
+// Manually define __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+server.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 server.use(cookieParser());
 server.use(express.static('public'));
+
+
 server.use(express.urlencoded({ extended: true }));
 
 

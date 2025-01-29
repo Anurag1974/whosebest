@@ -8,7 +8,9 @@
         <nav id="navMenu" class="bg-white p-3 shadow-lg" style="width: 250px; height: 100vh;">
             <!-- Profile Image -->
             <div class="text-center mb-4">
-                <img src="https://via.placeholder.com/100" alt="Profile Picture" class="rounded-circle mb-3" style="width: 80px; height: 80px;">
+                
+
+                <img  src="<%= userDetails.profile_image %>" alt="Profile Picture" class="rounded-circle mb-3" style="width: 80px; height: 80px;">
                 <p class="fw-bold text-dark"><%= userDetails.name  %></p>
             </div>
 
@@ -35,7 +37,7 @@
             <!-- Banner Section -->
             <div class="banner">
                 <!-- Profile Image inside the banner -->
-                <img src="./image/banner.jpg" alt="Profile Image" class="profile-image">
+                <img  src="<%= userDetails.profile_image %>" alt="Profile Image" class="profile-image">
             </div>
 
             <!-- Content Section -->

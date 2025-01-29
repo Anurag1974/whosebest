@@ -588,6 +588,9 @@ export default class BusinessController {
 
             // Assuming the business details contain a toggle value
             const toggle = req.session.toggle || userDetails.toggle || false; // Use session toggle or the business-specific toggle
+            userDetails.profile_image = userDetails.profile_image
+            ? `/uploads/${userDetails.profile_image}` // Adjust the path as needed
+            : null;
 
             // Render the edit page with business details and the toggle value
             res.render('edit', {
