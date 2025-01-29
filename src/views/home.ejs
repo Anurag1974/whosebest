@@ -143,7 +143,19 @@
                 <div class="single-list-topics-icon">
                     <i class="fa-solid fa-screwdriver-wrench fa-2xl"></i>
                 </div>
-                <h2><a id="all-category" href="/search-category?category=ACService">All Category</a></h2>
+                <button id="all-category"  class="btn btn-primary" >All Category</button>
+                <div id="sidebar" class="sidebar">
+                    <div class="sidebar-header">
+                        <h3>Categories</h3>
+                        <button id="close-sidebar" class="close-btn">&times;</button>
+                    </div>
+                    <ul class="sidebar-content">
+                        <li><a href="">Category 1</a></li>
+                        <li><a href="">Category 2</a> </li>
+                        <li><a href="">Category 3</a> </li>
+                        <li><a href="">Category 4</a></li>
+                    </ul>
+                </div>
                 
             </div>            
 
@@ -222,7 +234,7 @@
         </div>
     </div>
 </section>
-<h1>this is<%= console.log(paidAdvertisements)%></h1>
+
 <% if(paidAdvertisements){%>
     
     
@@ -424,9 +436,7 @@
     <div class="testimonial-slider">
         <!-- Testimonial 1 -->
         <div class="testimonial-box text-center">
-            <div class="testimonial-img mx-auto">
-                <img src="assets/images/clients/c1.png" alt="clients" class="rounded-circle">
-            </div>
+            
             <h2>Shahrab Hossain</h2>
             <h4>London, UK</h4>
             <div class="testimonial-stars">
@@ -443,9 +453,7 @@
         </div>
         <!-- Testimonial 2 -->
         <div class="testimonial-box text-center">
-            <div class="testimonial-img mx-auto">
-                <img src="assets/images/clients/c2.png" alt="clients" class="rounded-circle">
-            </div>
+           
             <h2>Tom Leakar1</h2>
             <h4>London, UK</h4>
             <div class="testimonial-stars">
@@ -461,9 +469,7 @@
         </div>
         <!-- Testimonial 3 -->
         <div class="testimonial-box text-center">
-            <div class="testimonial-img mx-auto">
-                <img src="assets/images/clients/c2.png" alt="clients" class="rounded-circle">
-            </div>
+            
             <h2>Tom Leakar2</h2>
             <h4>London, UK</h4>
             <div class="testimonial-stars">
@@ -479,9 +485,7 @@
         </div>
         <!-- Testimonial 4 -->
         <div class="testimonial-box text-center">
-            <div class="testimonial-img mx-auto">
-                <img src="assets/images/clients/c2.png" alt="clients" class="rounded-circle">
-            </div>
+            
             <h2>Tom Leakar3</h2>
             <h4>London, UK</h4>
             <div class="testimonial-stars">
@@ -497,9 +501,7 @@
         </div>
         <!-- Testimonial 5 -->
         <div class="testimonial-box text-center">
-            <div class="testimonial-img mx-auto">
-                <img src="assets/images/clients/c2.png" alt="clients" class="rounded-circle">
-            </div>
+            
             <h2>Tom Leakar4</h2>
             <h4>London, UK</h4>
             <div class="testimonial-stars">
@@ -515,9 +517,7 @@
         </div>
         <!-- Testimonial 6 -->
         <div class="testimonial-box text-center">
-            <div class="testimonial-img mx-auto">
-                <img src="assets/images/clients/c2.png" alt="clients" class="rounded-circle">
-            </div>
+            
             <h2>Tom Leakar5</h2>
             <h4>London, UK</h4>
             <div class="testimonial-stars">
@@ -663,3 +663,13 @@
     </div>
 
 </section>
+<script>
+    
+document.getElementById('all-category').addEventListener('click', function () {
+    document.getElementById('sidebar').classList.add('show');
+});
+
+document.getElementById('close-sidebar').addEventListener('click', function () {
+    document.getElementById('sidebar').classList.remove('show');
+});
+</script>

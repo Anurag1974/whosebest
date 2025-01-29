@@ -448,7 +448,7 @@ async function addName() {
 }
 async function addBusinessDetails() {
     const businessName = document.getElementById('business-name').value;
-    const pincode = document.getElementById('pincode').value;
+    
     
     const address = document.getElementById('address').value;
 
@@ -462,26 +462,42 @@ async function addBusinessDetails() {
     const latitudeInput = document.getElementById('latitude').value;
     const longitudeInput = document.getElementById('longitude').value;
     const website = document.getElementById('website').value;
+    const evCharging = document.getElementById('ev-charging').value;
+    const images = document.getElementById('images').files;
+
     
     
     console.log('latitude================')
 
-    if (!businessName|| !latitudeInput || !longitudeInput || !pincode || !address || !phone  || !category ) {
+    if (!businessName|| !latitudeInput || !longitudeInput || !address || !phone  || !category ) {
         alert('All fields are required except website');
         return;
     }
-    const requestBody  = { businessName, pincode, address, category, phone, latitudeInput, longitudeInput};
+    const formData = new FormData();
+    formData.append('businessName', businessName);
+   
+    formData.append('address', address);
+    formData.append('category', category);
+    formData.append('phone', phone);
+    formData.append('latitudeInput', latitudeInput);
+    formData.append('longitudeInput', longitudeInput);
+    formData.append('evCharging', evCharging)
+
     if (website) {
-        requestBody.website = website;
+        formData.append('website', website);
     }
+
+    for (let i = 0; i < images.length; i++) {
+        formData.append('images', images[i]);
+    }
+
+    
     const url = '/list-business';
     try {
         const res = await fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(requestBody)
+            
+            body: formData,
         });
 
         if (res.ok) {
@@ -513,67 +529,38 @@ function setModalImage(imageSrc) {
     document.getElementById('modalImage').src = imageSrc;
 }
 
+
 // Update fetch api
 
-// async function updateUserInformation(name, phone_number) {
-//     const name = document.getElementById('user-name').value;
-//     const phone_number = document.getElementById('phone_number').value;
-//     try {
-//         const response = await fetch('/update-user', {
-//             method: 'POST',  // Use POST for updating data
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify({
-//                 name: name,
-//                 phone_number: phone_number
-//             }),
-//         });
+async function updateUserInformation() {
+    const formData = new FormData();
+    formData.append('name', document.getElementById('user-name').value);
+    formData.append('phoneNumber', document.getElementById('phone-number').value);
+    
+    const fileInput = document.getElementById('profileImage');
+    if (fileInput.files.length > 0) {
+        formData.append('profileImage', fileInput.files[0]); // Append image file
+    }
 
-//         // Handling the response
-//         if (!response.ok) {
-//             throw new Error(`Error: ${response.statusText}`);
-//         }
+    try {
+        const response = await fetch('/update-user', {
+            method: 'PUT',
+            body: formData // Send as multipart/form-data (no need for Content-Type)
+        });
 
-//         const data = await response.json();
-//         console.log('Success:', data);
-//         alert('User information updated successfully');
-//     } catch (error) {
-//         console.error('Error updating user:', error);
-//         alert('Failed to update user information');
-//     }
-// }
+        if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+        }
 
-// opening modal from rate
- 
-// document.getElementById("openModalBtn").addEventListener("click", function () {
-//     var myModal = new bootstrap.Modal(document.getElementById("loginModal"));
-//     myModal.show();
-// });
+        const data = await response.json();
+        console.log('Success:', data);
+        alert('User information updated successfully');
+    } catch (error) {
+        console.error('Error updating user:', error);
+        alert('Failed to update user information');
+    }
+}
 
-// document.addEventListener("DOMContentLoaded", () => {
-//     const deleteButton = document.getElementById("delete-review-btn");
 
-//     if (deleteButton) {
-//         deleteButton.addEventListener("click", async function () {
-//             console.log('Delete review button clicked ==========================');
-//             const reviewId = this.getAttribute("data-id");
+// all category- home page
 
-//             if (!confirm("Are you sure you want to delete this review?")) return;
-
-//             try {
-//                 const response = await fetch(`/reviews/delete/${reviewId}`, {
-//                     method: "DELETE",
-//                 });
-
-//                 const data = await response.json();
-//                 alert(data.message);
-//                 location.reload(); // Refresh the page after deletion
-//             } catch (error) {
-//                 console.error("Error:", error);
-//             }
-//         });
-//     } else {
-//         console.log("Delete button not found.");
-//     }
-// });

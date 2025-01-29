@@ -26,10 +26,10 @@
 
 
         <!-- Pincode -->
-        <div class="mb-3">
+        <!-- <div class="mb-3">
             <label for="pincode" class="form-label">Pincode</label>
             <input type="text" class="form-control" id="pincode" name="pincode" required>
-        </div>
+        </div> -->
 
         <!-- City -->
         <!-- <div class="mb-3">
@@ -60,20 +60,36 @@
         </div>
 
         <!-- Phone -->
-        
+
 
         <!-- Latitude -->
-        
+
 
         <!-- Website -->
+
         
-        <!-- <div class="mb-3">
-            <label for="image" class="form-label">Upload Image</label>
-            <input type="file" class="form-control" id="image" accept="image/*" required>
-        </div> -->
-        <label for="images">Upload Images:</label>
-        <input type="file" id="images" name="images" multiple accept="image/*">
+
+        <div class="mb-3">
+            <label for="ev-charging">Does your business have an EV charging facility? <span
+                    style="color: red;">*</span></label>
+            <select id="ev-charging" class="form-control" required>
+                <option value="" disabled selected>Select</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="images">Upload Images:</label>
+            <input type="file" id="images" name="images" multiple accept="image/*">
+
+        </div>
+
+
+
         <br><br>
+
+
 
 
 

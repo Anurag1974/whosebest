@@ -269,6 +269,12 @@ html, body {
     text-align: center;
     margin: 10px 10px;
 }
+.testimonial-img{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
 .testimonial-img img {
     width: 80px;
     height: 80px;
@@ -852,4 +858,55 @@ input:checked + .slider:before {
     height: 120px;
     border-radius: 50%;
     border: 10px solid aqua;
+}
+
+/* all category home page ================================================================= */
+
+
+/* Sidebar styles */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -60%;
+    /* left: -300px; Hidden by default */
+    width: 50%;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+    transition: left 0.3s ease; /* Smooth slide-in effect */
+    z-index: 1000;
+}
+
+/* Visible state for the sidebar */
+.sidebar.show {
+    left: 0;
+}
+
+/* Sidebar header */
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #f4f4f4;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Close button */
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Sidebar content */
+.sidebar-content {
+    list-style: none;
+    padding: 15px;
+}
+
+.sidebar-content li {
+    margin: 10px 0;
 }

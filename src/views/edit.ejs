@@ -47,7 +47,7 @@
                         <form>
                             <div class="mb-2">
                                 <label for="name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="name" placeholder="Name" value="<%= userDetails.name %>">
+                                <input type="text" class="form-control" id="user-name" placeholder="Name" value="<%= userDetails.name %>">
                             </div>
                             <!-- <div class="mb-2">
                                 <label for="middleName" class="form-label">Middle Name</label>
@@ -74,21 +74,23 @@
                             </div> -->
                             <div class="mb-3">
                                 <label for="phone_number" class="form-label">Phone Number</label>
-                                <input type="number" class="form-control" id="phone_number" placeholder="Phone Number" value="<%= userDetails.phone_number %>" >
+                                <input type="number" class="form-control" id="phone-number" placeholder="Phone Number" value="<%= userDetails.phone_number %>" >
                             </div>
                             <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" placeholder="Password">
-                                <button class="btn btn-outline-warning mt-2">Change</button>
+                                <label for="profileImage" class="form-label">Upload Profile Picture</label>
+                                <input type="file" class="form-control" name="profileImage" id="profileImage">
                             </div>
+                            
                         </form>
                     </div>
                 </div>
 
+
+
                 <!-- Save and Cancel Buttons -->
                 <div class="text-end">
-                    <button class="btn btn-outline-secondary">Cancel</button>
-                    <button class="btn btn-success">Save</button>
+                    
+                    <button onclick="updateUserInformation()" class="btn btn-success">Save</button>
                 </div>
             </div>
         </div>

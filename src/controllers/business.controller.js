@@ -15,7 +15,7 @@ export default class BusinessController {
         }
         try {
             const registeredBusiness = await BusinessModel.getRegisteredBusiness(req.user.id);
-            res.render('your-business', { user: req.user, registeredBusiness, toggle : req.session.toggle });
+            res.render('your-business', { user: req.user, registeredBusiness, toggle: req.session.toggle });
         }
         catch (error) {
             console.error('Database error:', error);
@@ -33,13 +33,13 @@ export default class BusinessController {
         //     return res.redirect('/login');
         // }
         const businessId = req.params.id;
-        res.render('rate', { user: req.user , businessId, toggle:null});
+        res.render('rate', { user: req.user, businessId, toggle: null });
     }
     async submitReview(req, res) {
         const { rating, review } = req.body;
         const businessId = req.params.businessId;
 
-        if(!rating || !review){
+        if (!rating || !review) {
 
         }
 
@@ -50,7 +50,7 @@ export default class BusinessController {
         try {
             // Save the rating and review using the model
             const result = await BusinessModel.saveRating(req.user.id, businessId, rating, review);
-    
+
             if (result.success) {
                 // Redirect to business details page
                 return res.redirect(`/business-details/${businessId}`);
@@ -68,19 +68,19 @@ export default class BusinessController {
             });
         }
     }
-    async deleteReview(req, res){
+    async deleteReview(req, res) {
         try {
             const { id } = req.params;
 
             console.log('in the controller of delete review')
-            
+
             // Call model function to delete the review
             const result = await BusinessModel.deleteReviewById(id);
-    
+
             if (result.affectedRows === 0) {
                 return res.status(404).json({ message: "Review not found" });
             }
-    
+
             res.json({ message: "Review deleted successfully" });
         } catch (error) {
             console.error("Error deleting review:", error);
@@ -91,7 +91,7 @@ export default class BusinessController {
         console.log(`User: ${req.user}`);
         const paidAdvertisements = await BusinessModel.getPaidAdvertisements();
         const businessCounts = await BusinessModel.getBusinessCount(req.session.toggle);
-        res.render('home', { user: req.user || null, toggle: req.session.toggle ,  paidAdvertisements: paidAdvertisements || 1, businessCounts });
+        res.render('home', { user: req.user || null, toggle: req.session.toggle, paidAdvertisements: paidAdvertisements || 1, businessCounts });
 
 
 
@@ -111,7 +111,7 @@ export default class BusinessController {
     showbusinessLogin(req, res) {
 
         // console.log(generateOTP());
-        res.render('business-login', { user: req.user, message: null,  toggle: req.session.toggle })
+        res.render('business-login', { user: req.user, message: null, toggle: req.session.toggle })
 
     }
     showTaxiPage(req, res) {
@@ -142,37 +142,57 @@ export default class BusinessController {
 
     }
     async addBusinessDetails(req, res) {
-        if (!req.user) {
-            return res.status(401).send('Unauthorized2');
-
-        }
-       
-        // Extract business details from request body
-        const { businessName, pincode, address, category, phone, latitudeInput, longitudeInput , website = null} = req.body;
-        
-         // Handle uploaded images
-         const images = req.files ? req.files.map(file => file.filename) : [];
-         if (!businessName || !pincode || !address || !category || !phone || !latitude || !longitude) {
-            return res.status(400).json({ message: 'All required fields must be provided' });
-        }
-        const userId = req.user.id ;
-
-       
         try {
-            const userId2 = await BusinessModel.addBusinessDetails(businessName, pincode, address, category, phone, latitudeInput, longitudeInput, website, userId);
+            console.log('Inside addBusinessDetails controller');
+            const {
+                businessName,
 
-            const email = req.user.email;
-            console.log(`email in session is ${email}`)
-            await BusinessModel.setOwner(email);
-            const redirectUrl = `/manage-business/${userId2}`;
+                address,
+                category,
+                phone,
+                latitudeInput,
+                longitudeInput,
+                website,
+                evCharging
+            } = req.body;
 
+            // Handle uploaded images
+            const images = req.files ? req.files.map(file => file.filename) : [];
 
+            if (!businessName || !address || !category || !phone || !latitudeInput || !longitudeInput ) {
+                return res.status(400).json({ message: 'All required fields must be provided except website' });
+            }
 
-            res.json({ redirectUrl, success: true, message: 'Business details added successfully', });
-        }
-        catch (error) {
-            console.error('Database error:', error);
-            res.status(500).json({ success: false, message: 'Failed to add business' });
+            // Assuming the user is authenticated and `req.user` is populated
+            const userId = req.user ? req.user.id : null;
+
+            // Save business details
+            const businessId = await BusinessModel.addBusinessDetails(
+                businessName,
+
+                address,
+                category,
+                phone,
+                latitudeInput,
+                longitudeInput,
+                website || null,
+                 
+                evCharging,
+                userId
+            );
+
+            // Save images to the database (if any)
+            if (images.length > 0) {
+                await BusinessModel.addBusinessImages(businessId, images);
+            }
+
+            res.status(201).json({
+                message: 'Business details added successfully',
+                redirectUrl: '/', // Update with your desired redirect route
+            });
+        } catch (error) {
+            console.error('Error adding business details:', error);
+            res.status(500).json({ message: 'Internal Server Error', error: error.message });
         }
 
 
@@ -183,28 +203,28 @@ export default class BusinessController {
     //         if (err) {
     //             return res.status(400).send(err.message); // Handle file upload errors
     //         }
-    
-            // if (!req.user) {
-            //     return res.status(401).send('Unauthorized'); // User not logged in
-            // }
-    
-            // // Extract business details from request body
-            // const { businessName, pincode, address, category, phone, latitudeInput, longitudeInput , website = null} = req.body;
-    
+
+    // if (!req.user) {
+    //     return res.status(401).send('Unauthorized'); // User not logged in
+    // }
+
+    // // Extract business details from request body
+    // const { businessName, pincode, address, category, phone, latitudeInput, longitudeInput , website = null} = req.body;
+
     //         // Validate required fields
     //         if (!businessName || !pincode || !address || !category || !phone || !latitudeInput || !longitudeInput ) {
     //             return res.status(400).send('All fields are required');
     //         }
-    
+
     //         try {
     //             // Get file paths of uploaded images
     //             // const businessImages = req.files.map((file) => `/uploads/${file.filename}`);
-    
+
     //             // Save business details and images to the database
     //             const businessId = await BusinessModel.addBusinessDetails(
     //                 businessName, pincode, address, category, phone, latitudeInput, longitudeInput, website
     //             );
-    
+
     //             // Redirect user after successful addition
     //             const redirectUrl = `/manage-business/${businessId}`;
     //             res.json({
@@ -225,7 +245,7 @@ export default class BusinessController {
         }
         const business = await BusinessModel.getBusinessDetailsById(req.params.id);
         console.log(business);
-        res.render('manage-business', { user: req.user, business: business, email: req.session.email || null, toggle:req.session.toggle });
+        res.render('manage-business', { user: req.user, business: business, email: req.session.email || null, toggle: req.session.toggle });
     }
     showEnterBusinessDetails(req, res) {
 
@@ -436,7 +456,7 @@ export default class BusinessController {
         if (!id) {
             return res.status(400).send('Query parameter is required');
         }
-    
+
         try {
             const business = await BusinessModel.getBusinessDetailsById(businessId);
         }
@@ -499,15 +519,15 @@ export default class BusinessController {
         try {
             const businessDetails = await BusinessModel.getBusinessDetailsById(businessId);
             let hasReviewed = null;
-            if(req.user){
+            if (req.user) {
                 hasReviewed = await BusinessModel.hasUserReviewed(req.user.id, businessId);
             }
-            
-    
+
+
             if (businessDetails && businessDetails.message !== "No business found with the provided ID") {
                 console.log("Business Details for Rendering: ", businessDetails);
-                
-                res.render('business-details', { user: req.user || null, businessDetails, toggle: req.session.toggle,  hasReviewed : hasReviewed || null });
+
+                res.render('business-details', { user: req.user || null, businessDetails, toggle: req.session.toggle, hasReviewed: hasReviewed || null });
             } else {
                 res.status(404).send("No business found with the given ID.");
             }
@@ -517,63 +537,75 @@ export default class BusinessController {
         }
     }
 
-    // reviewsss===========================================================================
-
-    async addReview(req, res) {
-        const { businessId, userId, rating, review } = req.body;
-
-        if (rating < 1 || rating > 5) {
-            return res.status(400).json({ message: "Rating must be between 1 and 5" });
-        }
-
-        try {
-            await Reviews.addReview(businessId, userId, rating, review);
-            res.status(201).json({ message: "Review added successfully!" });
-        } catch (err) {
-            res.status(500).json({ message: "Error adding review", error: err.message });
-        }
-
-    }
+    
     updateToggle(req, res) {
         const { toggle } = req.body;
         req.session.toggle = toggle;
         console.log(req.session.toggle);
-        if(toggle){
+        if (toggle) {
 
         }
         res.json({ message: 'Toggle value updated in session' });
 
 
     }
+    async addTestimonial(req, res){
+        try {
+            const { name, location, stars, comment } = req.body;
+            const userId = req.user.id;
+    
+            // Validate input
+            if (!user_id || !name || !location || !stars || !comment) {
+                return res.status(400).json({ error: 'All fields are required' });
+            }
+    
+            const result = await BusinessModel.createTestimonial({
+                userId,
+                name,
+                location,
+                stars,
+                comment,
+            });
+    
+            res.status(201).json({
+                message: 'Testimonial added successfully',
+                id: result.insertId,
+            });
+        } catch (error) {
+            console.error('Error adding testimonial:', error.message);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }
 
     //  in edit page =========
 
-    
-     async showEditUser(req, res) {
-        const userId = req.params.id;
-        
-    
+
+    async showEditUser(req, res) {
+
+        const userId = req.user.id;
+
+
         // Check if ID is provided
         if (!userId) {
             return res.status(400).send('Query parameter is required');
         }
-    
+
         try {
             // Fetch business details by ID
             const userDetails = await BusinessModel.getUserByUserId(userId);
-    
+
             if (!userDetails) {
                 return res.status(404).send('Business not found');
             }
-    
+
             // Assuming the business details contain a toggle value
             const toggle = req.session.toggle || userDetails.toggle || false; // Use session toggle or the business-specific toggle
-    
+
             // Render the edit page with business details and the toggle value
-            res.render('edit', { 
+            res.render('edit', {
                 user: req.user || null,
-                userDetails, 
-                toggle 
+                userDetails,
+                toggle
             });
         } catch (error) {
             // Send an error response if something goes wrong
@@ -582,29 +614,29 @@ export default class BusinessController {
     }
 
 
-    
 
-   
+
+
 
     //  async editUser(req, res) {
     //     const id = req.params.id;
-    
+
     //     // Check if ID is provided
     //     if (!id) {
     //         return res.status(400).send('Query parameter is required');
     //     }
-    
+
     //     try {
     //         // Fetch business details by ID
     //         const businessDetails = await BusinessModel.getBusinessDetailsById(id);
-    
+
     //         if (!businessDetails) {
     //             return res.status(404).send('Business not found');
     //         }
-    
+
     //         // Assuming the business details contain a toggle value
     //         const toggle = req.session.toggle || businessDetails.toggle || false; // Use session toggle or the business-specific toggle
-    
+
     //         // Render the edit page with business details and the toggle value
     //         res.render('edit', { 
     //             user: req.user,
@@ -621,28 +653,40 @@ export default class BusinessController {
     // user update information name 
 
     async updateInformation(req, res) {
-        const { name, phone_number } = req.body;
-
-        // Check if required fields are provided
-        if (!phone_number || !name) {
-            return res.status(400).json({ error: 'Phone number and name are required' });
+        try {
+            const { name, phoneNumber } = req.body;
+            const userId = req.user?.id; // Ensure `req.user` exists
+            let profileImage = req.file ? req.file.filename : null; 
+    
+            if (!userId) {
+                return res.status(401).json({ message: 'Unauthorized: User not logged in' });
+            }
+    
+            // Input validation
+            if (!name || !phoneNumber) {
+                return res.status(400).json({ message: 'Name and phone number are required' });
+            }
+    
+           
+    
+            console.log(`User ID ${userId} update attempt: name = "${name}", phoneNumber = "${phoneNumber}"`);
+    
+            const result = await BusinessModel.updateName(userId, name, phoneNumber, profileImage);
+    
+            if (result.affectedRows === 0) {
+                return res.status(200).json({ message: 'No changes were made' }); // Handle unchanged data
+            }
+    
+            res.status(200).json({ message: 'User information updated successfully' });
+        } catch (error) {
+            console.error('Error updating user:', error);
+            res.status(500).json({ error: 'Database update failed', details: error.message });
         }
 
-        // Call the model function to update user information
-        User.updateInformation(name, phone_number, (err, result) => {
-            if (err) {
-                return res.status(500).json({ error: 'Database update failed', details: err });
-            }
-
-            if (result.affectedRows === 0) {
-                return res.status(404).json({ message: 'User not found' });
-            }
-
-            res.status(200).json({ message: 'User information updated successfully' });
-        });
+        
     }
 
-       
+
 
 
 }

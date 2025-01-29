@@ -29,7 +29,7 @@ router.get('/book-your-taxi', businessController.showTaxiPage)
 router.get('/tours-and-travels', businessController.showToursAndTravelsPage)
 router.get('/rate/:id',authMiddleware, businessController.showRatePage)
 // Route to get business details by ID
-router.get('/edit/:id',authMiddleware, businessController.showEditUser);
+router.get('/edit',authMiddleware, businessController.showEditUser);
 
 
 router.post('/enter-your-details', businessController.addNameDetails)
@@ -42,9 +42,14 @@ router.post('/submit-rating/:businessId',authMiddleware,  businessController.sub
 router.post('/update-toggle', businessController.updateToggle);
 
 // router.post('/list-business',authMiddleware, businessController.addBusinessDetails);
-router.post('/list-business',authMiddleware,  upload.array('images', 5), businessController.addBusinessDetails);
+router.post('/list-business', authMiddleware, upload.array('images', 5), businessController.addBusinessDetails);
+router.post('/testimonials', businessController.addTestimonial);
+
 // update user information
-router.post('/update-user', businessController.updateInformation);
+// router.put('/update-user', authMiddleware, businessController.updateInformation);
+router.put('/update-user', authMiddleware, upload.single('profileImage'), businessController.updateInformation);
+
+
 router.delete("/delete/:id", businessController.deleteReview);
 
 export default router;

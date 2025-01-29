@@ -87,13 +87,13 @@ export default class BusinessModel {
         const [result] = await db.execute('INSERT INTO users (name,email, phone_number, user_type) VALUES (?,?,?,?)', [name, email, phone, userType]);
         return result;
     }
-    static async addBusinessDetails(businessName, pincode, address, category, phone, latitude, longitude, website, userId) {
+    static async addBusinessDetails(businessName,  address, category, phone, latitude, longitude, website,  evCharging, userId) {
         console.log('inside addBusinessDetails');
-        console.log({ businessName, pincode, address, category, phone, latitude, longitude, website, userId });
+        console.log({ businessName,  address, category, phone, latitude, longitude, website, evCharging, userId });
     
         const [result] = await db.execute(
-            'INSERT INTO business_detail (business_name, address, category, phone, latitude, longitude, website, user_id) VALUES (?,?,?,?,?,?,?,?)',
-            [businessName, address, category, phone, latitude, longitude, website, userId]
+            'INSERT INTO business_detail (business_name, address, category, phone, latitude, longitude, website, ev_station, user_id) VALUES (?,?,?,?,?,?,?,?,?)',
+            [businessName, address, category, phone, latitude, longitude, website,evCharging, userId]
         );
     
         const userId2 = result.insertId;
@@ -101,12 +101,30 @@ export default class BusinessModel {
     }
     static async addBusinessImages(businessId, images) {
         const values = images.map(image => [businessId, image]);
-        await db.query(
-            `INSERT INTO business_images (business_id, image_path) VALUES ?`,
-            [values]
-        );
+        await db.query(`INSERT INTO business_images (business_id, image_path) VALUES ?`, [values]);
     }
+    static async updateName(userId, name, phoneNumber, profileImage){
+        try {
+            console.log(`Updating user ${userId} with name=${name}, phone=${phoneNumber}`);
     
+            let sql, values;
+
+            if (profileImage) {
+                sql = "UPDATE users SET name = ?, phone_number = ?, profile_image = ? WHERE user_id = ?";
+                values = [name, phoneNumber, profileImage, userId];
+            } else {
+                sql = "UPDATE users SET name = ?, phone_number = ? WHERE user_id = ?";
+                values = [name, phoneNumber, userId];
+            }
+    
+            const [result] = await db.execute(sql, values);
+            return result;
+        } catch (error) {
+            console.error("Database Error:", error);
+            throw error;
+        }
+
+    }
     // static async addBusinessDetails(businessName, pincode, city, state, category, phone, latitude, longitude, website, imag) {
     //     try {
     //         // Insert business details into the database
@@ -192,6 +210,18 @@ export default class BusinessModel {
                 error: error.message, // Include error message for debugging
             };
         }
+    }
+    static async createTestimonial(userId, name, location, stars, comment ){
+        const query = `INSERT INTO testimonials (user_id, name, location, stars, comment) VALUES (?, ?, ?, ?, ?)`;
+        const values = [user_id, name, location, stars, comment];
+    
+        try {
+            const [result] = await db.query(query, values);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+
     }
     static async getBusinessDetailsById(id) {
         try {
