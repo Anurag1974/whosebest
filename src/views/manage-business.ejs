@@ -30,7 +30,9 @@
                         <div class="tab-pane fade show active" id="details" role="tabpanel"
                             aria-labelledby="details-tab">
                             <h4>Business Information</h4>
-                            <form>
+                            <form id="updateBusinessForm">
+
+                                <input type="hidden" id="businessId" value="<%= business.id %>">
                                 <div class="mb-3">
                                     <label for="businessName" class="form-label">Business Name</label>
                                     <input type="text" class="form-control" id="businessName"
@@ -42,28 +44,28 @@
                                     <input type="text" class="form-control" id="businessAddress"
                                         placeholder="Enter business address" value="<%= business.address %>">
                                 </div>
-                                <div class="mb-3">
+                                <!-- <div class="mb-3">
                                     <label for="pincode" class="form-label">Pincode</label>
                                     <input type="number" class="form-control" id="pincode" placeholder="Enter Pincode"
                                         value="<%= business.pincode %>">
-                                </div>
+                                </div> -->
                                 <!-- City -->
                                 <div class="mb-3">
                                     <label for="city" class="form-label">City</label>
-                                    <input type="text" class="form-control" id="city" name="city"
+                                    <input type="text" class="form-control" id="businessCity" name="city"
                                         value="<%= business.city %>" required>
                                 </div>
 
                                 <!-- State -->
                                 <div class="mb-3">
                                     <label for="state" class="form-label">State</label>
-                                    <input type="text" class="form-control" id="state" name="state"
+                                    <input type="text" class="form-control" id="businessState" name="state"
                                         value="<%= business.state %>" required>
                                 </div>
                                 <!-- Category -->
                                 <div class="mb-3">
                                     <label for="category" class="form-label">Category</label>
-                                    <input type="text" class="form-control" id="business-category" name="category" value="<%= business.category %>"
+                                    <input type="text" class="form-control" id="businessCategory" name="category" value="<%= business.category %>"
                                         required>
                                 </div>
                                 <div class="mb-3">
@@ -75,7 +77,7 @@
                                 <!-- Website -->
                                 <div class="mb-3">
                                     <label for="website" class="form-label">Website</label>
-                                    <input type="text" class="form-control" id="website" value="<%= business.website %>" name="website">
+                                    <input type="text" class="form-control" id="businessWebsite" value="<%= business.website %>" name="website">
                                 </div>
 
 

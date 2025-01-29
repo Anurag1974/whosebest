@@ -158,18 +158,19 @@ export default class BusinessController {
         console.log('button clicked')
        
         // Extract business details from request body
-        const { businessName, address, category, phone, latitudeInput, longitudeInput , website = null} = req.body;
+        const { businessName, address, category, phone, latitudeInput, longitudeInput, website = null,state,city} = req.body;
+        console.log(req.body)
         
          // Handle uploaded images
          const images = req.files ? req.files.map(file => file.filename) : [];
-         if (!businessName  || !address || !category || !phone || !latitudeInput || !longitudeInput) {
+         if (!businessName  || !address || !category || !phone || !latitudeInput || !longitudeInput ||!state || !city) {
             return res.status(400).json({ message: 'All required fields must be provided' });
         }
         const userId = req.user.id ;
 
        
         try {
-            const userId2 = await BusinessModel.addBusinessDetails(businessName, address, category, phone, latitudeInput, longitudeInput, website, userId);
+            const userId2 = await BusinessModel.addBusinessDetails(businessName, address, category, phone, latitudeInput, longitudeInput, website, userId ,state,city);
 
             const email = req.user.email;
             console.log(`email in session is ${email}`)
@@ -187,6 +188,56 @@ export default class BusinessController {
 
 
     }
+    //update business details 
+    static async updateBusinessDetails(req, res) {
+        if (!req.user) {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
+
+        console.log('Button clicked - Updating business details');
+
+        // Extract business details from request body
+        const { businessId, businessName, address, category, phone, website = null, state, city } = req.body;
+
+        console.log('Received Business Data for Update:', req.body);
+
+        // Validate required fields
+        if (!businessId || !businessName || !address || !category || !phone || !state || !city) {
+            return res.status(400).json({ success: false, message: 'All required fields must be provided' });
+        }
+
+        try {
+            // Update business details in the database
+            const success = await BusinessModel.updateBusinessDetails(businessId, businessName, address, category, phone, website, state, city);
+
+            if (!success) {
+                return res.status(404).json({ success: false, message: 'Business not found or not updated' });
+            }
+
+            res.json({ success: true, message: 'Business details updated successfully' });
+        } catch (error) {
+            console.error('Database error:', error);
+            res.status(500).json({ success: false, message: 'Failed to update business' });
+        }
+    }
+
+    
+    static async getBusinessById(req, res) {
+        const { businessId } = req.params;
+
+        try {
+            const business = await BusinessModel.getBusinessById(businessId);
+            if (!business) {
+                return res.status(404).json({ success: false, message: 'Business not found' });
+            }
+            res.json({ success: true, business });
+        } catch (error) {
+            console.error('Database error:', error);
+            res.status(500).json({ success: false, message: 'Failed to fetch business details' });
+        }
+    }
+
+
     // async addBusinessDetails(req, res) {
     //     // Use Multer middleware to handle file uploads
     //     uploadMiddleware(req, res, async (err) => {
@@ -671,7 +722,7 @@ export default class BusinessController {
     // Method to search for businesses based on location and category
     async searchBusiness(req, res) {
         
-        const query = req.query.location;  // Location query parameter from the request
+        const query = req.query.city;  // Location query parameter from the request
         const category = req.query.category; // Category query parameter from the request
         const toggle = req.session.toggle || false; // Retrieve toggle state from session (if any)
 
@@ -730,9 +781,6 @@ export default class BusinessController {
 
     }
 }
-
-
-
 
 
  // Export the controller as an instance for usage in routes
