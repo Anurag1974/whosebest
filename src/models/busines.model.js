@@ -43,22 +43,22 @@ export default class BusinessModel {
             throw error;
         }
     }
-    static async getBusinessCount(toggle){
+    static async getBusinessCount(toggle) {
         try {
             // Define the query
             const query = toggle
-  ? `SELECT category, COUNT(*) AS total_listings FROM business_detail WHERE ev_station = true GROUP BY category`
-  : `SELECT category, COUNT(*) AS total_listings FROM business_detail GROUP BY category`;
+                ? `SELECT category, COUNT(*) AS total_listings FROM business_detail WHERE ev_station = true GROUP BY category`
+                : `SELECT category, COUNT(*) AS total_listings FROM business_detail GROUP BY category`;
 
             // Execute the query
             const [results] = await db.execute(query); // Assuming you're using a promise-based DB connection like mysql2
-    
+
             // Convert results into an object with category names as keys
             const counts = results.reduce((acc, row) => {
                 acc[row.category] = row.total_listings;
                 return acc;
             }, {});
-    
+
             return counts; // Return the object
         } catch (error) {
             throw new Error(`Error fetching category counts: ${error.message}`);
@@ -80,29 +80,29 @@ export default class BusinessModel {
 
         console.log(`asdfa;slkdfj;lkasdflkjasd ${email}`)
         const [result] = await db.execute('UPDATE users SET user_type = "business_owner" WHERE email = ?', [email]);
-        
+
         return result;
     }
     static async insertNameDetails(name, email, phone, userType) {
         const [result] = await db.execute('INSERT INTO users (name,email, phone_number, user_type) VALUES (?,?,?,?)', [name, email, phone, userType]);
         return result;
     }
-    static async addBusinessDetails(businessName,  address, category, phone, latitude, longitude, city, state, website, evCharging, userId) {
+    static async addBusinessDetails(businessName, address, category, phone, latitude, longitude, city, state, website, evCharging, userId) {
         console.log('inside addBusinessDetails');
-        console.log({ businessName,  address, category, phone, latitude, longitude, website, evCharging, userId });
-    
+        console.log({ businessName, address, category, phone, latitude, longitude, website, evCharging, userId });
+
         const [result] = await db.execute(
             'INSERT INTO business_detail (business_name, address, category, phone, latitude, longitude, city, state, website, ev_station, user_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
-            [businessName, address, category, phone, latitude, longitude, city, state, website,  evCharging, userId]
+            [businessName, address, category, phone, latitude, longitude, city, state, website, evCharging, userId]
         );
-    
+
         const userId2 = result.insertId;
         return userId2;
     }
     static async addBusinessImages(businessId, images) {
         const values = images.map(image => [businessId, image]);
         await db.query(`INSERT INTO business_images (business_id, image_path) VALUES ?`, [values]);
-    } 
+    }
 
     //update new business
 
@@ -124,8 +124,8 @@ export default class BusinessModel {
         }
     }
 
-     // Fetch Business Details by ID
-     static async getBusinessById(businessId) {
+    // Fetch Business Details by ID
+    static async getBusinessById(businessId) {
         try {
             const [result] = await db.execute(
                 'SELECT * FROM business_detail WHERE id = ?',
@@ -138,11 +138,11 @@ export default class BusinessModel {
         }
     }
 
-   
-    static async updateName(userId, name, phoneNumber, profileImage){
+
+    static async updateName(userId, name, phoneNumber, profileImage) {
         try {
             console.log(`Updating user ${userId} with name=${name}, phone=${phoneNumber}`);
-    
+
             let sql, values;
 
             if (profileImage) {
@@ -152,7 +152,7 @@ export default class BusinessModel {
                 sql = "UPDATE users SET name = ?, phone_number = ? WHERE user_id = ?";
                 values = [name, phoneNumber, userId];
             }
-    
+
             const [result] = await db.execute(sql, values);
             return result;
         } catch (error) {
@@ -169,7 +169,7 @@ export default class BusinessModel {
     //              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     //             [businessName, pincode, city, state, category, phone, latitude, longitude, website, JSON.stringify(images)]
     //         );
-    
+
     //         return result.insertId; // Return the new business ID
     //     } catch (error) {
     //         console.error('Database error:', error);
@@ -180,16 +180,16 @@ export default class BusinessModel {
         const [rows] = await db.execute('SELECT * FROM business_details');
         return rows;
     }
-    
+
 
     static async getBusinessesByCategoryAndSort(category, sortBy, limit, offset, toggle) {
-        
+
         const validSortOptions = {
             rating: 'rating DESC',
             totalRatings: 'total_ratings DESC',
         };
         const orderBy = validSortOptions[sortBy] || validSortOptions.rating;
-        
+
         const query = toggle ? `SELECT SQL_CALC_FOUND_ROWS *
             FROM business_detail
             WHERE category = ? AND ev_station = true
@@ -208,7 +208,7 @@ export default class BusinessModel {
             throw error;
         }
     }
-    
+
     static async getSuggestions(query) {
         const sql = `
         SELECT DISTINCT name FROM businesses WHERE name LIKE ?
@@ -228,7 +228,7 @@ export default class BusinessModel {
                 'INSERT INTO reviews (user_id, business_id, rating, review) VALUES (?, ?, ?, ?)',
                 [userId, businessId, rating, review]
             );
-    
+
             // Return a success response with the inserted record's ID
             return {
                 success: true,
@@ -238,7 +238,7 @@ export default class BusinessModel {
         } catch (error) {
             // Log the error for debugging
             console.error('Error saving rating:', error);
-    
+
             // Return a failure response with the error details
             return {
                 success: false,
@@ -247,10 +247,10 @@ export default class BusinessModel {
             };
         }
     }
-    static async createTestimonial(userId, name, location, stars, comment ){
+    static async createTestimonial(userId, name, location, stars, comment) {
         const query = `INSERT INTO testimonials (user_id, name, location, stars, comment) VALUES (?, ?, ?, ?, ?)`;
         const values = [user_id, name, location, stars, comment];
-    
+
         try {
             const [result] = await db.query(query, values);
             return result;
@@ -263,8 +263,8 @@ export default class BusinessModel {
         try {
             const [businessRows] = await db.execute('SELECT * FROM business_detail  WHERE id = ? ', [id]);
             const [reviewRows] = await db.execute('SELECT * FROM reviews WHERE business_id = ?', [id]);
-         
-            if(businessRows.length>0){
+
+            if (businessRows.length > 0) {
                 const businessDetails = businessRows[0];
                 businessDetails.reviews = reviewRows;
 
@@ -272,7 +272,7 @@ export default class BusinessModel {
                 return businessDetails;
 
             }
-            else{
+            else {
                 return null;
             }
         } catch (error) {
@@ -291,8 +291,8 @@ export default class BusinessModel {
         console.log(`the hasuserreviewed status is ${rows}`);
         return rows.length > 0;
     }
-    
-     // edit
+
+    // edit
     // static async getBusinessDyetailsById(id) {
     //     try {
     //         const [rows] = await db.query('SELECT * FROM businesses WHERE id = ?', [id]);
@@ -301,20 +301,20 @@ export default class BusinessModel {
     //         throw error;
     //     }
     // }
-     
+
     static async getUserByUserId(userId) {
         try {
-        
+
             const [rows] = await db.query('SELECT * FROM users WHERE user_id = ?', [userId]);
             console.log(rows[0]);
-            return rows? rows[0] : null;
+            return rows ? rows[0] : null;
         } catch (error) {
             console.error('Error fetching users by user_id:', error);
             throw error;
         }
     }
-    
-    
+
+
     // async  getAllUsersOrderedByName() {
     //     try {
     //         const [rows] = await db.query('SELECT * FROM users ORDER BY name' );
@@ -324,7 +324,7 @@ export default class BusinessModel {
     //         throw error;
     //     }
     // }
-    
+
     // user update information name,phone_number
     static async updateInformation(name, phone_number, callback) {
         try {
@@ -337,15 +337,15 @@ export default class BusinessModel {
             callback(err, null);
         }
     }
-    
+
 
     // static async filterBusiness(query, category) {
     //     // OpenCage API URL
     //     const apiKey = "d9a0d19eb39945f98c94b9138eb8d6d0";
-        
+
     //     // Initialize the base SQL query
     //     let sqlQuery = "SELECT * FROM business_detail WHERE 1=1";
-        
+
     //     // Initialize parameters for SQL query
     //     let queryParams = [];
 
@@ -353,7 +353,7 @@ export default class BusinessModel {
     //         // Case 1: If location (query) is provided, fetch latitude and longitude from the API
     //         if (query) {
     //             const apiUrl = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(query)}&key=${apiKey}&limit=5&countrycode=IN`;
-                
+
     //             // Fetching data from OpenCage API
     //             const response = await fetch(apiUrl);
     //             const data = await response.json();
@@ -391,26 +391,26 @@ export default class BusinessModel {
     static async filterBusiness(city, category) {
         // Initialize the base SQL query
         let sqlQuery = "SELECT * FROM business_detail WHERE 1=1";
-        
+
         // Initialize parameters for SQL query
         let queryParams = [];
-    
+
         try {
             // Case 1: If city is provided, filter by city
             if (city) {
                 sqlQuery += " AND city = ?";
                 queryParams.push(city);
             }
-    
+
             // Case 2: If category is provided, filter by category as well
             if (category) {
                 sqlQuery += " AND category = ?";
                 queryParams.push(category);
             }
-    
+
             // Fetching businesses from the database with updated query
             const [business_detail] = await db.execute(sqlQuery, queryParams);
-    
+
             // Returning the businesses
             return business_detail;
         } catch (error) {
@@ -449,7 +449,7 @@ export default class BusinessModel {
             WHERE 
                 rank = 1;
         `;
-        
+
         try {
             const [businesses] = await db.execute(query);  // Assuming `db.execute` works similarly to your MySQL connection
             return businesses;
@@ -458,7 +458,60 @@ export default class BusinessModel {
             throw new Error("Failed to fetch top-rated businesses per category");
         }
     }
+    static async getBusinessHours(businessId) {
+        try {
+            const sql = "SELECT * FROM business_hours WHERE business_id = ?";
+            const [result] = await db.execute(sql, [businessId]);
+            return result;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
 
+    // Insert business hours for selected days
+    static async insertBusinessHours(businessId, selectedDays, openingTime, closingTime) {
+        try {
+            const insertQuery = `INSERT INTO business_hours (business_id, day_of_week, opening_time, closing_time) VALUES (?, ?, ?, ?)`;
+
+            const values = selectedDays.map(async (day) => {
+                return await db.execute(insertQuery, [businessId, day, openingTime, closingTime]);
+            });
+
+            await Promise.all(values); // Execute all queries
+
+            return { message: "Business hours added successfully" };
+        } catch (error) {
+            throw new Error("Database Insert Error: " + error.message);
+        }
+    }
+
+
+    // Update business hours for selected days
+    static async updateBusinessHours(businessId, dayOfWeek, openingTime, closingTime) {
+        try {
+            // Log the parameters to verify their values and types
+            console.log('Updating business hours with parameters:');
+            console.log('businessId:', businessId);
+            console.log('dayOfWeek:', dayOfWeek);
+            console.log('openingTime:', openingTime);
+            console.log('closingTime:', closingTime);
+    
+            const updateQuery = `
+                UPDATE business_hours 
+                SET opening_time = ?, closing_time = ?
+                WHERE business_id = ? AND day_of_week = ?`;
+    
+            // Execute the query
+            await db.execute(updateQuery, [openingTime, closingTime, businessId, dayOfWeek]);
+    
+            return { message: "Business hours updated successfully" };
+        } catch (error) {
+            // Log the error for debugging
+            console.error("Database Update Error:", error);
+            throw new Error("Database Update Error: " + error.message);
+        }
+    }
+    
 }
 
 // (async () => {

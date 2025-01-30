@@ -121,6 +121,7 @@
                                 <!-- Example Feedback -->
 
                                 <h2>Select Business Days</h2>
+
                                 <form id="businessHoursForm">
                                     <label><input type="checkbox" name="days" value="Monday"> Monday</label>
                                     <label><input type="checkbox" name="days" value="Tuesday"> Tuesday</label>
@@ -129,6 +130,9 @@
                                     <label><input type="checkbox" name="days" value="Friday"> Friday</label>
                                     <label><input type="checkbox" name="days" value="Saturday"> Saturday</label>
                                     <label><input type="checkbox" name="days" value="Sunday"> Sunday</label>
+                                    <input type="hidden" id="existing_hours"
+                                        value="<%= businessHours.length > 0 ? 'true' : 'false' %>">
+
 
                                     <div class="time-input" id="timeSelection">
                                         <h3>Set Common Business Hours</h3>
@@ -148,39 +152,49 @@
 
         <script>
             const checkboxes = document.querySelectorAll('input[name="days"]');
-        const timeInputSection = document.getElementById("timeSelection");
+            const timeInputSection = document.getElementById("timeSelection");
 
-        // Show time input only when at least one day is selected
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                timeInputSection.style.display = document.querySelector('input[name="days"]:checked') ? "block" : "none";
-            });
-        });
-
-        // Submit Form
-        document.getElementById("businessHoursForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-
-            const formData = {
-                businessId: 1, // Replace with dynamic ID
-                selectedDays: [],
-                opening_time: document.getElementById("opening_time").value,
-                closing_time: document.getElementById("closing_time").value
-            };
-
+            // Show time input only when at least one day is selected
             checkboxes.forEach(checkbox => {
-                if (checkbox.checked) {
-                    formData.selectedDays.push(checkbox.value);
-                }
+                checkbox.addEventListener('change', function () {
+                    timeInputSection.style.display = document.querySelector('input[name="days"]:checked') ? "block" : "none";
+                });
             });
 
-            fetch("/save-business-hours", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData)
-            })
-            .then(response => response.json())
-            .then(result => alert(result.message))
-            .catch(error => console.error("Error:", error));
-        });
+            
+
+
+
+            document.getElementById("businessHoursForm").addEventListener("submit", function (event) {
+                event.preventDefault();
+
+                const formData = {
+                    selectedDays: [],
+                    opening_time: document.getElementById("opening_time").value,
+                    closing_time: document.getElementById("closing_time").value
+                };
+
+                const businessId = document.getElementById('businessId').value;
+                formData.businessId = businessId; // Add businessId to formData as a property
+
+                document.querySelectorAll('input[name="days"]:checked').forEach(checkbox => {
+                    formData.selectedDays.push(checkbox.value);
+                });
+
+                // Check if we need to POST (insert) or PUT (update)
+                const existingHoursValue = document.getElementById("existing_hours").value;
+                console.log("Current value of existing_hours:", existingHoursValue);
+                const method = existingHoursValue === "true" ? "PUT" : "POST";
+
+                // Make the fetch request with JSON data
+                fetch("/business-hours", {
+                    method: method,
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData)
+                })
+                    .then(response => response.json())
+                    .then(result => alert(result.message))
+                    .catch(error => console.error("Error:", error, "Method is", method));
+            });
+
         </script>

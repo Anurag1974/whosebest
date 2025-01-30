@@ -300,9 +300,14 @@ export default class BusinessController {
         if (!req.user) {
             return res.status(401).send('Unauthorized3');
         }
-        const business = await BusinessModel.getBusinessDetailsById(req.params.id);
+        const businessId = req.params.id;
+
+        const business = await BusinessModel.getBusinessDetailsById(businessId);
+        const businessHours = await BusinessModel.getBusinessHours(businessId);
+        
         console.log(business);
-        res.render('manage-business', { user: req.user, business: business, email: req.session.email || null, toggle: req.session.toggle });
+
+        res.render('manage-business', { user: req.user, business: business, email: req.session.email || null, toggle: req.session.toggle, businessHours: businessHours });
     }
     showEnterBusinessDetails(req, res) {
 
@@ -823,6 +828,56 @@ export default class BusinessController {
         });
 
     }
+    async addBusinessHours(req, res) {
+        try {
+            const { businessId, selectedDays, opening_time, closing_time } = req.body;
+    
+            // Logging received values for debugging
+            console.log("Received Data:");
+            console.log("Business ID:", businessId);
+            console.log("Selected Days:", selectedDays);
+            console.log("Opening Time:", opening_time);
+            console.log("Closing Time:", closing_time);
+    
+            await BusinessModel.insertBusinessHours(businessId, selectedDays, opening_time, closing_time);
+            res.json({ message: "Business hours added successfully" });
+    
+        } catch (error) {
+            console.error("Error in addBusinessHours:", error.message);
+            res.status(500).json({ error: error.message });
+        }
+    }
+    
+    async updateBusinessHours(req, res) {
+        try {
+            const { businessId, selectedDays, opening_time, closing_time } = req.body;
+    
+            // Log incoming request data for debugging
+            console.log("Received request to update business hours:");
+            console.log("businessId:", businessId);
+            console.log("selectedDays:", selectedDays);
+            console.log("opening_time:", opening_time);
+            console.log("closing_time:", closing_time);
+    
+            // Call the businessModel to update business hours
+            const result = await BusinessModel.updateBusinessHours(businessId, selectedDays, opening_time, closing_time);
+    
+            // Log the result of the database update
+            console.log("Database update result:", result);
+    
+            // Send success response
+            res.json({ message: "Business hours updated successfully" });
+        } catch (error) {
+            // Log the error if any occurs
+            console.error("Error updating business hours:", error);
+    
+            // Send error response
+            res.status(500).json({ error: error.message });
+        }
+    }
+    
+    
+    
 }
 
 
