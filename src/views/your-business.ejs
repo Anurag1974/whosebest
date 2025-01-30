@@ -1,30 +1,41 @@
-<div class="container my-5">
-    <h1 class="text-center mb-4">Your Listed Businesses</h1>
-    <a href="/enter-business-details" class="btn-primary">Enter Business Details</a>
-    <div class="row">
+<div class="your-business-container my-5">
+    <h1 class="your-business-title text-center mb-4">Your Listed Businesses</h1>
+    <div class="d-flex justify-content-center mb-4">
+        <a href="/enter-business-details" class="btn your-business-enter-btn">
+            Enter Business Details
+        </a>
+    </div>
+    <div class="your-business-row row">
         <% if (registeredBusiness && registeredBusiness.length > 0) { %>
             <% registeredBusiness.forEach(business => { %>
                 <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title"><%= business.name %></h5>
-                            <p class="card-text"><strong>Category:</strong> <%= business.category %></p>
-                            <p class="card-text"><strong>Phone:</strong> <%= business.phone %></p>
-                            <p class="card-text"><strong>Location:</strong> <%= business.city %>, <%= business.state %> - <%= business.pincode %></p>
+                    <div class="your-business-card card">
+                        <div class="your-business-card-body card-body">
+                            <h5 class="your-business-card-title card-title"><%= business.name %></h5>
+                            <p class="your-business-card-text card-text"><strong>Name:</strong> <%= business.business_name %></p>
+                            <p class="your-business-card-text card-text"><strong>Category:</strong> <%= business.category %></p>
+                            <p class="your-business-card-text card-text"><strong>Phone:</strong> <%= business.phone %></p>
+                            <p class="your-business-card-text card-text"><strong>Address:</strong> <%= business.address %></p>
+
                             <% if (business.website) { %>
-                                <p class="card-text"><strong>Website:</strong> <a href="<%= business.website %>" target="_blank"><%= business.website %></a></p>
+                                <p class="your-business-card-text card-text"><strong>Website:</strong> <a href="<%= business.website %>" target="_blank" class="your-business-card-link card-link"> <%= business.website %></a></p>
                             <% } %>
-                            <p class="card-text"><strong>Coordinates:</strong> <%= business.latitude %>, <%= business.longitude %></p>
-                            <a href="/manage-business/<%= business.id %>">Edit</a>
+
+                            <!-- <p class="your-business-card-text card-text"><strong>Coordinates:</strong> <%= business.latitude %>, <%= business.longitude %></p> -->
+                            <a href="/manage-business/<%= business.id %>" class="btn btn-primary btn-sm your-business-edit-btn">Edit</a>
                         </div>
                     </div>
                 </div>
             <% }) %>
         <% } else { %>
-            <div class="col-12">
-                <p class="text-center">No registered businesses found.</p>
-                <a href="/enter-business-details" class="btn-primary">Enter Business Details</a>
+            <div class="col-12 text-center">
+                <p>No registered businesses found.</p>
+                <a href="/enter-business-details" class="btn your-business-enter-btn">
+                    Enter Business Details
+                </a>
             </div>
         <% } %>
     </div>
 </div>
+
+

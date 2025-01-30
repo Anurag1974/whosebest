@@ -911,3 +911,165 @@ input:checked + .slider:before {
 .sidebar-content li {
     margin: 10px 0;
 }
+
+/* your-business css file */
+
+.your-business-container {
+    background-color: #f8f9fa;
+    padding: 70px;
+    border-radius: 10px;
+}
+
+.your-business-title {
+    color: #007bff;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.your-business-enter-btn {
+    background-color: #007bff;
+    color: white;
+    font-size: 18px;
+    padding: 12px 30px;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.your-business-enter-btn:hover {
+    transform: translateY(-5px);
+    background-color: #007bff;
+    color: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.your-business-card {
+    height: 400px; /* Fixed height for the card */
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.your-business-card-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.your-business-card-title {
+    color: #007bff;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.your-business-card-text {
+    font-size: 16px;
+    color: #555;
+}
+
+.your-business-card-link {
+    color: #17a2b8;
+    text-decoration: none;
+}
+
+.your-business-card-link:hover {
+    text-decoration: underline;
+}
+
+.your-business-edit-btn {
+    background-color: #007bff; /* Blue color */
+    color: white;
+    padding: 6px 12px;
+    border-radius: 5px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out; /* Remove translation */
+}
+
+.your-business-edit-btn:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Keep hover effect */
+}
+
+.your-business-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* end of your-business css file */
+
+/* css of manage-business file  */
+
+.manage-business-business-details-heading {
+    color: #007bff;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.manage-business-business-details-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background-color: #f8f9fa;
+}
+
+.manage-business-business-details-section-title {
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.manage-business-business-details-form {
+    padding: 20px;
+}
+
+.manage-business-business-details-form-label {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
+
+.manage-business-business-details-form-input {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    width: 100%;
+    transition: border-color 0.3s ease;
+}
+
+.manage-business-business-details-form-input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.manage-business-business-details-submit-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+    border: none; /* Remove any border */
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+.manage-business-business-details-submit-btn:hover {
+    background-color: #0056b3; /* Slightly darker shade of blue */
+    color: white; /* Keep text color white on hover */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Optional: Add subtle shadow on hover */
+}
+.manage-business-business-details-alert {
+    margin-bottom: 20px;
+}
+/* end of manage business css file */
+
+
+
+    
