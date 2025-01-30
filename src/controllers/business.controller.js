@@ -186,7 +186,7 @@ export default class BusinessController {
 
     }
     //update business details 
-    static async updateBusinessDetails(req, res) {
+    async updateBusinessDetails(req, res) {
         if (!req.user) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }

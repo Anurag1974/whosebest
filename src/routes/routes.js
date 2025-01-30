@@ -43,7 +43,7 @@ router.get('/form', businessController.formfooter);
 // Use PUT instead of POST
 router.get('/business/:businessId', BusinessController.getBusinessById);
 
-router.put('/update-business', BusinessController.updateBusinessDetails); 
+ 
 
 router.post('/enter-your-details', businessController.addNameDetails)
 //router.post('/show-business', businessController.showBusiness)
@@ -61,6 +61,7 @@ router.post('/testimonials', businessController.addTestimonial);
 // update user information
 // router.put('/update-user', authMiddleware, businessController.updateInformation);
 router.put('/update-user', authMiddleware, upload.single('profileImage'), businessController.updateInformation);
+router.put('/update-business', businessController.updateBusinessDetails);
 
 
 router.delete("/delete/:id", businessController.deleteReview);

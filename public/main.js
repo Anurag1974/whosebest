@@ -167,11 +167,11 @@ async function fetchLocationDetails(pincode) {
 async function sendOtp() {
     console.log('send otp');
     const verifyOtpBox = document.getElementById('verify-otp-box');
-   
+
     const otpEmail = document.getElementById('otp-email');
     const email = document.getElementById('email').value;
-    
-    
+
+
 
     if (!email) {
         alert('Email is required');
@@ -322,12 +322,12 @@ async function sendOtpPopup() {
 
 async function verifyOtp() {
     const otp = document.getElementById('otp').value;
-    const nameInput =  document.getElementById('user-name');
+    const nameInput = document.getElementById('user-name');
     const phoneInput = document.getElementById('user-phone');
 
     const userName = nameInput ? nameInput.value : null;
     const userPhone = phoneInput ? phoneInput.value : null;
-    
+
     if (!otp) {
         alert('Please enter the OTP');
         return;
@@ -350,7 +350,7 @@ async function verifyOtp() {
             if (data.redirectUrl) {
                 window.location.href = data.redirectUrl;
 
-               
+
             } else {
                 const errorData = await res.json();
                 alert(`Failed to verify OTP: ${errorData.message}`);
@@ -417,7 +417,7 @@ async function addName() {
     const phone = document.getElementById('user-phone').value;
     const userType = 'customer';
 
-    
+
     if (!name || !phone || !userType) {
         alert('All fields are required');
         return;
@@ -440,7 +440,7 @@ async function addName() {
             const errorData = await res.json();
             alert(`Failed to add name: ${errorData.message}`);
         }
-    }catch (error) {    
+    } catch (error) {
         console.error('Error:', error);
         alert('An error occurred while adding name');
     }
@@ -448,36 +448,36 @@ async function addName() {
 }
 async function addBusinessDetails() {
     const businessName = document.getElementById('business-name').value;
-    
-    
+
+
     const address = document.getElementById('address').value;
 
     const category = document.getElementById('business-category').value;
 
     const phone = document.getElementById('phone').value;
     // const email = document.getElementById('email').value;
-    
-    
-    
+
+
+
     const latitudeInput = document.getElementById('latitude').value;
     const longitudeInput = document.getElementById('longitude').value;
     const website = document.getElementById('website').value;
     const evCharging = document.getElementById('ev-charging').value;
     const images = document.getElementById('images').files;
 
-    const state=document.getElementById('add-state').value;
-    const city=document.getElementById('add-city').value;
-    
-    
+    const state = document.getElementById('add-state').value;
+    const city = document.getElementById('add-city').value;
+
+
     console.log('latitude================')
 
-    if (!businessName|| !latitudeInput || !longitudeInput || !address || !phone  || !category   ) {
+    if (!businessName || !latitudeInput || !longitudeInput || !address || !phone || !category) {
         alert('All fields are required except website');
         return;
     }
     const formData = new FormData();
     formData.append('businessName', businessName);
-   
+
     formData.append('address', address);
     formData.append('category', category);
     formData.append('phone', phone);
@@ -493,12 +493,12 @@ async function addBusinessDetails() {
         formData.append('images', images[i]);
     }
 
-    
+
     const url = '/list-business';
     try {
         const res = await fetch(url, {
             method: 'POST',
-            
+
             body: formData,
         });
 
@@ -519,68 +519,68 @@ async function addBusinessDetails() {
 
 }
 
-async function updateBusinessDetails(){
-    document.getElementById('updateBusinessForm').addEventListener('submit', async function (event) {
-        event.preventDefault(); // Prevent default form submission
-    
-        // Get business ID (Ensure it's being retrieved correctly)
-        const businessId = document.getElementById('businessId').value;
-        if (!businessId) {
-            alert('Business ID is missing!');
-            return;
+
+document.getElementById('updateBusinessForm').addEventListener('submit', async function (event) {
+    event.preventDefault(); // Prevent default form submission
+
+    // Get business ID (Ensure it's being retrieved correctly)
+    const businessId = document.getElementById('businessId').value;
+    if (!businessId) {
+        alert('Business ID is missing!');
+        return;
+    }
+
+    // Get form data
+    const businessName = document.getElementById('businessName').value;
+    const address = document.getElementById('businessAddress').value;
+    const category = document.getElementById('businessCategory').value;
+    const phone = document.getElementById('businessPhone').value;
+    const website = document.getElementById('businessWebsite').value;
+    const city = document.getElementById('businessCity').value;
+    const state = document.getElementById('businessState').value;
+
+    // Validate required fields
+    if (!businessName || !address || !category || !phone || !city || !state) {
+        alert('All fields are required except website.');
+        return;
+    }
+
+    const requestBody = {
+        businessId, // Ensure businessId is passed
+        businessName,
+        address,
+        category,
+        phone,
+        city,
+        state,
+        website
+    };
+
+    console.log('Sending Update Request:', requestBody);
+
+    try {
+        const response = await fetch('/update-business', {
+            method: 'PUT',  // Use PUT method for updating
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert('Business details updated successfully');
+            window.location.reload(); // Refresh page to show updated details
+        } else {
+            alert(`Failed to update business: ${data.message}`);
         }
-    
-        // Get form data
-        const businessName = document.getElementById('businessName').value;
-        const address = document.getElementById('businessAddress').value;
-        const category = document.getElementById('businessCategory').value;
-        const phone = document.getElementById('businessPhone').value;
-        const website = document.getElementById('businessWebsite').value;
-        const city = document.getElementById('businessCity').value;
-        const state = document.getElementById('businessState').value;
-    
-        // Validate required fields
-        if (!businessName || !address || !category || !phone || !city || !state) {
-            alert('All fields are required except website.');
-            return;
-        }
-    
-        const requestBody = {
-            businessId, // Ensure businessId is passed
-            businessName,
-            address,
-            category,
-            phone,
-            city,
-            state,
-            website
-        };
-    
-        console.log('Sending Update Request:', requestBody);
-    
-        try {
-            const response = await fetch('/update-business', {
-                method: 'PUT',  // Use PUT method for updating
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestBody)
-            });
-    
-            const data = await response.json();
-    
-            if (response.ok) {
-                alert('Business details updated successfully');
-                window.location.reload(); // Refresh page to show updated details
-            } else {
-                alert(`Failed to update business: ${data.message}`);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred while updating business details.');
-        }
-    });
-    
-    
-}
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while updating business details.');
+    }
+});
+
+
+
 
 function submitSort() {
     const form = document.getElementById('sortForm');
@@ -673,7 +673,7 @@ async function updateUserInformation() {
     const formData = new FormData();
     formData.append('name', document.getElementById('user-name').value);
     formData.append('phoneNumber', document.getElementById('phone-number').value);
-    
+
     const fileInput = document.getElementById('profileImage');
     if (fileInput.files.length > 0) {
         formData.append('profileImage', fileInput.files[0]); // Append image file
@@ -693,7 +693,7 @@ async function updateUserInformation() {
         console.log('Success:', data);
         alert('User information updated successfully');
         window.location.reload();
-        
+
     } catch (error) {
         console.error('Error updating user:', error);
         alert('Failed to update user information');
