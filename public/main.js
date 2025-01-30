@@ -461,17 +461,18 @@ async function addBusinessDetails() {
 
     const latitudeInput = document.getElementById('latitude').value;
     const longitudeInput = document.getElementById('longitude').value;
+    const state = document.getElementById('add-state').value;
+    const city = document.getElementById('add-city').value;
     const website = document.getElementById('website').value;
     const evCharging = document.getElementById('ev-charging').value;
     const images = document.getElementById('images').files;
 
-    const state = document.getElementById('add-state').value;
-    const city = document.getElementById('add-city').value;
+    
 
 
     console.log('latitude================')
 
-    if (!businessName || !latitudeInput || !longitudeInput || !address || !phone || !category) {
+    if (!businessName || !latitudeInput || !longitudeInput|| !city || !state || !address || !phone || !category || !evCharging ) {
         alert('All fields are required except website');
         return;
     }
@@ -484,6 +485,8 @@ async function addBusinessDetails() {
     formData.append('latitudeInput', latitudeInput);
     formData.append('longitudeInput', longitudeInput);
     formData.append('evCharging', evCharging)
+    formData.append('city', city)
+    formData.append('state', state)
 
     if (website) {
         formData.append('website', website);

@@ -150,39 +150,60 @@ export default class BusinessController {
 
     }
     async addBusinessDetails(req, res) {
-        if (!req.user) {
-            return res.status(401).send('Unauthorized2');
-
-        }
-       
-        // Extract business details from request body
-        const { businessName, pincode, address, category, phone, latitudeInput, longitudeInput , website = null} = req.body;
-        
-         // Handle uploaded images
-         const images = req.files ? req.files.map(file => file.filename) : [];
-         if (!businessName || !pincode || !address || !category || !phone || !latitude || !longitude) {
-            return res.status(400).json({ message: 'All required fields must be provided' });
-        }
-        const userId = req.user.id ;
-
-       
         try {
-            const userId2 = await BusinessModel.addBusinessDetails(businessName, pincode, address, category, phone, latitudeInput, longitudeInput, website, userId);
+            console.log('Inside addBusinessDetails controller');
+            const {
+                businessName,
 
-            const email = req.user.email;
-            console.log(`email in session is ${email}`)
-            await BusinessModel.setOwner(email);
-            const redirectUrl = `/manage-business/${userId2}`;
+                address,
+                category,
+                phone,
+                latitudeInput,
+                longitudeInput,
+                city, 
+                state,
+                website,
+                evCharging
+            } = req.body;
 
+            // Handle uploaded images
+            const images = req.files ? req.files.map(file => file.filename) : [];
 
+            if (!businessName || !address || !category || !phone || !latitudeInput || !longitudeInput || !city || !state ) {
+                return res.status(400).json({ message: 'All required fields must be provided except website' });
+            }
 
-            res.json({ redirectUrl, success: true, message: 'Business details added successfully', });
+            // Assuming the user is authenticated and `req.user` is populated
+            const userId = req.user ? req.user.id : null;
+
+            // Save business details
+            const businessId = await BusinessModel.addBusinessDetails(
+                businessName,
+                latitudeInput,
+                longitudeInput,
+                city,
+                state,
+                address,
+                phone,
+                website || null,
+                category,
+                evCharging,
+                userId
+            );
+
+            // Save images to the database (if any)
+            if (images.length > 0) {
+                await BusinessModel.addBusinessImages(businessId, images);
+            }
+
+            res.status(201).json({
+                message: 'Business details added successfully',
+                redirectUrl: '/', // Update with your desired redirect route
+            });
+        } catch (error) {
+            console.error('Error adding business details:', error);
+            res.status(500).json({ message: 'Internal Server Error', error: error.message });
         }
-        catch (error) {
-            console.error('Database error:', error);
-            res.status(500).json({ success: false, message: 'Failed to add business' });
-        }
-
 
     }
     //update business details 
