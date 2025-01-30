@@ -520,64 +520,64 @@ async function addBusinessDetails() {
 }
 
 
-document.getElementById('updateBusinessForm').addEventListener('submit', async function (event) {
-    event.preventDefault(); // Prevent default form submission
+    document.getElementById('updateBusinessForm').addEventListener('submit', async function (event) {
+        event.preventDefault(); // Prevent default form submission
 
-    // Get business ID (Ensure it's being retrieved correctly)
-    const businessId = document.getElementById('businessId').value;
-    if (!businessId) {
-        alert('Business ID is missing!');
-        return;
-    }
-
-    // Get form data
-    const businessName = document.getElementById('businessName').value;
-    const address = document.getElementById('businessAddress').value;
-    const category = document.getElementById('businessCategory').value;
-    const phone = document.getElementById('businessPhone').value;
-    const website = document.getElementById('businessWebsite').value;
-    const city = document.getElementById('businessCity').value;
-    const state = document.getElementById('businessState').value;
-
-    // Validate required fields
-    if (!businessName || !address || !category || !phone || !city || !state) {
-        alert('All fields are required except website.');
-        return;
-    }
-
-    const requestBody = {
-        businessId, // Ensure businessId is passed
-        businessName,
-        address,
-        category,
-        phone,
-        city,
-        state,
-        website
-    };
-
-    console.log('Sending Update Request:', requestBody);
-
-    try {
-        const response = await fetch('/update-business', {
-            method: 'PUT',  // Use PUT method for updating
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(requestBody)
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            alert('Business details updated successfully');
-            window.location.reload(); // Refresh page to show updated details
-        } else {
-            alert(`Failed to update business: ${data.message}`);
+        // Get business ID (Ensure it's being retrieved correctly)
+        const businessId = document.getElementById('businessId').value;
+        if (!businessId) {
+            alert('Business ID is missing!');
+            return;
         }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while updating business details.');
-    }
-});
+
+        // Get form data
+        const businessName = document.getElementById('businessName').value;
+        const address = document.getElementById('businessAddress').value;
+        const category = document.getElementById('businessCategory').value;
+        const phone = document.getElementById('businessPhone').value;
+        const website = document.getElementById('businessWebsite').value;
+        const city = document.getElementById('businessCity').value;
+        const state = document.getElementById('businessState').value;
+
+        // Validate required fields
+        if (!businessName || !address || !category || !phone || !city || !state) {
+            alert('All fields are required except website.');
+            return;
+        }
+
+        const requestBody = {
+            businessId, // Ensure businessId is passed
+            businessName,
+            address,
+            category,
+            phone,
+            city,
+            state,
+            website
+        };
+
+        console.log('Sending Update Request:', requestBody);
+
+        try {
+            const response = await fetch('/update-business', {
+                method: 'PUT',  // Use PUT method for updating
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestBody)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Business details updated successfully');
+                window.location.reload(); // Refresh page to show updated details
+            } else {
+                alert(`Failed to update business: ${data.message}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while updating business details.');
+        }
+    });
 
 
 

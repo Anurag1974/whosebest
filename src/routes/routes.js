@@ -34,14 +34,14 @@ router.get('/rate/:id',authMiddleware, businessController.showRatePage)
 // Route to get business details by ID
 router.get('/edit',authMiddleware, businessController.showEditUser);
 
-router.get('/show-business', businessController.searchBusiness)
-router.get('/what-we-do',businessController.showWhatWeDo);
-router.get('/find-what-you-want',businessController.findWhatYouWant);
-router.get('/setup-your-business',businessController.setupYourBusiness);
-router.get('/form', businessController.formfooter);
+router.get('/show-business', authMiddleware, businessController.searchBusiness)
+router.get('/what-we-do',authMiddleware, businessController.showWhatWeDo);
+router.get('/find-what-you-want',authMiddleware,businessController.findWhatYouWant);
+router.get('/setup-your-business',authMiddleware, businessController.setupYourBusiness);
+router.get('/form',authMiddleware, businessController.formfooter);
 
 // Use PUT instead of POST
-router.get('/business/:businessId', BusinessController.getBusinessById);
+router.get('/business/:businessId', businessController.getBusinessById);
 
  
 

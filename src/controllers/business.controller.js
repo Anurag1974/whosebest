@@ -187,9 +187,7 @@ export default class BusinessController {
     }
     //update business details 
     async updateBusinessDetails(req, res) {
-        if (!req.user) {
-            return res.status(401).json({ success: false, message: 'Unauthorized' });
-        }
+        
 
         console.log('Button clicked - Updating business details');
 
@@ -219,7 +217,7 @@ export default class BusinessController {
     }
 
     
-    static async getBusinessById(req, res) {
+    async getBusinessById(req, res) {
         const { businessId } = req.params;
 
         try {
