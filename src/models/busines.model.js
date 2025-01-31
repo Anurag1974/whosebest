@@ -89,7 +89,7 @@ export default class BusinessModel {
     }
     static async addBusinessDetails(businessName, address, category, phone, latitude, longitude, city, state, website, evCharging, userId) {
         console.log('inside addBusinessDetails');
-        console.log(businessName, address, category, phone, latitude, longitude, website, evCharging, userId );
+        console.log(businessName, address, category, phone, latitude, longitude, website, evCharging, userId);
 
         const [result] = await db.execute(
             'INSERT INTO business_detail (business_name, address, category, phone, latitude, longitude, city, state, website, ev_station, user_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
@@ -469,49 +469,82 @@ export default class BusinessModel {
     }
 
     // Insert business hours for selected days
-    static async insertBusinessHours(businessId, selectedDays, openingTime, closingTime) {
+    static async insertBusinessHours(businessId, schedule) {
         try {
-            const insertQuery = `INSERT INTO business_hours (business_id, day_of_week, opening_time, closing_time) VALUES (?, ?, ?, ?)`;
+            // Assuming you have a `business_hours` table
+            // Loop through the schedule to insert/update each day's hours
+            for (const daySchedule of schedule) {
+                const { day, openingTime, closingTime } = daySchedule;
+                
+                // Assuming you're using SQL queries, adjust the query based on your DB
+                const query = `
+                    INSERT INTO business_hours (business_id, day_of_week, opening_time, closing_time)
+                    VALUES (?, ?, ?, ?)
+                    ON DUPLICATE KEY UPDATE opening_time = ?, closing_time = ?;
+                `;
+                const params = [businessId, day, openingTime, closingTime, openingTime, closingTime];
 
-            const values = selectedDays.map(async (day) => {
-                return await db.execute(insertQuery, [businessId, day, openingTime, closingTime]);
-            });
+                // Execute the query (this depends on your database client)
+                await db.query(query, params);  // Assuming db is your database connection object
+            }
 
-            await Promise.all(values); // Execute all queries
+            return { success: true }; // Return success status or any relevant data
 
-            return { message: "Business hours added successfully" };
         } catch (error) {
-            throw new Error("Database Insert Error: " + error.message);
+            console.error("Error in insertBusinessHours:", error.message);
+            throw error;  // Rethrow the error to be handled by the controller
         }
     }
 
-
     // Update business hours for selected days
-    static async updateBusinessHours(businessId, dayOfWeek, openingTime, closingTime) {
+    static async updateBusinessHours(businessId, selectedDays, openingTime, closingTime) {
         try {
             // Log the parameters to verify their values and types
             console.log('Updating business hours with parameters:');
             console.log('businessId:', businessId);
-            console.log('dayOfWeek:', dayOfWeek);
+            console.log('selectedDays:', selectedDays);
             console.log('openingTime:', openingTime);
             console.log('closingTime:', closingTime);
-    
+
+            // Ensure selectedDays is an array
+            if (!Array.isArray(selectedDays) || selectedDays.length === 0) {
+                throw new Error("selectedDays must be a non-empty array.");
+            }
+
             const updateQuery = `
                 UPDATE business_hours 
                 SET opening_time = ?, closing_time = ?
                 WHERE business_id = ? AND day_of_week = ?`;
+
+            // Loop through each day and update the database
+            const updatePromises = selectedDays.map(async (dayOfWeek) => {
+                // console.log("Executing Query:", updateQuery);
+                // console.log("Parameters:", [openingTime, closingTime, businessId, dayOfWeek]);
+
+                // return db.execute(updateQuery, [openingTime, closingTime, businessId, dayOfWeek]);
+                const [result] = await db.execute(updateQuery, [openingTime, closingTime, businessId, dayOfWeek]);
     
-            // Execute the query
-            await db.execute(updateQuery, [openingTime, closingTime, businessId, dayOfWeek]);
-    
-            return { message: "Business hours updated successfully" };
+                console.log(`✅ Update Result for ${dayOfWeek}:`, result);
+            
+                if (result.affectedRows === 0) {
+                    console.warn(`⚠️ No rows updated for ${dayOfWeek}. Possible reasons:`);
+                    console.warn(`   - No matching row found in database`);
+                    console.warn(`   - Data already matches (MySQL ignores unchanged updates)`);
+                }
+            });
+
+            // Execute all updates
+            await Promise.all(updatePromises);
+
+            return { message: "Business hours updated successfully for selected days" };
         } catch (error) {
             // Log the error for debugging
             console.error("Database Update Error:", error);
             throw new Error("Database Update Error: " + error.message);
         }
     }
-    
+
+
 }
 
 // (async () => {
