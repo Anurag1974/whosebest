@@ -140,6 +140,7 @@
                                         Close: <input type="time" id="closing_time">
                                     </div>
 
+
                                     <button type="submit">Save Schedule</button>
                                 </form>
                             </div>
@@ -151,6 +152,21 @@
         </div>
 
         <script>
+            // document.addEventListener("DOMContentLoaded", async () => {
+            //     const businessId = "123";  // Replace with dynamic ID if necessary
+            //     const response = await fetch(`/business-hours/${businessId}`);
+            //     const businessHours = await response.json();
+
+            //     // Pre-select checkboxes and set time
+            //     businessHours.forEach(({ day_of_week, opening_time, closing_time }) => {
+            //         const checkbox = document.querySelector(`input[value="${day_of_week}"]`);
+            //         if (checkbox) {
+            //             checkbox.checked = true;
+            //         }
+            //         document.getElementById("openingTime").value = opening_time;
+            //         document.getElementById("closingTime").value = closing_time;
+            //     });
+            // });
             const checkboxes = document.querySelectorAll('input[name="days"]');
             const timeInputSection = document.getElementById("timeSelection");
 
@@ -161,40 +177,98 @@
                 });
             });
 
-            
+
 
 
 
             document.getElementById("businessHoursForm").addEventListener("submit", function (event) {
                 event.preventDefault();
 
-                const formData = {
-                    selectedDays: [],
-                    opening_time: document.getElementById("opening_time").value,
-                    closing_time: document.getElementById("closing_time").value
-                };
+                // Collect the form data
+                const opening_time = document.getElementById("opening_time").value;
+                const closing_time = document.getElementById("closing_time").value;
 
-                const businessId = document.getElementById('businessId').value;
-                formData.businessId = businessId; // Add businessId to formData as a property
+                // Define all the days
+                const allDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
+                // Collect selected days from the checked checkboxes
+                const selectedDays = [];
                 document.querySelectorAll('input[name="days"]:checked').forEach(checkbox => {
-                    formData.selectedDays.push(checkbox.value);
+                    selectedDays.push(checkbox.value);
+                    console.log(selectedDays)
                 });
+
+                // Prepare the schedule with days and times
+                const schedule = allDays.map(day => {
+                    const isSelected = selectedDays.includes(day); // Check if the day is selected
+                    return {
+                        day: day,
+                        openingTime: isSelected ? opening_time : "CLOSED", // If selected, use opening time
+                        closingTime: isSelected ? closing_time : "CLOSED" // If selected, use closing time
+                    };
+                });
+
+                // Prepare the formData object to send to the backend
+                const formData = {
+                    businessId: document.getElementById('businessId').value, // Add businessId to formData
+                    schedule: schedule
+                };
 
                 // Check if we need to POST (insert) or PUT (update)
                 const existingHoursValue = document.getElementById("existing_hours").value;
-                console.log("Current value of existing_hours:", existingHoursValue);
-                const method = existingHoursValue === "true" ? "PUT" : "POST";
+                const method = "POST"; // Use PUT for update, POST for new
 
-                // Make the fetch request with JSON data
+                // Send the request to the backend
                 fetch("/business-hours", {
                     method: method,
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(formData)
+                    body: JSON.stringify(formData) // Send the formData as JSON
                 })
                     .then(response => response.json())
-                    .then(result => alert(result.message))
-                    .catch(error => console.error("Error:", error, "Method is", method));
+                    .then(result => {
+                        alert(result.message);
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    });
             });
+            function populateForm(response) {
+                const businessHours = response.businessHours;  // Accessing the array from the response
+                console.log(businessHours);  // Check if the array is correctly populated
+                const allDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+                businessHours.forEach(hour => {
+                    const day = hour.day_of_week;
+                    const openingTime = hour.opening_time;
+                    const closingTime = hour.closing_time;
+
+                    const checkbox = document.querySelector(`input[name="days"][value="${day}"]`);
+                    if (checkbox) {
+                        checkbox.checked = openingTime !== "00:00:00" && closingTime !== "00:00:00";
+                    }
+
+                    if (openingTime !== "00:00:00" && closingTime !== "00:00:00") {
+                        document.getElementById("opening_time").value = openingTime;
+                        document.getElementById("closing_time").value = closingTime;
+                    }
+                });
+            }
+
+
+            document.addEventListener("DOMContentLoaded", async () => {
+                const businessId = document.getElementById("businessId").value;
+
+
+                try {
+                    const response = await fetch(`/business-hours/${businessId}`);
+                    const businessHours = await response.json();
+
+
+                    populateForm(businessHours);
+                } catch (error) {
+                    console.error("Error fetching business hours:", error);
+                }
+            });
+
 
         </script>

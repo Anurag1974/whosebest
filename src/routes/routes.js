@@ -65,6 +65,7 @@ router.put('/update-business', businessController.updateBusinessDetails);
 
 router.post("/business-hours", businessController.addBusinessHours);
 router.put("/business-hours", businessController.updateBusinessHours);
+router.get('/business-hours/:businessId', businessController.getBusinessHours)
 
 
 router.delete("/delete/:id", businessController.deleteReview);

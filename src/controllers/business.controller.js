@@ -835,23 +835,47 @@ export default class BusinessController {
     }
     async addBusinessHours(req, res) {
         try {
-            const { businessId, selectedDays, opening_time, closing_time } = req.body;
+            const { businessId, schedule } = req.body;
     
             // Logging received values for debugging
             console.log("Received Data:");
             console.log("Business ID:", businessId);
-            console.log("Selected Days:", selectedDays);
-            console.log("Opening Time:", opening_time);
-            console.log("Closing Time:", closing_time);
+            console.log("Schedule:", schedule);
     
-            await BusinessModel.insertBusinessHours(businessId, selectedDays, opening_time, closing_time);
-            res.json({ message: "Business hours added successfully" });
+            // Validate the schedule to ensure it contains all 7 days with the correct data
+            if (!schedule || schedule.length !== 7) {
+                return res.status(400).json({ error: "Schedule must contain 7 days" });
+            }
+    
+            // For each day, check if the opening and closing time are 'CLOSED'
+            for (const daySchedule of schedule) {
+                if (daySchedule.openingTime !== "CLOSED" && daySchedule.closingTime !== "CLOSED") {
+                    // Validate the time formats if needed (you can use regex or Date validation)
+                    // if (!isValidTime(daySchedule.openingTime) || !isValidTime(daySchedule.closingTime)) {
+                    //     return res.status(400).json({ error: `Invalid time format for ${daySchedule.day}` });
+                    // }
+                }
+            }
+    
+            // Insert or update business hours for the business
+            const result = await BusinessModel.insertBusinessHours(businessId, schedule);
+    
+            // Respond with success message
+            res.json({ message: "Business hours added/updated successfully", data: result });
     
         } catch (error) {
             console.error("Error in addBusinessHours:", error.message);
             res.status(500).json({ error: error.message });
         }
     }
+    
+    // Helper function to validate time format (if needed)
+    // async function isValidTime(time) {
+    //     // Simple time validation (HH:mm) - You can adjust this based on your needs
+    //     const timePattern = /^([01]?[0-9]|2[0-3]):([0-5][0-9])$/;
+    //     return timePattern.test(time);
+    // }
+    
     
     async updateBusinessHours(req, res) {
         try {
@@ -880,7 +904,20 @@ export default class BusinessController {
             res.status(500).json({ error: error.message });
         }
     }
+    async getBusinessHours(req, res) {
+        try {
+            const { businessId } = req.params; // Get the businessId from request parameters
+            
+            // Fetch business hours using the model
+            const businessHours = await BusinessModel.getBusinessHours(businessId);
     
+            // Send the fetched data back to the frontend
+            res.json({ businessHours });
+        } catch (error) {
+            console.error('Error fetching business hours:', error.message);
+            res.status(500).json({ error: error.message });
+        }
+    }
     
     
 }
