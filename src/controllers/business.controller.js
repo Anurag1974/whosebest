@@ -166,6 +166,7 @@ export default class BusinessController {
                 evCharging
             } = req.body;
 
+
             // Handle uploaded images
             const images = req.files ? req.files.map(file => file.filename) : [];
 
@@ -179,14 +180,17 @@ export default class BusinessController {
             // Save business details
             const businessId = await BusinessModel.addBusinessDetails(
                 businessName,
+                address,
+                category,
+                phone,
                 latitudeInput,
                 longitudeInput,
                 city,
                 state,
-                address,
-                phone,
+                
+                
                 website || null,
-                category,
+                
                 evCharging,
                 userId
             );
@@ -304,6 +308,7 @@ export default class BusinessController {
 
         const business = await BusinessModel.getBusinessDetailsById(businessId);
         const businessHours = await BusinessModel.getBusinessHours(businessId);
+        console.log(businessHours)
         
         console.log(business);
 
