@@ -63,6 +63,9 @@ router.post('/testimonials', businessController.addTestimonial);
 router.put('/update-user', authMiddleware, upload.single('profileImage'), businessController.updateInformation);
 router.put('/update-business', businessController.updateBusinessDetails);
 
+router.post("/business-hours", businessController.addBusinessHours);
+router.put("/business-hours", businessController.updateBusinessHours);
+
 
 router.delete("/delete/:id", businessController.deleteReview);
 
