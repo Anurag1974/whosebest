@@ -55,6 +55,15 @@
            font-size: 36px;
            margin-left: 50px;
          }
+         .btn{
+          background-color: #0B5ED7; /* Blue color */
+          color: white;
+         }
+         .btn:hover{
+          background-color: #0651c2; /* Blue color */
+    color: white;
+
+         }
          
          @media screen and (max-height: 450px) {
            .sidenav {padding-top: 15px;}
@@ -118,10 +127,10 @@
                     </div>
 
                     <div class="collapse navbar-collapse" id="navbar-menu">
-                        <div class="container  text-center">
+                        <div class="container  text-center ">
                             <label class="toggle-switch">
                                 <input type="checkbox" id="evToggle" <%= toggle ? 'checked' : '' %>>
-                                <span class="slider"></span>
+                                <span class="slider text-light">EV</span>
                             </label>
                         </div>
                         <ul class="navbar-nav ms-auto">
@@ -170,7 +179,7 @@
                                         <a class="nav-link" href="business-login">Free Listing</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="btn btn-primary m-3 p-1 " href="#" id="loginButton" data-bs-toggle="modal"
+                                        <a class="btn btn-primary m-3  " href="#" id="loginButton" data-bs-toggle="modal"
                                             data-bs-target="#loginModal">Login/Signup</a>
                                     </li>
 

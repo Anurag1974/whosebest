@@ -133,17 +133,6 @@
                                     <input type="hidden" id="existing_hours"
                                         value="<%= businessHours.length > 0 ? 'true' : 'false' %>">
 
-                <!-- Business Hours Tab -->
-                <div class="tab-pane fade" id="hours" role="tabpanel" aria-labelledby="hours-tab">
-                    <h4 class="manage-business-business-details-section-title">Select Business Days</h4>
-                    <form id="businessHoursForm" class="manage-business-business-details-form">
-                        <label><input type="checkbox" name="days" value="Monday"> Monday</label>
-                        <label><input type="checkbox" name="days" value="Tuesday"> Tuesday</label>
-                        <label><input type="checkbox" name="days" value="Wednesday"> Wednesday</label>
-                        <label><input type="checkbox" name="days" value="Thursday"> Thursday</label>
-                        <label><input type="checkbox" name="days" value="Friday"> Friday</label>
-                        <label><input type="checkbox" name="days" value="Saturday"> Saturday</label>
-                        <label><input type="checkbox" name="days" value="Sunday"> Sunday</label>
 
                                     <div class="time-input" id="timeSelection">
                                         <h3>Set Common Business Hours</h3>
@@ -171,10 +160,6 @@
                     timeInputSection.style.display = document.querySelector('input[name="days"]:checked') ? "block" : "none";
                 });
             });
-
-            
-
-
 
             document.getElementById("businessHoursForm").addEventListener("submit", function (event) {
                 event.preventDefault();

@@ -1,106 +1,112 @@
-<div class="container my-5">
-    <h1 class="text-center mb-4">Enter Your Business Details</h1>
+
+<div class="enter-business-detail-container my-5">
+    <h2 class="enter-business-detail-title text-center mb-4">Enter Your Business Details</h2>
     <form id="business-details-form">
-        <!-- Business Name -->
-        <div class="mb-3">
-            <label for="name" class="form-label">Business Name</label>
-            <input type="text" class="form-control" id="business-name" name="name" required>
-        </div>
-        <div class="mb-3">
-            <label for="latitude" class="form-label">Latitude</label>
-            <input type="text" class="form-control" id="latitude" name="latitude" required>
-        </div>
-
-        <!-- Longitude -->
-        <div class="mb-3">
-            <label for="longitude" class="form-label">Longitude</label>
-            <input type="text" class="form-control" id="longitude" name="longitude" required>
-        </div>
-
-        <!-- Email -->
-        <!-- <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" required>
-        </div> -->
-
-
-
-        <!-- Pincode -->
-        <!-- <div class="mb-3">
-            <label for="pincode" class="form-label">Pincode</label>
-            <input type="text" class="form-control" id="pincode" name="pincode" required>
-        </div> -->
-
-        <!-- City -->
-        <div class="mb-3">
-            <label for="city" class="form-label">City</label>
-            <input type="text" class="form-control" id="add-city" name="city" required>
-        </div>
-
-        <!-- State -->
-        <div class="mb-3">
-            <label for="state" class="form-label">State</label>
-            <input type="text" class="form-control" id="add-state" name="state" required>
-        </div>
-
-        <!-- address section -->
-        <div class="mb-3">
-            <label for="address" class="form-label">Address</label>
-            <input type="text" class="form-control" id="address" name="address" required>
-        </div>
-        <button type="button" class="btn btn-secondary" onclick="setCurrentLocation()">Set Current Location</button>
-
-        <div class="mb-3">
-            <label for="phone" class="form-label">Phone</label>
-            <input type="number" class="form-control" id="phone" name="phone" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="website" class="form-label">Website</label>
-            <input type="text" class="form-control" id="website" name="website">
-        </div>
-
-        <!-- Category -->
-        <div class="mb-3">
-            <label for="category" class="form-label">Category</label>
-            <input type="text" class="form-control" id="business-category" name="category" required>
-        </div>
-
-        <!-- Phone -->
-
-
-        <!-- Latitude -->
-
-
-        <!-- Website -->
-
         
-
-        <div class="mb-3">
-            <label for="ev-charging">Does your business have an EV charging facility? <span
-                    style="color: red;">*</span></label>
-            <select id="ev-charging" class="form-control" required>
-                <option value="" disabled selected>Select</option>
-                <option value="1">Yes</option>
-                <option value="0">No</option>
-            </select>
+        <div class="enter-business-detail-row">
+            <div class="enter-business-detail-col">
+                <label for="name">Business Name</label>
+                <input type="text" class="form-control" id="business-name" name="name" required>
+            </div>
+            <div class="enter-business-detail-col">
+                <label for="category">Category</label>
+                <input type="text" class="form-control" id="business-category" name="category" required>
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label for="images">Upload Images:</label>
-            <input type="file" id="images" name="images" multiple accept="image/*">
-
+        <div class="enter-business-detail-row">
+            <div class="enter-business-detail-col">
+                <label for="latitude">Latitude</label>
+                <input type="text" class="form-control" id="latitude" name="latitude" required>
+            </div>
+            <div class="enter-business-detail-col">
+                <label for="longitude">Longitude</label>
+                <input type="text" class="form-control" id="longitude" name="longitude" required>
+            </div>
         </div>
 
+        <div class="enter-business-detail-row enter-business-detail-location-container">
+            <div class="enter-business-detail-col enter-business-detail-full">
+                <label for="address">Address</label>
+                <div class="enter-business-detail-location-wrapper">
+                    <input type="text" class="form-control" id="address" name="address" required>
+                    <button type="button" class="enter-business-detail-location-btn" onclick="setCurrentLocation()"><i class="fa-solid fa-location-dot" style="color: #0b5ed7;"></i></button>
+                </div>
+            </div>
+        </div>
 
+        <div class="enter-business-detail-row">
+            <div class="enter-business-detail-col">
+                <label for="city">City</label>
+                <input type="text" class="form-control" id="add-city" name="city" required>
+            </div>
+            <div class="enter-business-detail-col">
+                <label for="state">State</label>
+                <input type="text" class="form-control" id="add-state" name="state" required>
+            </div>
+        </div>
 
-        <br><br>
+        <div class="enter-business-detail-row">
+            <div class="enter-business-detail-col">
+                <label for="phone">Phone</label>
+                <input type="phone" class="form-control" id="phone" name="phone" required>
+            </div>
+            <div class="enter-business-detail-col">
+                <label for="website">Website</label>
+                <input type="text" class="form-control" id="website" name="website">
+            </div>
+        </div>
 
+        <div class="enter-business-detail-row">
+            <div class="enter-business-detail-col enter-business-detail-full">
+                <label for="ev-charging">Does your business have an EV charging facility? <span style="color: red;">*</span></label>
+                <select id="ev-charging" class="form-control" required>
+                    <option value="" disabled selected>Select</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+        </div>
 
+        <div class="enter-business-detail-row">
+            <div class="enter-business-detail-col enter-business-detail-full">
+                <label for="images">Upload Images:</label>
+                <input type="file" id="images" name="images" multiple accept="image/*" onchange="previewImages()">
+                <div id="image-preview-container" class="image-preview-container mt-3"></div>
+            </div>
+        </div>
 
-
-
-        <!-- Submit Button -->
-        <button type="button" class="btn btn-primary" onclick="addBusinessDetails()">Add Business</button>
+        <button type="button" class="enter-business-detail-btn" onclick="addBusinessDetails()">Add Business</button>
     </form>
 </div>
+
+
+
+<script>
+    // Function to preview selected images
+    function previewImages() {
+        const fileInput = document.getElementById('images');
+        const previewContainer = document.getElementById('image-preview-container');
+        
+        // Clear previous previews
+        previewContainer.innerHTML = '';
+
+        // Loop through selected files and create image previews
+        for (let i = 0; i < fileInput.files.length; i++) {
+            const file = fileInput.files[i];
+            
+            // Create a new image element for each file
+            const img = document.createElement('img');
+            const reader = new FileReader();
+
+            // When the file is read, set the image source
+            reader.onload = function(event) {
+                img.src = event.target.result;
+                previewContainer.appendChild(img);
+            };
+
+            // Read the file as a data URL
+            reader.readAsDataURL(file);
+        }
+    }
+</script>

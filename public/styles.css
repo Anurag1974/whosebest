@@ -915,20 +915,20 @@ input:checked + .slider:before {
 /* your-business css file */
 
 .your-business-container {
-    background-color: #f8f9fa;
+    
     padding: 70px;
     border-radius: 10px;
 }
 
 .your-business-title {
-    color: #007bff;
+    color: #0B5ED7;
     font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 0.5px;
 }
 
 .your-business-enter-btn {
-    background-color: #007bff;
+    background-color: #0B5ED7; /* Blue color */
     color: white;
     font-size: 18px;
     padding: 12px 30px;
@@ -939,7 +939,7 @@ input:checked + .slider:before {
 
 .your-business-enter-btn:hover {
     transform: translateY(-5px);
-    background-color: #007bff;
+    background-color: #0651c2; /* Blue color */
     color: white;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
@@ -984,7 +984,7 @@ input:checked + .slider:before {
 }
 
 .your-business-edit-btn {
-    background-color: #007bff; /* Blue color */
+    background-color: #0B5ED7; /* Blue color */
     color: white;
     padding: 6px 12px;
     border-radius: 5px;
@@ -993,6 +993,8 @@ input:checked + .slider:before {
 }
 
 .your-business-edit-btn:hover {
+    background-color: #0651c2; /* Blue color */
+    color: white;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Keep hover effect */
 }
 
@@ -1003,72 +1005,151 @@ input:checked + .slider:before {
 
 /* end of your-business css file */
 
-/* css of manage-business file  */
+/* enter business -detials css */
 
-.manage-business-business-details-heading {
-    color: #007bff;
+/* title */
+
+.enter-business-detail-title{
+    color: #0B5ED7;
     font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 0.5px;
 }
 
-.manage-business-business-details-card {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    background-color: #f8f9fa;
-}
 
-.manage-business-business-details-section-title {
-    color: #333;
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
+/* Container Styling */
 
-.manage-business-business-details-form {
+.enter-business-detail-container {
+    max-width: 900px;
+    margin: auto;
+    background: #f8f9fa;
     padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.manage-business-business-details-form-label {
-    font-weight: bold;
-    font-size: 16px;
-    color: #333;
+
+/* Labels */
+.enter-business-detail-container label {
+    font-weight: 600;
+    margin-bottom: 5px; /* Added margin between label and input */
+    display: block;
 }
 
-.manage-business-business-details-form-input {
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 8px;
+/* Form Grid */
+.enter-business-detail-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+/* Each field takes 48% width */
+.enter-business-detail-col {
+    flex: 1;
+    min-width: 48%;
+}
+
+/* Input Fields */
+.enter-business-detail-container input,
+.enter-business-detail-container select {
+    border-radius: 6px;
+    
     border: 1px solid #ced4da;
+   
+    padding: 10px;
     width: 100%;
-    transition: border-color 0.3s ease;
+    margin-bottom: 10px; /* Added margin between inputs */
+}
+.enter-business-detail-container input:focus,
+.enter-business-detail-container select:focus {
+    border-color: #0056b3; /* Darker blue when focused */
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Optional: Add subtle shadow on focus */
+}
+/* Full-width fields */
+.enter-business-detail-full {
+    width: 100%;
 }
 
-.manage-business-business-details-form-input:focus {
-    border-color: #007bff;
-    outline: none;
+/* Location Wrapper */
+.enter-business-detail-location-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
 }
 
-.manage-business-business-details-submit-btn {
-    background-color: #007bff;
-    color: white;
-    padding: 12px 30px;
-    border-radius: 25px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* Location Button inside Input */
+/* Location Button inside Input */
+.enter-business-detail-location-btn {
+    position: absolute;
+    right: 10px;
+    top: 25%;
+    transform: translateY(-50%);
+    border: none;
+    background: none; /* Removed background color */
+    cursor: pointer;
     font-size: 18px;
-    border: none; /* Remove any border */
-    transition: background-color 0.3s ease; /* Smooth transition for background color */
+    outline: none; /* Removes any focus outline */
 }
 
-.manage-business-business-details-submit-btn:hover {
-    background-color: #0056b3; /* Slightly darker shade of blue */
-    color: white; /* Keep text color white on hover */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Optional: Add subtle shadow on hover */
+/* Removed hover effect */
+.enter-business-detail-location-btn:hover {
+    background: none;
 }
-.manage-business-business-details-alert {
-    margin-bottom: 20px;
+
+
+/* Add Business Button */
+.enter-business-detail-btn {
+    background-color:#0B5ED7;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    margin-top: 20px; /* Added margin for spacing */
 }
-/* end of manage business css file */
+
+.enter-business-detail-btn:hover {
+    background-color: #0651c2; /* Blue color */
+    color: white;
+}
+.enter-business-detail-container label {
+    font-size: 14px; /* Made text slightly smaller */
+    font-weight: 500; /* Reduced font weight */
+    margin-bottom: 5px; /* Keeps spacing between label and input */
+    display: block;
+}
+ /* Add these styles for the preview container */
+ .image-preview-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap; /* Prevent images from wrapping to the next line */
+    overflow-x: auto; /* Add horizontal scrolling */
+    max-width: 100%; /* Ensure it doesn't overflow beyond the container */
+}
+
+.image-preview-container img {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-top: 10px;
+    cursor: pointer; /* Optional: adds a pointer cursor when hovering over images */
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+    .enter-business-detail-row {
+        flex-direction: column;
+    }
+    .enter-business-detail-col {
+        min-width: 100%;
+    }
+    .enter-business-detail-btn {
+        width: 100%;
+    }
+}
+
 
 
 

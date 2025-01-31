@@ -89,7 +89,7 @@ export default class BusinessModel {
     }
     static async addBusinessDetails(businessName, address, category, phone, latitude, longitude, city, state, website, evCharging, userId) {
         console.log('inside addBusinessDetails');
-        console.log({ businessName, address, category, phone, latitude, longitude, website, evCharging, userId });
+        console.log(businessName, address, category, phone, latitude, longitude, website, evCharging, userId );
 
         const [result] = await db.execute(
             'INSERT INTO business_detail (business_name, address, category, phone, latitude, longitude, city, state, website, ev_station, user_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
@@ -460,7 +460,7 @@ export default class BusinessModel {
     }
     static async getBusinessHours(businessId) {
         try {
-            const sql = "SELECT * FROM business_hours WHERE business_id = ?";
+            const sql = "SELECT day_of_week, opening_time, closing_time FROM business_hours WHERE business_id = ?";
             const [result] = await db.execute(sql, [businessId]);
             return result;
         } catch (error) {
