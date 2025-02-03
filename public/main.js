@@ -755,5 +755,26 @@ async function updateUserInformation() {
 }
 
 
-// all category- home page
+// business details , review delete code ==============================================================
+function deleteReview() {
+    const deleteButton = document.getElementById("delete-review-btn");
+    const reviewId = deleteButton.getAttribute("data-id");
+
+    console.log('Delete review button clicked ==========================');
+    console.log('Review ID:', reviewId);
+
+    if (!confirm("Are you sure you want to delete this review?")) return;
+
+    fetch(`/delete/${reviewId}`, {
+      method: "DELETE",
+    })
+      .then(response => response.json())
+      .then(data => {
+        alert(data.message);
+        location.reload(); // Refresh the page after deletion
+      })
+      .catch(error => {
+        console.error("Error:", error);
+      });
+  }
 
