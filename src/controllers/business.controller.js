@@ -171,7 +171,7 @@ export default class BusinessController {
 
 
             // Handle uploaded images
-            const images = req.files ? req.files.map(file => file.filename) : [];
+            // const images = req.files ? req.files.map(file => file.filename) : [];
 
             if (!businessName || !address || !category || !phone || !latitudeInput || !longitudeInput || !city || !state ) {
                 return res.status(400).json({ message: 'All required fields must be provided except website' });
@@ -199,9 +199,9 @@ export default class BusinessController {
             );
 
             // Save images to the database (if any)
-            if (images.length > 0) {
-                await BusinessModel.addBusinessImages(businessId, images);
-            }
+            // if (images.length > 0) {
+            //     await BusinessModel.addBusinessImages(businessId, images);
+            // }
 
             res.status(201).json({
                 message: 'Business details added successfully',
@@ -214,35 +214,39 @@ export default class BusinessController {
 
     }
     //update business details 
-    async updateBusinessDetails(req, res) {
-        
+    // Controller for handling the business update
+async updateBusinessDetails(req, res) {
+    // Multer will populate req.files with the uploaded images
+    const { businessId, businessName, address, category, phone, website = null, state, city } = req.body;
+    const images = req.files ? req.files.map(file => file.filename) : [];  // Get the filenames of uploaded images
 
-        console.log('Button clicked - Updating business details');
+    console.log('Received Business Data:', req.body);
+    console.log('Received Files:', req.files); // Ensure that files are correctly populated
 
-        // Extract business details from request body
-        const { businessId, businessName, address, category, phone, website = null, state, city } = req.body;
-
-        console.log('Received Business Data for Update:', req.body);
-
-        // Validate required fields
-        if (!businessId || !businessName || !address || !category || !phone || !state || !city) {
-            return res.status(400).json({ success: false, message: 'All required fields must be provided' });
-        }
-
-        try {
-            // Update business details in the database
-            const success = await BusinessModel.updateBusinessDetails(businessId, businessName, address, category, phone, website, state, city);
-
-            if (!success) {
-                return res.status(404).json({ success: false, message: 'Business not found or not updated' });
-            }
-
-            res.json({ success: true, message: 'Business details updated successfully' });
-        } catch (error) {
-            console.error('Database error:', error);
-            res.status(500).json({ success: false, message: 'Failed to update business' });
-        }
+    // Validate required fields
+    if (!businessId || !businessName || !address || !category || !phone || !state || !city) {
+        return res.status(400).json({ success: false, message: 'All required fields must be provided' });
     }
+
+    try {
+        // Update the business details in the database
+        const success = await BusinessModel.updateBusinessDetails(businessId, businessName, address, category, phone, website, state, city);
+
+        if (!success) {
+            return res.status(404).json({ success: false, message: 'Business not found or not updated' });
+        }
+
+        // Save the images to the database if there are any
+        if (images.length > 0) {
+            await BusinessModel.addBusinessImages(businessId, images);
+        }
+
+        res.json({ success: true, message: 'Business details updated successfully' });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ success: false, message: 'Failed to update business' });
+    }
+}
 
     
     async getBusinessById(req, res) {

@@ -99,10 +99,7 @@ export default class BusinessModel {
         const userId2 = result.insertId;
         return userId2;
     }
-    static async addBusinessImages(businessId, images) {
-        const values = images.map(image => [businessId, image]);
-        await db.query(`INSERT INTO business_images (business_id, image_path) VALUES ?`, [values]);
-    }
+    
 
     //update new business
 
@@ -123,7 +120,10 @@ export default class BusinessModel {
             throw error;
         }
     }
-
+    static async addBusinessImages(businessId, images) {
+        const values = images.map(image => [businessId, image]);
+        await db.query(`INSERT INTO business_images (business_id, image_path) VALUES ?`, [values]);
+    }
     // Fetch Business Details by ID
     static async getBusinessById(businessId) {
         try {
