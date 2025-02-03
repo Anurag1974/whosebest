@@ -533,9 +533,14 @@ function updateBusinessDetails(event) {
         alert('Business ID is missing!');
         return;
     }
+    // const ownerName=document.getElementById('ownerName').value;
+    const ownerId=document.getElementById('ownerId').value;
 
     // Append text fields to FormData
     formData.append('businessId', businessId);
+    // formData.append('ownerName',ownerName);
+    formData.append('ownerId',ownerId);
+    
     formData.append('businessName', document.getElementById('businessName').value);
     formData.append('address', document.getElementById('businessAddress').value);
     formData.append('category', document.getElementById('businessCategory').value);

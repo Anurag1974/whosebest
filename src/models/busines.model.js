@@ -120,10 +120,43 @@ export default class BusinessModel {
             throw error;
         }
     }
-    static async addBusinessImages(businessId, images) {
-        const values = images.map(image => [businessId, image]);
-        await db.query(`INSERT INTO business_images (business_id, image_path) VALUES ?`, [values]);
+    static async addBusinessImages(businessId, imageUrls) {
+        try {
+            // Step 1: Check if image_source is null for the business
+            const [businessDetails] = await db.execute(`
+                SELECT image_source FROM business_detail WHERE id = ?`, [businessId]);
+            
+            if (!businessDetails || businessDetails.length === 0) {
+                console.log("No business found with the provided ID");
+                return;
+            }
+    
+            const image_source = businessDetails[0].image_source;
+    
+            // Step 2: If image_source is null, insert the first image path into image_source
+            if (image_source == null && imageUrls.length > 0) {
+                const firstImageUrl = imageUrls[0]; // Get the first image URL to set as image_source
+                await db.execute(`
+                    UPDATE business_detail 
+                    SET image_source = ? 
+                    WHERE id = ?`, [firstImageUrl, businessId]);
+                console.log("Image source updated with the first image URL:", firstImageUrl);
+            }
+    
+            // Step 3: Insert the image URLs into the business_images table
+            const values = imageUrls.map(url => [businessId, url]);
+            await db.query(`
+                INSERT INTO business_images (business_id, image_path) 
+                VALUES ?`, [values]);
+    
+            console.log(`Inserted ${imageUrls.length} images for business with ID ${businessId}`);
+        } catch (error) {
+            console.error("Error adding business images:", error);
+            throw error;
+        }
     }
+    
+    
     // Fetch Business Details by ID
     static async getBusinessById(businessId) {
         try {
@@ -159,7 +192,6 @@ export default class BusinessModel {
             console.error("Database Error:", error);
             throw error;
         }
-
     }
     // static async addBusinessDetails(businessName, pincode, city, state, category, phone, latitude, longitude, website, imag) {
     //     try {
@@ -261,12 +293,12 @@ export default class BusinessModel {
     }
     static async getBusinessDetailsById(id) {
         try {
-            const [businessRows] = await db.execute(`
-            SELECT business_detail.*, users.name AS ownerName
-            FROM business_detail
-            JOIN users ON business_detail.user_id = users.user_id
-            WHERE business_detail.id = ?`, [id]);
-            const [reviewRows] = await db.execute('SELECT * FROM reviews WHERE business_id = ?', [id]);
+            const [businessRows] = await db.execute('SELECT * FROM business_detail  WHERE id = ? ', [id]);
+                const [reviewRows] = await db.execute(`SELECT reviews.*, users.name, users.profile_image
+    FROM reviews
+    JOIN users ON reviews.user_id = users.user_id
+    WHERE reviews.business_id = ?
+    `, [id]);
 
             if (businessRows.length > 0) {
                 const businessDetails = businessRows[0];
@@ -284,6 +316,8 @@ export default class BusinessModel {
             throw error; // Propagate the error
         }
     }
+    
+    
     static async deleteReviewById(reviewId) {
         const sql = "DELETE FROM reviews WHERE review_id = ?";
         const [result] = await db.execute(sql, [reviewId]);
@@ -561,3 +595,84 @@ export default class BusinessModel {
 //         console.log("No business found with the given ID.");
 //     }
 // })();
+
+
+
+
+// static async getBusinessDetailsById(id) {
+//     try {
+//         // Fetch business details
+//         const [businessImage] = await db.execute(`
+//             SELECT * FROM business_detail WHERE id = ?`, [id]);
+        
+//         console.log("Fetched business details:", businessImage);
+        
+//         // Check if business details exist
+//         if (!businessImage || businessImage.length === 0) {
+//             console.log("No business found with the provided ID");
+//             return null; // No business found
+//         }
+
+//         const image_source = businessImage[0]?.image_source;  // Use optional chaining to avoid errors
+//         console.log("Image source:", image_source);
+
+//         let businessRows = [];  // Ensure businessRows is always initialized
+        
+//         // If image_source is null, join business_detail and business_images
+//         if (image_source == null) {
+//             console.log('image source is null');
+
+//             const [rows] = await db.execute(`
+//             SELECT 
+//                 bd.id , 
+//                 bd.business_name , 
+//                 bd.latitude, 
+//                 bd.longitude, 
+//                 bd.address, 
+//                 bd.phone, 
+//                 bd.rating,  
+//                 bd.category,  
+//                 bd.total_ratings, 
+//                 bd.ev_station, 
+//                 bd.user_id, 
+//                 bd.city, 
+//                 bd.state, 
+//                 bi.image_path AS image_source
+//                 FROM business_detail AS bd
+//                 LEFT JOIN business_images AS bi ON bd.id = bi.business_id 
+//                 WHERE bd.id = ? 
+//                 LIMIT 1;
+//                 `, [id]);
+//                 console.log('this is the image source',rows[0].image)
+//             businessRows = rows;  // Assign query result
+//         } else {
+//             // Otherwise, fetch business details normally
+//             const [rows] = await db.execute(`
+//                 SELECT * FROM business_detail WHERE id = ?`, [id]);
+
+//             businessRows = rows; // Assign query result
+//         }
+
+//         console.log("Business rows:", businessRows);
+
+//         // Check if businessRows has data
+//         if (!businessRows || businessRows.length === 0) {
+//             console.log("No data found in businessRows");
+//             return null;
+//         }
+
+//         // Fetch the reviews for the business
+//         const [reviewRows] = await db.execute('SELECT * FROM reviews WHERE business_id = ?', [id]);
+
+//         // Return the business details if found, including reviews
+//         const businessDetails = businessRows[0]; // Ensure it is defined before modifying
+//         businessDetails.reviews = reviewRows;
+
+//         console.log("Complete business details:", businessDetails);
+//         return businessDetails;
+
+//     } catch (error) {
+//         console.error('Error fetching businesses by category:', error);
+//         throw error; // Propagate the error
+//     }
+// }

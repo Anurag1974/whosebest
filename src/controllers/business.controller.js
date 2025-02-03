@@ -218,16 +218,48 @@ export default class BusinessController {
     }
     //update business details 
     // Controller for handling the business update
+// async updateBusinessDetails(req, res) {
+//     // Multer will populate req.files with the uploaded images
+//     const { businessId, businessName, address, category, phone, website = null, state, city } = req.body;
+//     const images = req.files ? req.files.map(file => file.filename) : [];  // Get the filenames of uploaded images
+
+//     console.log('Received Business Data:', req.body);
+//     console.log('Received Files:', req.files); // Ensure that files are correctly populated
+
+//     // Validate required fields
+//     if (!businessId || !businessName || !address || !category || !phone || !state || !city) {
+//         return res.status(400).json({ success: false, message: 'All required fields must be provided' });
+//     }
+
+//     try {
+//         // Update the business details in the database
+//         const success = await BusinessModel.updateBusinessDetails(businessId, businessName, address, category, phone, website, state, city);
+
+//         if (!success) {
+//             return res.status(404).json({ success: false, message: 'Business not found or not updated' });
+//         }
+
+//         // Save the images to the database if there are any
+//         if (images.length > 0) {
+//             await BusinessModel.addBusinessImages(businessId, images);
+//         }
+
+//         res.json({ success: true, message: 'Business details updated successfully' });
+//     } catch (error) {
+//         console.error('Error:', error);
+//         res.status(500).json({ success: false, message: 'Failed to update business' });
+//     }
+// }
 async updateBusinessDetails(req, res) {
     // Multer will populate req.files with the uploaded images
-    const { businessId, businessName, address, category, phone, website = null, state, city } = req.body;
+    const { businessId, businessName, address, category, phone, website = null, state, city, ownerId } = req.body;
     const images = req.files ? req.files.map(file => file.filename) : [];  // Get the filenames of uploaded images
 
     console.log('Received Business Data:', req.body);
     console.log('Received Files:', req.files); // Ensure that files are correctly populated
 
     // Validate required fields
-    if (!businessId || !businessName || !address || !category || !phone || !state || !city) {
+    if (!businessId || !businessName || !address || !category || !phone || !state || !city || !ownerId) {
         return res.status(400).json({ success: false, message: 'All required fields must be provided' });
     }
 
@@ -239,9 +271,15 @@ async updateBusinessDetails(req, res) {
             return res.status(404).json({ success: false, message: 'Business not found or not updated' });
         }
 
-        // Save the images to the database if there are any
-        if (images.length > 0) {
-            await BusinessModel.addBusinessImages(businessId, images);
+        // Create the base URL for image storage
+        const baseUrl = `/uploads/${ownerId}/${businessId}`;  // Adjust according to your server's URL
+
+        // Generate full URLs for each image
+        const imageUrls = images.map(filename => `${baseUrl}/${filename}`);  // Full URL including the filename
+
+        // Save the images URLs to the database if there are any
+        if (imageUrls.length > 0) {
+            await BusinessModel.addBusinessImages(businessId, imageUrls);
         }
 
         res.json({ success: true, message: 'Business details updated successfully' });
@@ -317,10 +355,13 @@ async updateBusinessDetails(req, res) {
         const businessId = req.params.id;
 
         const business = await BusinessModel.getBusinessDetailsById(businessId);
+        console.log(business)
         const businessHours = await BusinessModel.getBusinessHours(businessId);
-        console.log(businessHours)
+        // console.log(businessHours)
+      
         
-        console.log(business);
+        
+        
 
         res.render('manage-business', { user: req.user, business: business, email: req.session.email || null, toggle: req.session.toggle, businessHours: businessHours });
     }
@@ -530,18 +571,19 @@ async updateBusinessDetails(req, res) {
     }
     async showBusinessDetails(req, res) {
         const businessId = req.params.id;
+        let business;
         if (!id) {
             return res.status(400).send('Query parameter is required');
         }
 
         try {
-            const business = await BusinessModel.getBusinessDetailsById(businessId);
+            business = await BusinessModel.getBusinessDetailsById(businessId);
         }
         catch (error) {
             console.error('Database error:', error);
             res.status(500).json({ error: "Failed to fetch business details" });
         }
-        res.render('business-details', { user: req.user || null });
+        res.render('business-details', { business,user: req.user || null });
 
 
     }

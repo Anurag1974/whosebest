@@ -37,6 +37,8 @@
                             <form id="updateBusinessForm">
 
                                 <input type="hidden" id="businessId" value="<%= business.id %>">
+                                <!-- <input type="hidden" id="ownerName" value="<%= business.ownerName%>"> -->
+                                <input type="hidden" id="ownerId" value="<%= business.user_id%>">
                                 <div class="mb-3">
                                     <label for="businessName" class="form-label">Business Name</label>
                                     <input type="text" class="form-control" id="businessName"
