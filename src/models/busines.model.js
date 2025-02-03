@@ -261,7 +261,11 @@ export default class BusinessModel {
     }
     static async getBusinessDetailsById(id) {
         try {
-            const [businessRows] = await db.execute('SELECT * FROM business_detail  WHERE id = ? ', [id]);
+            const [businessRows] = await db.execute(`
+            SELECT business_detail.*, users.name AS ownerName
+            FROM business_detail
+            JOIN users ON business_detail.user_id = users.user_id
+            WHERE business_detail.id = ?`, [id]);
             const [reviewRows] = await db.execute('SELECT * FROM reviews WHERE business_id = ?', [id]);
 
             if (businessRows.length > 0) {
