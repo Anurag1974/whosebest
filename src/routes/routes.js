@@ -57,7 +57,7 @@ router.post('/update-toggle', businessController.updateToggle);
 // router.post('/list-business',authMiddleware, businessController.addBusinessDetails);
 router.post('/list-business', authMiddleware, upload.array('images', 5), businessController.addBusinessDetails);
 router.post('/testimonials', businessController.addTestimonial);
-
+router.post('/submit-whosbest-review', authMiddleware,  businessController.addWhosbestReview)
 // update user information
 // router.put('/update-user', authMiddleware, businessController.updateInformation);
 router.put('/update-user', authMiddleware, upload.single('profileImage'), businessController.updateInformation);

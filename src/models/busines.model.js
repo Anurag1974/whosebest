@@ -543,6 +543,21 @@ export default class BusinessModel {
             throw new Error("Database Update Error: " + error.message);
         }
     }
+    static async insertWhosBestReview(name, rating, address, message, userId) {
+        const query = `
+            INSERT INTO whose_best_reviews (name, rating, address, message, user_id)
+            VALUES (?, ?, ?, ?, ?)
+        `;
+    
+        try {
+            const [result] = await db.execute(query, [name, rating, address, message, userId]);
+            return result;
+        } catch (error) {
+            console.error("Error inserting review:", error);
+            throw error;
+        }
+    }
+    
 
 
 }

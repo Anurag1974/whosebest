@@ -11,7 +11,14 @@
             <div class="enter-business-detail-col">
                 <label for="category">Category</label>
                 <input type="text" class="form-control" id="business-category" name="category" required>
+                <label for="ev-charging">Does your business have an EV charging facility? <span style="color: red;">*</span></label>
+                <select id="ev-charging" class="form-control" required>
+                    <option value="" disabled selected>Select</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
             </div>
+            
         </div>
 
         <div class="enter-business-detail-row">

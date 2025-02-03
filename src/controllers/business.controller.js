@@ -398,9 +398,8 @@ export default class BusinessController {
                     if (user_type === 'business_owner') {
                         console.log('User is business owner');
 
-                        console.log('Token set in cookie, redirecting to /manage-business');
-                        return res.json({ redirectUrl: '/manage-business/user_id=' + user_id }); // Redirect to manage-business
-                    } else {
+                        console.log('Token set in cookie, redirecting to /manage-business/');
+                        
                         console.log('user is the customer');
                         const token = generateToken({ email: email, user_id });
                         res.cookie('token', token, {
@@ -919,6 +918,23 @@ export default class BusinessController {
         } catch (error) {
             console.error('Error fetching business hours:', error.message);
             res.status(500).json({ error: error.message });
+        }
+    }
+    async addWhosbestReview(req, res) {
+        try {
+            const { name, rating, address, message } = req.body;
+            const userId = req.user.id;
+    
+            if (!name || !rating || !address || !message) {
+                return res.status(400).json({ error: "All fields are required" });
+            }
+    
+            const result = await BusinessModel.insertWhosBestReview(name, rating, address, message, userId);
+    
+            return res.status(201).json({ message: "Review added successfully", reviewId: result.insertId });
+        } catch (error) {
+            console.error("Error adding review:", error);
+            return res.status(500).json({ error: "Internal server error" });
         }
     }
     
