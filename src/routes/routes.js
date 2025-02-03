@@ -61,7 +61,7 @@ router.post('/submit-whosbest-review', authMiddleware,  businessController.addWh
 // update user information
 // router.put('/update-user', authMiddleware, businessController.updateInformation);
 router.put('/update-user', authMiddleware, upload.single('profileImage'), businessController.updateInformation);
-router.put('/update-business', businessController.updateBusinessDetails);
+router.put('/update-business',authMiddleware, upload.array('images', 5), businessController.updateBusinessDetails);
 
 router.post("/business-hours", businessController.addBusinessHours);
 router.put("/business-hours", businessController.updateBusinessHours);

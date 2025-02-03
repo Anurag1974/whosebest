@@ -465,7 +465,7 @@ async function addBusinessDetails() {
     const city = document.getElementById('add-city').value;
     const website = document.getElementById('website').value;
     const evCharging = document.getElementById('ev-charging').value;
-    const images = document.getElementById('images').files;
+    // const images = document.getElementById('images').files;
 
     
 
@@ -492,9 +492,9 @@ async function addBusinessDetails() {
         formData.append('website', website);
     }
 
-    for (let i = 0; i < images.length; i++) {
-        formData.append('images', images[i]);
-    }
+    // for (let i = 0; i < images.length; i++) {
+    //     formData.append('images', images[i]);
+    // }
 
 
     const url = '/list-business';
@@ -522,65 +522,116 @@ async function addBusinessDetails() {
 
 }
 
+function updateBusinessDetails(event) {
+    if (event) event.preventDefault(); // Prevent form submission if inside <form>
 
-    document.getElementById('updateBusinessForm').addEventListener('submit', async function (event) {
-        event.preventDefault(); // Prevent default form submission
+    const formData = new FormData();
 
-        // Get business ID (Ensure it's being retrieved correctly)
-        const businessId = document.getElementById('businessId').value;
-        if (!businessId) {
-            alert('Business ID is missing!');
-            return;
+    // Get business ID
+    const businessId = document.getElementById('businessId').value;
+    if (!businessId) {
+        alert('Business ID is missing!');
+        return;
+    }
+
+    // Append text fields to FormData
+    formData.append('businessId', businessId);
+    formData.append('businessName', document.getElementById('businessName').value);
+    formData.append('address', document.getElementById('businessAddress').value);
+    formData.append('category', document.getElementById('businessCategory').value);
+    formData.append('phone', document.getElementById('businessPhone').value);
+    formData.append('website', document.getElementById('businessWebsite').value);
+    formData.append('city', document.getElementById('businessCity').value);
+    formData.append('state', document.getElementById('businessState').value);
+
+    // Append images to FormData
+    const images = document.getElementById('images').files;
+    for (let i = 0; i < images.length; i++) {
+        formData.append('images', images[i]);
+    }
+
+    // Send the PUT request to update business details
+    fetch('/update-business', {
+        method: 'PUT',  // Use PUT for updating
+        body: formData  // FormData for files
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Business details updated successfully');
+            window.location.reload(); // Refresh page to show updated details
+        } else {
+            alert(`Failed to update business: ${data.message}`);
         }
-
-        // Get form data
-        const businessName = document.getElementById('businessName').value;
-        const address = document.getElementById('businessAddress').value;
-        const category = document.getElementById('businessCategory').value;
-        const phone = document.getElementById('businessPhone').value;
-        const website = document.getElementById('businessWebsite').value;
-        const city = document.getElementById('businessCity').value;
-        const state = document.getElementById('businessState').value;
-
-        // Validate required fields
-        if (!businessName || !address || !category || !phone || !city || !state) {
-            alert('All fields are required except website.');
-            return;
-        }
-
-        const requestBody = {
-            businessId, // Ensure businessId is passed
-            businessName,
-            address,
-            category,
-            phone,
-            city,
-            state,
-            website
-        };
-
-        console.log('Sending Update Request:', requestBody);
-
-        try {
-            const response = await fetch('/update-business', {
-                method: 'PUT',  // Use PUT method for updating
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestBody)
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                alert('Business details updated successfully');
-                window.location.reload(); // Refresh page to show updated details
-            } else {
-                alert(`Failed to update business: ${data.message}`);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred while updating business details.');
-        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while updating business details.');
     });
+}
+
+
+
+
+
+    // document.getElementById('updateBusinessForm').addEventListener('submit', async function (event) {
+    //     event.preventDefault(); // Prevent default form submission
+
+    //     // Get business ID (Ensure it's being retrieved correctly)
+    //     const businessId = document.getElementById('businessId').value;
+    //     if (!businessId) {
+    //         alert('Business ID is missing!');
+    //         return;
+    //     }
+
+    //     // Get form data
+    //     const businessName = document.getElementById('businessName').value;
+    //     const address = document.getElementById('businessAddress').value;
+    //     const category = document.getElementById('businessCategory').value;
+    //     const phone = document.getElementById('businessPhone').value;
+    //     const website = document.getElementById('businessWebsite').value;
+    //     const city = document.getElementById('businessCity').value;
+    //     const state = document.getElementById('businessState').value;
+
+    //     // Validate required fields
+    //     if (!businessName || !address || !category || !phone || !city || !state) {
+    //         alert('All fields are required except website.');
+    //         return;
+    //     }
+
+    //     const requestBody = {
+    //         businessId, // Ensure businessId is passed
+    //         businessName,
+    //         address,
+    //         category,
+    //         phone,
+    //         city,
+    //         state,
+    //         website
+    //     };
+
+    //     console.log('Sending Update Request:', requestBody);
+
+    //     try {
+    //         const response = await fetch('/update-business', {
+    //             method: 'PUT',  // Use PUT method for updating
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify(requestBody)
+    //         });
+
+    //         const data = await response.json();
+
+    //         if (response.ok) {
+    //             alert('Business details updated successfully');
+    //             window.location.reload(); // Refresh page to show updated details
+    //         } else {
+    //             alert(`Failed to update business: ${data.message}`);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //         alert('An error occurred while updating business details.');
+    //     }
+    // });
 
 
 

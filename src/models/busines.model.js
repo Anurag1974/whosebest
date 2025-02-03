@@ -99,10 +99,7 @@ export default class BusinessModel {
         const userId2 = result.insertId;
         return userId2;
     }
-    static async addBusinessImages(businessId, images) {
-        const values = images.map(image => [businessId, image]);
-        await db.query(`INSERT INTO business_images (business_id, image_path) VALUES ?`, [values]);
-    }
+    
 
     //update new business
 
@@ -123,7 +120,10 @@ export default class BusinessModel {
             throw error;
         }
     }
-
+    static async addBusinessImages(businessId, images) {
+        const values = images.map(image => [businessId, image]);
+        await db.query(`INSERT INTO business_images (business_id, image_path) VALUES ?`, [values]);
+    }
     // Fetch Business Details by ID
     static async getBusinessById(businessId) {
         try {
@@ -543,21 +543,6 @@ export default class BusinessModel {
             throw new Error("Database Update Error: " + error.message);
         }
     }
-    static async insertWhosBestReview(name, rating, address, message, userId) {
-        const query = `
-            INSERT INTO whose_best_reviews (name, rating, address, message, user_id)
-            VALUES (?, ?, ?, ?, ?)
-        `;
-    
-        try {
-            const [result] = await db.execute(query, [name, rating, address, message, userId]);
-            return result;
-        } catch (error) {
-            console.error("Error inserting review:", error);
-            throw error;
-        }
-    }
-    
 
 
 }
