@@ -109,6 +109,9 @@ export default class BusinessController {
 
     }
     showbusinessLogin(req, res) {
+        if (req.user) {
+            return res.redirect('/');  // ✅ Return to prevent multiple responses
+        }
 
         // console.log(generateOTP());
         res.render('business-login', { user: req.user, message: null, toggle: req.session.toggle })
@@ -320,7 +323,8 @@ export default class BusinessController {
     showEnterBusinessDetails(req, res) {
 
         if (!req.user) {
-            return res.status(401).send('Unauthorized');
+            return res.redirect("/business-login")
+
         }
         res.render('enter-business-details', { user: req.user, toggle: req.user.toggle });
     }
