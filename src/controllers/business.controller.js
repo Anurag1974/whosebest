@@ -409,7 +409,7 @@ export default class BusinessController {
                             maxAge: 24 * 60 * 60 * 1000 // 24 hours
                         });
                         console.log('Token set in cookie, redirecting to /enter-business-details');
-                        return res.json({ redirectUrl: '/enter-business-details' }); // Redirect to enter-business-details
+                        return res.json({ redirectUrl: `your-business/${user_id}` }); // Redirect to enter-business-details
                     }
                 } catch (error) {
                     console.error('Database error while fetching business owner:', error);
