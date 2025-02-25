@@ -1,87 +1,117 @@
-<div class="container my-5">
-    <div class="card shadow-lg p-4">
-      <h1 class="text-center mb-4">Submit Your Information</h1>
-      <form id="whose-best-review-form" >
-        
-        <div class="mb-3">
-          <label for="name" class="form-label">Name</label>
-          <input type="text" class="form-control" name="name" id="reviewer-name" placeholder="Enter your name" required>
-        </div>
-        
-        <div class="mb-3">
-          <label for="rating" class="form-label">Rating:</label>
-          <select class="form-select" name="rating" id="whose-best-rating" required>
-            <option value="" selected disabled>Select Rating</option>
-            <option value="1">1 - Poor</option>
-            <option value="2">2 - Fair</option>
-            <option value="3">3 - Good</option>
-            <option value="4">4 - Very Good</option>
-            <option value="5">5 - Excellent</option>
-          </select>
-        </div>
-  
-        <div class="mb-3">
-          <label for="address" class="form-label">Address:</label>
-          <input type="text" class="form-control" name="address" id="reviewer-address" placeholder="Enter your address" required>
-        </div>
-  
-        <div class="mb-3">
-          <label for="message" class="form-label">Message:</label>
-          <textarea class="form-control" name="message" id="reviewer-message" rows="4" placeholder="Write your message here..." required></textarea>
-        </div>
-  
-        <!-- <div class="mb-3">
-          <label for="fileUpload" class="form-label">Upload File:</label>
-          <input type="file" class="form-control" name="fileUpload" id="fileUpload" required>
-        </div> -->
-  
-        <div class="text-center">
-          <button type="submit" class="btn btn-primary w-100">Submit</button>
-        </div>
-  
-      </form>
-    </div>
+<link rel="stylesheet" href="/form.css">
+<div class="container my-5 d-flex justify-content-center">
+  <div class=" shadow-lg p-4 mx-auto" style="max-width: 700px; width: 100%;">
+      <div class="card-body small">
+          <div class="text-center mb-4">
+              <h3>Submit Your Information</h3>
+          </div>
+
+          <form action="/form" method="POST" enctype="multipart/form-data " class="mt-5">
+              <div class="row">
+                  <!-- Name -->
+                  <div class="col-md-6 mb-3">
+                      <label for="name" class="form-label">Name:</label>
+                      <input type="text" class="form-control" name="name" id="name" placeholder="Enter your name" required value="<%=user.name %>" readonly>
+                  </div>
+                  
+                  <!-- Rating -->
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Rate Us:</label>
+                    <div class="rating">
+                        <% for(let i = 5; i >= 1; i--) { %>
+                            <input type="radio" name="rating" id="star<%= i %>" value="<%= i %>" <%= testimonial && testimonial.rating == i ? 'checked' : '' %> required>
+                            <label for="star<%= i %>">★</label>
+                        <% } %>
+                    </div>
+                </div>
+              </div>
+
+              <div class="row">
+                  <!-- City -->
+                  <div class="col-md-6 mb-3">
+                      <label for="city" class="form-label">City:</label>
+                      <input type="text" class="form-control text-capitalize" name="city" id="city" placeholder="Enter your city"  required value="<%= testimonial ? testimonial.city : '' %>">
+                  </div>
+                  
+                  <!-- Country -->
+                  <div class="col-md-6 mb-3">
+                      <label for="country" class="form-label">Country:</label>
+                      <input type="text" class="form-control text-capitalize" name="country" id="country" placeholder="Enter your country"  value="<%= testimonial ? testimonial.country : '' %>" required>
+                  </div>
+              </div>
+
+              <!-- Reviews -->
+              <div class="mb-3">
+                <label for="reviews" class="form-label">Reviews:</label>
+                <textarea class="form-control" name="reviews" id="reviews" rows="4" placeholder="Write your reviews here..." required><%= testimonial ? testimonial.reviews : '' %></textarea>
+                <small id="charCount" class="text-muted">Remaining characters: 200</small>
+            </div>
+
+              <!-- Submit Button -->
+              <div class="d-grid">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+          </form>
+      </div>
   </div>
-  <script>
-    function submitReviewWhosBest() {
-    document.getElementById('whose-best-review-form').addEventListener("submit", async function(event) {
-        event.preventDefault();
+</div>
 
-        const name = document.getElementById('reviewer-name').value.trim();
-        const rating = parseFloat(document.getElementById('whose-best-rating').value); // Ensure rating is a number
-        const address = document.getElementById('reviewer-address').value.trim();
-        const message = document.getElementById('reviewer-message').value.trim();
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const reviewInput = document.getElementById("reviews");
+        const charCount = document.getElementById("charCount");
+        const maxLength = 120;
+        const minLength =0;
 
-        // Validate inputs before sending the request
-        if (!name || !rating || !address || !message) {
-            alert("All fields are required!");
-            return;
-        }
+        // Function to update remaining characters
+       function updateCharCount() {
+    let remaining = maxLength - reviewInput.value.length;
+    
+    // Prevent negative values
+    remaining = remaining < 0 ? 0 : remaining;
 
-        const requestBody = { name, rating, address, message };
+    charCount.textContent = `Remaining characters: ${remaining}`;
 
-        console.log("Sending review request:", requestBody);
+    // Change color if out of range
+    charCount.style.color = (remaining === 0 || remaining < 10) ? "red" : "black";
+}
 
-        try {
-            const response = await fetch('/submit-whosbest-review', { // Ensure this matches your backend route
-                method: 'POST', // Use POST for adding new data
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestBody)
-            });
+        // Run function once on page load to account for pre-filled value
+        updateCharCount();
 
-            // Ensure response is handled correctly
-            const data = await response.json().catch(() => null);
+        // Update counter on user input
+        reviewInput.addEventListener("input", updateCharCount);
 
-            if (response.ok) {
-                alert('Review submitted successfully!');
-                window.location.reload(); // Refresh to show the updated review
-            } else {
-                alert(`Failed to submit review: ${data?.message || "Unknown error"}`);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred while submitting the review.');
+        const form = document.querySelector("form");
+        form.addEventListener("submit", function (event) {
+            const reviewLength = reviewInput.value.trim().length;
+            
+            if (reviewLength >= 120) {
+                event.preventDefault();
+                showToast("You have entered more than 120 characters.");
+            } 
+        });
+
+        function showToast(message) {
+            let toast = document.createElement("div");
+            toast.innerText = message;
+            toast.style.position = "fixed";
+            toast.style.bottom = "20px";
+            toast.style.left = "50%";
+            toast.style.transform = "translateX(-50%)";
+            toast.style.backgroundColor = "#dc3545";
+            toast.style.color = "#fff";
+            toast.style.padding = "10px 20px";
+            toast.style.borderRadius = "5px";
+            toast.style.zIndex = "1000";
+            toast.style.fontSize = "14px";
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
         }
     });
-}
-  </script>
+</script>
+   
+    

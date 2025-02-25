@@ -1,20 +1,177 @@
 import db from '../config/db.js';
 import session from 'express-session';
 import nodemailer from 'nodemailer';
+import bcrypt from "bcrypt";
+
+import jwt from "jsonwebtoken";
 import BusinessModel from '../models/busines.model.js';
 import { generateToken } from '../utils/jwt.js';
 import GlobalToggleService from '../services/globalToggleService.js';
 import uploadMiddleware from '../middleware/multerMiddleware.js';
 
-const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
+const OTP_EXPIRATION = 5 * 60 * 1000; // 5 minutes
+const otpStore = {}; // Store OTPs in memory (Replace with Redis for production)
+
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
+});
+
+
 export default class BusinessController {
 
+    async sendOTP(req, res) {
+        try {
+            const { name, email, otp } = req.body;
+            console.log(req.body);
+    
+            // Check if email is provided
+            if (!email) {
+                return res.status(400).json({ success: false, message: "Email is required" });
+            }
+    
+            otpStore[email] = { otp, expiresAt: Date.now() + OTP_EXPIRATION };
+    
+            // Send OTP to email
+            await transporter.sendMail({
+                from: process.env.EMAIL_USER,
+                to: email,
+                subject: "Welcome to Whose Best - Your OTP Code",
+                text: `Dear ${name},\n\nWelcome to Whose Best! We are thrilled to have you on board.\n\nYour OTP is: ${otp}\n\nPlease use this OTP to complete your registration.\n\nThank you for being a part of us!\n\nBest regards,\nWhose Best Team`,
+            });
+    
+            res.json({ success: true, message: "OTP sent successfully!" });
+    
+        } catch (error) {
+            console.error("Error sending OTP:", error);
+            res.status(500).json({ success: false, message: "Failed to send OTP" });
+        }
+    }
+    
+
+    
+
+    async verifyOTP(req, res) {
+        try {
+            const { email, otp } = req.body;
+    
+            if (!email || !otp) {
+                return res.status(400).json({ success: false, message: "Email and OTP are required." });
+            }
+    
+            // Check if OTP exists and if it's expired
+            if (!otpStore[email]) {
+                return res.status(400).json({ success: false, message: "OTP not found. Please request a new one." });
+            }
+    
+            if (otpStore[email].expiresAt < Date.now()) {
+                delete otpStore[email]; // Clean up expired OTP
+                return res.status(400).json({ success: false, message: "OTP expired. Please request a new one." });
+            }
+    
+            // Validate OTP
+            if (otpStore[email].otp !== otp) {
+                return res.status(400).json({ success: false, message: "Invalid OTP. Please try again." });
+            }
+    
+            // OTP verified, remove it from the store
+            delete otpStore[email];
+    
+            return res.json({ success: true, message: "OTP verified successfully!" });
+        } catch (error) {
+            console.error("Error verifying OTP:", error);
+            return res.status(500).json({ success: false, message: "Failed to verify OTP. Please try again later." });
+        }
+    }
+    
+    
+
+
+async signup(req, res) {
+    try {
+        const { username, email, phone, password } = req.body;
+
+        // Check if all required fields are provided
+        if (!username || !email || !phone || !password) {
+            return res.status(400).json({ success: false, message: "All fields are required!" });
+        }
+
+        // Check if user already exists
+        const existingUser = await BusinessModel.getUserByEmail(email);
+        if (existingUser.length) {
+            return res.status(400).json({ success: false, message: "Email already in use!" });
+        }
+
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Save user to database
+        await BusinessModel.createUser(username, email, hashedPassword, phone);
+
+        // Send success response
+        res.json({
+            success: true,
+            message: "✅ Signup successful! Redirecting...",
+            redirectUrl: "/login",
+        });
+
+    } catch (error) {
+        console.error("Error in signup:", error);
+        res.status(500).json({ success: false, message: " Internal server error. Please try again later." });
+    }
+}
+
+
+    
+async login(req, res) {
+    try {
+        const { email, password } = req.body;
+
+        // Check if user exists
+        const user = await BusinessModel.getUserByEmail(email);
+        if (!user.length) {
+            return res.status(400).json({ success: false, message: "User not found. Please sign up first." });
+        }
+
+        // Validate password
+        const isValidPassword = await bcrypt.compare(password, user[0].password_hash);
+        if (!isValidPassword) {
+            return res.status(400).json({ success: false, message: "Invalid password" });
+        }
+
+        // Generate JWT Token
+        const token = generateToken({ email: user[0].email, userId: user[0].user_id });
+
+        // Store token in session
+        req.session.user = {
+            id: user[0].user_id,
+            email: user[0].email,
+        };
+
+        // Store token in cookie
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+            maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        });
+
+        res.json({ success: true, message: "Login successful", token });
+
+    } catch (error) {
+        console.error("Error in login:", error);
+        res.status(500).json({ success: false, message: "An error occurred during login. Please try again later." });
+    }
+}
+
+
+ 
     async showOwnListedBusinessList(req, res) {
         if (!req.user) {
-            return res.status(401).send('Unauthorized');
+            // return res.status(401).json({ message: "Unauthorized" });
+            return res.redirect('/login')
         }
         try {
-            const registeredBusiness = await BusinessModel.getRegisteredBusiness(req.user.id);
+            const registeredBusiness = await BusinessModel.getRegisteredBusiness(req.user.id,req.session.toggle);
             res.render('your-business', { user: req.user, registeredBusiness, toggle: req.session.toggle });
         }
         catch (error) {
@@ -22,29 +179,48 @@ export default class BusinessController {
             res.status(500).json({ error: "Failed to fetch business details" });
         }
     }
+    
+    
+    
     showNamePage(req, res) {
-        if (!req.user) {
-            return res.status(401).send('Unauthorizd');
+        try {
+            if (!req.user) {
+                return res.redirect('/login');
+            }
+            res.render('enter-your-details', { user: req.user });
+        } catch (error) {
+            console.error("Error in showNamePage:", error);
+            res.status(500).send("An error occurred while loading the page.");
         }
-        res.render('enter-your-details', { user: req.user });
     }
-    showRatePage(req, res) {
-        // if (!req.user) {
-        //     return res.redirect('/login');
-        // }
+    
+   
+    async showRatePage(req, res) {
         const businessId = req.params.id;
-        res.render('rate', { user: req.user, businessId, toggle: null });
+        const userId = req.user ? req.user.id : null;
+
+        if (!userId) {
+            return res.redirect('/login');
+        }
+
+        try {
+            const ratingData = await BusinessModel.getUserRating(userId, businessId);
+            res.render('rate', { user: req.user, businessId, ratingData, toggle: req.session.toggle });
+        } catch (error) {
+            console.error('Error fetching rating:', error);
+            res.status(500).send('Internal Server Error');
+        }
     }
+
     async submitReview(req, res) {
         const { rating, review } = req.body;
         const businessId = req.params.businessId;
 
-        if (!rating || !review) {
-
-        }
+    
 
         if (!req.user) {
-            return res.status(401).json({ message: 'User not logged in' });
+            return res.redirect('/login')
+            // return res.status(401).json({ message: 'User not logged in' });
         }
 
         try {
@@ -72,7 +248,7 @@ export default class BusinessController {
         try {
             const { id } = req.params;
 
-            console.log('in the controller of delete review')
+            // console.log('in the controller of delete review')
 
             // Call model function to delete the review
             const result = await BusinessModel.deleteReviewById(id);
@@ -88,73 +264,94 @@ export default class BusinessController {
         }
     }
     async showHome(req, res) {
-        console.log(`User: ${req.user}`);
-        const paidAdvertisements = await BusinessModel.getPaidAdvertisements();
-        const businessCounts = await BusinessModel.getBusinessCount(req.session.toggle);
-
-        // top rated business
-
-        const topRatedBusinesses = await BusinessModel.getTopRatedBusinessPerCategory();
-        res.render('home', { user: req.user || null, toggle: req.session.toggle ,  paidAdvertisements: paidAdvertisements || 1, businessCounts , topRatedBusinesses: topRatedBusinesses || [] });
+        try {
+            // Fetching data for the home page
+            const paidAdvertisements = await BusinessModel.getPaidAdvertisements();
+            const testimonials = await BusinessModel.getTestimonials();
+            const businessCounts = await BusinessModel.getBusinessCount(req.session.toggle);
+            const recentActivity = await BusinessModel.getReviewRecentActivity();
+    
+            // Fetching top rated businesses
+            const topRatedBusinesses = await BusinessModel.getTopRatedBusinessPerCategory();
+    
+            // Rendering the home page with the fetched data
+            res.render('home', {
+                user: req.user || null,
+                toggle: req.session.toggle,
+                paidAdvertisements: paidAdvertisements || 1,
+                businessCounts,
+                topRatedBusinesses: topRatedBusinesses || [],
+                testimonials,
+                recentActivity
+            });
+        } catch (error) {
+            console.error("Error loading home page:", error);
+            res.status(500).send("Internal Server Error");
+        }
     }
+
     logout(req, res) {
         res.clearCookie('token');
         res.redirect('/');
     }
+
+
     showBusiness(req, res) {
-        const { location, business } = req.body;
-        console.log(location, business)
-
-        res.render('show-business', { location, business,toggle: req.session.toggle,user: req.user });
-
-    }
-    showbusinessLogin(req, res) {
-        if (req.user) {
-            return res.redirect('/');  // ✅ Return to prevent multiple responses
-        }
-
-        // console.log(generateOTP());
-        res.render('business-login', { user: req.user, message: null, toggle: req.session.toggle })
-
-    }
-    showTaxiPage(req, res) {
-        res.render('book-your-taxi', { user: req.user || null, toggle: req.user ? req.user.toggle : null });
-    }
-    // Method to render the "Book Your Guide" form
-    async bookguide (req, res)  {
-        // Check if user is logged in and if there's any specific data to pass to the view
-        res.render('book-your-guide', { 
-          user: req.user || null, // Passing user if exists
-          toggle: req.user ? req.user.toggle : null // Conditionally passing toggle if the user exists
-        });
-      };
-    showToursAndTravelsPage(req, res) {
-        res.render('tours-and-travels', { user: req.user || null ,toggle: req.user ? req.user.toggle : null });
-    }
-    async addNameDetails(req, res) {
-        const { name, phone, userType } = req.body;
-        const email = req.session.email;
-
-        if (!name || !phone || !userType) {
-            return res.status(400).send('All fields are required');
-        }
-
         try {
-            const result = await BusinessModel.insertNameDetails(name, email, phone, userType);
-            console.log(result)
-
-
-            res.json({ success: true, message: 'name added successfully!', id: result.insertId });
+            const { location, business } = req.body;
+            // console.log(location, business);
+    
+            res.render('show-business', { location, business, toggle: req.session.toggle, user: req.user });
+    
         } catch (error) {
-            console.error('Database error:', error);
-            res.status(500).json({ success: false, message: 'Failed to add business' });
+            console.error("Error in showBusiness:", error);
+            res.status(500).send("An error occurred while displaying the business.");
         }
-
-
     }
+    
+  
+   
+
+
+
+    // async bookguide (req, res)  {
+    //      Check if user is logged in and if there's any specific data to pass to the view
+    //     res.render('book-your-guide', { 
+    //       user: req.user || null, // Passing user if exists
+    //       toggle: req.user ? req.session.toggle : null // Conditionally passing toggle if the user exists
+    //     });
+    //   };
+
+
+    // showToursAndTravelsPage(req, res) {
+    //     res.render('tours-and-travels', { user: req.user || null ,toggle: req.user ? req.session.toggle : null });
+    // }
+    // async addNameDetails(req, res) {
+    //     const { name, phone, userType } = req.body;
+    //     const email = req.session.email;
+
+        
+
+    //     if (!name || !phone || !userType) {
+    //         return res.status(400).send('All fields are required');
+    //     }
+
+    //     try {
+    //         const result = await BusinessModel.insertNameDetails(name, email, phone, userType);
+    //         // console.log(result)
+
+
+    //         res.json({ success: true, message: 'name added successfully!', id: result.insertId });
+    //     } catch (error) {
+    //         console.error('Database error:', error);
+    //         res.status(500).json({ success: false, message: 'Failed to add business' });
+    //     }
+
+
+    // }
     async addBusinessDetails(req, res) {
         try {
-            console.log('Inside addBusinessDetails controller');
+            // console.log('Inside addBusinessDetails controller');
             const {
 
                 
@@ -163,9 +360,10 @@ export default class BusinessController {
                 address,
                 category,
                 phone,
-                latitudeInput,
-                longitudeInput,
+                // latitudeInput,
+                // longitudeInput,
                 evCharging,
+                womenOwned,
                 city, 
                 state,
                 website,
@@ -176,7 +374,7 @@ export default class BusinessController {
             // Handle uploaded images
             // const images = req.files ? req.files.map(file => file.filename) : [];
 
-            if (!businessName || !address || !category || !phone || !latitudeInput || !longitudeInput || !city || !state ) {
+            if (!businessName || !address || !category || !phone  || !city || !state  || !womenOwned) {
                 return res.status(400).json({ message: 'All required fields must be provided except website' });
             }
 
@@ -189,8 +387,8 @@ export default class BusinessController {
                 address,
                 category,
                 phone,
-                latitudeInput,
-                longitudeInput,
+                // latitudeInput,
+                // longitudeInput,
                 city,
                 state,
                 
@@ -198,6 +396,7 @@ export default class BusinessController {
                 website || null,
                 
                 evCharging,
+                womenOwned,
                 userId
             );
 
@@ -216,359 +415,112 @@ export default class BusinessController {
         }
 
     }
-    //update business details 
-    // Controller for handling the business update
-// async updateBusinessDetails(req, res) {
-//     // Multer will populate req.files with the uploaded images
-//     const { businessId, businessName, address, category, phone, website = null, state, city } = req.body;
-//     const images = req.files ? req.files.map(file => file.filename) : [];  // Get the filenames of uploaded images
 
-//     console.log('Received Business Data:', req.body);
-//     console.log('Received Files:', req.files); // Ensure that files are correctly populated
-
-//     // Validate required fields
-//     if (!businessId || !businessName || !address || !category || !phone || !state || !city) {
-//         return res.status(400).json({ success: false, message: 'All required fields must be provided' });
-//     }
-
-//     try {
-//         // Update the business details in the database
-//         const success = await BusinessModel.updateBusinessDetails(businessId, businessName, address, category, phone, website, state, city);
-
-//         if (!success) {
-//             return res.status(404).json({ success: false, message: 'Business not found or not updated' });
-//         }
-
-//         // Save the images to the database if there are any
-//         if (images.length > 0) {
-//             await BusinessModel.addBusinessImages(businessId, images);
-//         }
-
-//         res.json({ success: true, message: 'Business details updated successfully' });
-//     } catch (error) {
-//         console.error('Error:', error);
-//         res.status(500).json({ success: false, message: 'Failed to update business' });
-//     }
-// }
-async updateBusinessDetails(req, res) {
-    // Multer will populate req.files with the uploaded images
-    const { businessId, businessName, address, category, phone, website = null, state, city, ownerId } = req.body;
-    const images = req.files ? req.files.map(file => file.filename) : [];  // Get the filenames of uploaded images
-
-    console.log('Received Business Data:', req.body);
-    console.log('Received Files:', req.files); // Ensure that files are correctly populated
-
-    // Validate required fields
-    if (!businessId || !businessName || !address || !category || !phone || !state || !city || !ownerId) {
-        return res.status(400).json({ success: false, message: 'All required fields must be provided' });
-    }
-
+   async updateBusinessDetails(req, res) {
     try {
-        // Update the business details in the database
-        const success = await BusinessModel.updateBusinessDetails(businessId, businessName, address, category, phone, website, state, city);
+        const { 
+            businessId, businessName, address, category, phone, 
+            website = null, state, city, overview, usp, ownerId, 
+            businessService1, businessService2, businessService3, businessService4 
+        } = req.body;
+
+        // Access images (array) and thumbnail (single file)
+        const images = req.files?.['images'] ? req.files['images'].map(file => file.filename) : [];
+        const thumbnail = req.files?.['thumbnail'] ? req.files['thumbnail'][0].filename : null;
+
+        // Validate required fields
+        if (!businessId || !businessName || !address || !category || !phone || !state || !city || !overview || !usp || !ownerId) {
+            return res.status(400).json({ success: false, message: 'All required fields must be provided' });
+        }
+
+        // Update business details
+        const success = await BusinessModel.updateBusinessDetails(
+            businessId, businessName, address, category, phone, website, state, city, overview, usp,
+            businessService1, businessService2, businessService3, businessService4
+        );
 
         if (!success) {
             return res.status(404).json({ success: false, message: 'Business not found or not updated' });
         }
 
-        // Create the base URL for image storage
-        const baseUrl = `/uploads/${ownerId}/${businessId}`;  // Adjust according to your server's URL
+        const baseUrl = `/uploads/${ownerId}/${businessId}`;
+        const imageUrls = images.map(filename => `${baseUrl}/${filename}`);
 
-        // Generate full URLs for each image
-        const imageUrls = images.map(filename => `${baseUrl}/${filename}`);  // Full URL including the filename
-
-        // Save the images URLs to the database if there are any
+        // Add images to the database if there are any
         if (imageUrls.length > 0) {
             await BusinessModel.addBusinessImages(businessId, imageUrls);
         }
 
+        // Update thumbnail if it exists
+        if (thumbnail) {
+            const thumbnailUrl = `${baseUrl}/thumbnail/${thumbnail}`;
+            await BusinessModel.updateThumbnail(businessId, thumbnailUrl);
+        }
+
         res.json({ success: true, message: 'Business details updated successfully' });
+
     } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ success: false, message: 'Failed to update business' });
+        console.error('Error updating business details:', error);
+        res.status(500).json({ success: false, message: 'Failed to update business details. Please try again.' });
     }
 }
 
-    
-    async getBusinessById(req, res) {
-        const { businessId } = req.params;
-
-        try {
-            const business = await BusinessModel.getBusinessById(businessId);
-            if (!business) {
-                return res.status(404).json({ success: false, message: 'Business not found' });
-            }
-            res.json({ success: true, business });
-        } catch (error) {
-            console.error('Database error:', error);
-            res.status(500).json({ success: false, message: 'Failed to fetch business details' });
-        }
-    }
-
-
-    // async addBusinessDetails(req, res) {
-    //     // Use Multer middleware to handle file uploads
-    //     uploadMiddleware(req, res, async (err) => {
-    //         if (err) {
-    //             return res.status(400).send(err.message); // Handle file upload errors
-    //         }
-
-    // if (!req.user) {
-    //     return res.status(401).send('Unauthorized'); // User not logged in
-    // }
-
-    // // Extract business details from request body
-    // const { businessName, pincode, address, category, phone, latitudeInput, longitudeInput , website = null} = req.body;
-
-    //         // Validate required fields
-    //         if (!businessName || !pincode || !address || !category || !phone || !latitudeInput || !longitudeInput ) {
-    //             return res.status(400).send('All fields are required');
-    //         }
-
-    //         try {
-    //             // Get file paths of uploaded images
-    //             // const businessImages = req.files.map((file) => `/uploads/${file.filename}`);
-
-    //             // Save business details and images to the database
-    //             const businessId = await BusinessModel.addBusinessDetails(
-    //                 businessName, pincode, address, category, phone, latitudeInput, longitudeInput, website
-    //             );
-
-    //             // Redirect user after successful addition
-    //             const redirectUrl = `/manage-business/${businessId}`;
-    //             res.json({
-    //                 success: true,
-    //                 message: 'Business details added successfully',
-    //                 redirectUrl,
-    //             });
-    //         } catch (error) {
-    //             console.error('Database error:', error);
-    //             res.status(500).json({ success: false, message: 'Failed to add business' });
-    //         }
-    //     });
-    // }
 
     async showManageBusiness(req, res) {
-        if (!req.user) {
-            return res.status(401).send('Unauthorized3');
-        }
-        const businessId = req.params.id;
-
-        const business = await BusinessModel.getBusinessDetailsById(businessId);
-        console.log(business)
-        const businessHours = await BusinessModel.getBusinessHours(businessId);
-        // console.log(businessHours)
-      
-        
-        
-        
-
-        res.render('manage-business', { user: req.user, business: business, email: req.session.email || null, toggle: req.session.toggle, businessHours: businessHours });
-    }
-    showEnterBusinessDetails(req, res) {
-
-        if (!req.user) {
-            return res.redirect("/business-login")
-
-        }
-        res.render('enter-business-details', { user: req.user, toggle: req.user.toggle });
-    }
-
-    async sendOtp(req, res) {
-        const { email } = req.body;
-        console.log(email);
-        if (!email) {
-            return res.status(400).send('email is required')
-        }
-        const otp = generateOTP();
-        req.session.otp = otp;
-        req.session.email = email;
-        console.log('Email stored in session:', req.session.email);
-
-
-        // Configure nodemailer transporter
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
-            },
-        });
-
-        // Email options
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: 'Your OTP Code',
-            text: `Your OTP code is ${otp}`,
-        };
         try {
-            await transporter.sendMail(mailOptions);
-
-
-            const emailIsPresent = await BusinessModel.getEmail(email);
-            console.log(`email status in send otp is email is present: ${emailIsPresent}`);
-            res.status(200).json({ success: true, message: 'OTP sent successfully', emailIsPresent });
-
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ success: false, message: 'Failed to send email' });
-        }
-
-    }
-    async verifyOtpHandler(req, res) {
-        const { otp } = req.body;
-
-        if (!otp) {
-            console.log('OTP is missing');
-            return res.status(400).send('OTP is required');
-        }
-
-
-
-        if (req.session.otp === otp) {
-            console.log('OTP is valid');
-            const token = generateToken({ email: req.session.email });
-            res.cookie('token', token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                maxAge: 24 * 60 * 60 * 1000 // 24 hours
+            // Check if the user is logged in
+            if (!req.user) {
+                return res.redirect('/login');
+            }
+    
+            const businessId = req.params.id;
+    
+            // Get business details by ID
+            const business = await BusinessModel.getBusinessDetailsById(businessId);
+    
+            // Ensure the business exists and belongs to the logged-in user
+            if (!business || business.user_id !== req.user.id) {
+                return res.redirect('/login');
+            }
+    
+            // Calculate the remaining images
+            const maxImages = 7;
+            const remainingImages = Math.max(maxImages - business.image_count, 0);
+    
+            // Fetch business hours and reviews
+            const businessHours = await BusinessModel.getBusinessHours(businessId);
+            const businessReview = await BusinessModel.getBusinessReview(businessId);
+    
+            // Render the manage business page with the data
+            res.render('manage-business', { 
+                user: req.user, 
+                business: business, 
+                email: req.session.email || null, 
+                toggle: req.session.toggle, 
+                businessHours: businessHours,
+                reviews: businessReview,
+                remainingImages: remainingImages  // Pass the remaining images count to the view
             });
-            req.session.otp = null;
-            const email = req.session.email;
-            console.log(`The email is ${email}`);
-
-            const emailIsPresent = await BusinessModel.getEmail(email);
-            if (emailIsPresent) {
-                try {
-                    const { user_type, user_id } = await BusinessModel.getUserByEmail(email);
-                    // console.log(`Business owner: ${businessOwner}`);
-
-                    if (user_type === 'business_owner') {
-                        console.log('User is business owner');
-
-                        console.log('Token set in cookie, redirecting to /manage-business/');
-                        
-                        console.log('user is the customer');
-                        const token = generateToken({ email: email, user_id });
-                        res.cookie('token', token, {
-                            httpOnly: true,
-                            secure: process.env.NODE_ENV === 'production',
-                            maxAge: 24 * 60 * 60 * 1000 // 24 hours
-                        });
-                        console.log('Token set in cookie, redirecting to /enter-business-details');
-                        return res.json({ redirectUrl: `your-business/${user_id}` }); // Redirect to enter-business-details
-                    }
-                } catch (error) {
-                    console.error('Database error while fetching business owner:', error);
-                    return res.status(500).send('An error occurred while checking the email'); // Ensure return
-                }
-
-            } else {
-                const email = req.session.email;
-                const user_type = 'customer';
-                const { userName, userPhone } = req.body;
-                console.log(`The email is ${email}, the name is ${userName}, the phone is ${userPhone}`);
-                try {
-                    const result = await BusinessModel.insertNameDetails(userName, email, userPhone, user_type);
-                    console.log(result);
-                    res.json({ redirectUrl: '/enter-business-details', success: true, message: 'name added successfully!', id: result.insertId });
-                } catch (error) {
-                    console.error('Database error:', error);
-                    res.status(500).json({ success: false, message: 'Failed to add business' });
-                }
-            }
-
-
-
-
-
-
-        } else {
-            console.log('Invalid OTP');
-            return res.status(400).send('Invalid OTP. Please try again.'); // Ensure return
+    
+        } catch (error) {
+            console.error("Error in showManageBusiness:", error);
+            res.status(500).send("An error occurred while loading the business management page.");
         }
     }
-    async verifyOtpHandlerPopupPage(req, res) {
-
-        console.log('Request received:', req.body);
-
-        const { otp, userName, userPhone } = req.body;
-
-        if (!otp) {
-            console.log('OTP is missing');
-            return res.status(400).send('OTP is required');
-        }
-
-        if (req.session.otp !== otp) {
-            console.log('Invalid OTP');
-            return res.status(400).send('Invalid OTP. Please try again.');
-        }
-
-        console.log('OTP is valid');
-        req.session.otp = null; // Clear OTP after verification
-
-        const email = req.session.email;
-        console.log(`The email is ${email}`);
+    
+   
+    showEnterBusinessDetails(req, res) {
         try {
-
-            const emailIsPresent = await BusinessModel.getEmail(email);
-            if (emailIsPresent) {
-                const { user_type, user_id } = await BusinessModel.getUserByEmail(email);
-                console.log(`User type: ${user_type}, User ID: ${user_id}`);
-
-                // Generate JWT token and set cookie
-                const token = generateToken({ email, user_id, user_type });
-                res.cookie('token', token, {
-                    httpOnly: true,
-                    secure: process.env.NODE_ENV === 'production',
-                    maxAge: 24 * 60 * 60 * 1000, // 24 hours
-                });
-
-                // Redirect based on user type
-                const redirectUrl = '/';
-
-                console.log(`Redirecting to ${redirectUrl}`);
-                return res.json({ redirectUrl });
-            } else {
-                if (!userName || !userPhone) {
-                    return res.status(400).json({ message: 'User name and phone are required for registration.' });
-                }
-
-                const user_type = 'customer';
-                console.log(`New user details - Email: ${email}, Name: ${userName}, Phone: ${userPhone}`);
-
-                const result = await BusinessModel.insertNameDetails(userName, email, userPhone, user_type);
-                const user_id = result.insertId;
-
-                // Generate JWT token and set cookie
-                const token = generateToken({ email, user_id, user_type });
-                res.cookie('token', token, {
-                    httpOnly: true,
-                    secure: process.env.NODE_ENV === 'production',
-                    maxAge: 24 * 60 * 60 * 1000,
-                });
-
-                console.log('New user registered successfully');
-                return res.json({
-                    redirectUrl: '/',
-                    success: true,
-                    message: 'User registered successfully!',
-                    id: user_id,
-                });
-
+            if (!req.user) {
+                return res.redirect("/login");
             }
-
-
-
+            res.render('enter-business-details', { user: req.user, toggle: req.session.toggle });
+        } catch (error) {
+            console.error("Error in showEnterBusinessDetails:", error);
+            res.status(500).send("An error occurred while loading the page.");
         }
-        catch (error) {
-            console.error('Error during OTP verification or user handling:', error);
-            return res.status(500).send('An internal server error occurred');
-        }
-
-
     }
+    
     async showBusinessDetails(req, res) {
         const businessId = req.params.id;
         let business;
@@ -600,8 +552,9 @@ async updateBusinessDetails(req, res) {
             res.status(500).json({ error: "Failed to fetch business details" });
         }
     }
+
     async searchCategory(req, res) {
-        console.log(`user id ${req.user}`)
+        // console.log(`user id ${req.user}`)
         const category = req.query.category;
         const sortBy = req.query.sortBy || 'rating';
         const page = parseInt(req.query.page) || 1; // Default to page 1
@@ -614,6 +567,8 @@ async updateBusinessDetails(req, res) {
 
         try {
             const { businesses, total } = await BusinessModel.getBusinessesByCategoryAndSort(category, sortBy, limit, offset, req.session.toggle);
+
+            // console.log(req.session.toggle)
 
             const totalPages = Math.ceil(total / limit);
             res.render('list-of-businesses', {
@@ -632,21 +587,41 @@ async updateBusinessDetails(req, res) {
     }
     async showBusinessDetailsById(req, res) {
         const businessId = req.params.businessId;
-        if (!businessId) {
-            return res.status(400).send('Query parameter is required');
-        }
+    
         try {
-            const businessDetails = await BusinessModel.getBusinessDetailsById(businessId);
+            // Fetch business details
+            const businessDetails = await BusinessModel.getBusinessDetailsById(businessId); // No need for getBusinessImages
+            const offDays = await BusinessModel.getOffDays(businessId);
+            const reviewData = await BusinessModel.getReviewCount(businessId);
+    
             let hasReviewed = null;
             if (req.user) {
-                hasReviewed = await BusinessModel.hasUserReviewed(req.user.id, businessId);
+                hasReviewed = await BusinessModel.hasUserReviewed(businessId, req.user.id);
             }
-
-
+    
+            // Extract and format average rating from reviewData
+            const averageRating = reviewData?.average_rating 
+                ? parseFloat(reviewData.average_rating).toFixed(1) 
+                : "No rating"; 
+    
+            const reviewCount = reviewData?.review_count || 0; 
+    
+            // If the business details have images, split the string into an array of objects
+            const images = businessDetails?.images
+                ? businessDetails.images.split("||").map(image => ({ image_source: image }))
+                : [];
+    
             if (businessDetails && businessDetails.message !== "No business found with the provided ID") {
-                console.log("Business Details for Rendering: ", businessDetails);
-
-                res.render('business-details', { user: req.user || null, businessDetails, toggle: req.session.toggle, hasReviewed: hasReviewed || null });
+                res.render('business-details', { 
+                    user: req.user || null, 
+                    businessDetails, 
+                    toggle: req.session.toggle, 
+                    hasReviewed: hasReviewed || null, 
+                    offDays, 
+                    reviewCount,
+                    averageRating, // Pass the formatted average rating
+                    images // Pass images as an array of objects
+                });
             } else {
                 res.status(404).send("No business found with the given ID.");
             }
@@ -655,244 +630,285 @@ async updateBusinessDetails(req, res) {
             res.status(500).json({ error: "Failed to fetch business details" });
         }
     }
-
     
-    updateToggle(req, res) {
-        const { toggle } = req.body;
-        req.session.toggle = toggle;
-        console.log(req.session.toggle);
-        if (toggle) {
 
+async updateToggle(req, res) {
+    try {
+        const { toggleType, value } = req.body; // Expecting "ev" or "women"
+
+        if (!toggleType || typeof value === 'undefined') {
+            return res.status(400).json({ success: false, message: "Invalid request. Missing toggleType or value." });
         }
-        res.json({ message: 'Toggle value updated in session' });
 
+        if (!req.session.toggle) {
+            req.session.toggle = { ev: false, women: false };
+        }
 
+        if (toggleType in req.session.toggle) {
+            req.session.toggle[toggleType] = value; // Update only the relevant toggle
+        } else {
+            return res.status(400).json({ success: false, message: "Invalid toggle type." });
+        }
+
+        res.json({ success: true, message: "Toggle value updated", toggle: req.session.toggle });
+    } catch (error) {
+        console.error("Error updating toggle:", error);
+        res.status(500).json({ success: false, message: "Failed to update toggle. Please try again." });
     }
-    async addTestimonial(req, res){
+}
+
+    async addTestimonial(req, res) {
         try {
-            const { name, location, stars, comment } = req.body;
-            const userId = req.user.id;
+            const { name, city, country, rating, reviews } = req.body;
+            // console.log("Request Body:", req.body);
+    
+            // Ensure user is authenticated
+            if (!req.user || !req.user.id) {
+                return res.redirect('/login');
+            }
+    
+            const user_id = req.user.id;
+            // console.log("User ID:", user_id);
     
             // Validate input
-            if (!user_id || !name || !location || !stars || !comment) {
+            if (!name || !city || !country || !rating || !reviews) {
                 return res.status(400).json({ error: 'All fields are required' });
             }
     
-            const result = await BusinessModel.createTestimonial({
-                userId,
-                name,
-                location,
-                stars,
-                comment,
-            });
+            // Check if the user already has a testimonial
+            const existingTestimonial = await BusinessModel.getTestimonialByUserId(user_id);
     
-            res.status(201).json({
-                message: 'Testimonial added successfully',
-                id: result.insertId,
-            });
+            let result;
+            if (existingTestimonial) {
+                // Update the existing testimonial
+                result = await BusinessModel.updateTestimonial(user_id, name, city, country, rating, reviews);
+                return res.redirect('/'); 
+            } else {
+                // Insert a new testimonial
+                result = await BusinessModel.createTestimonial(user_id, name, city, country, rating, reviews);
+                return res.redirect('/'); 
+            }
+    
         } catch (error) {
             console.error('Error adding testimonial:', error.message);
             res.status(500).json({ error: 'Internal Server Error' });
         }
     }
-
+    
+    
     //  in edit page =========
 
 
     async showEditUser(req, res) {
-
-        const userId = req.user.id;
-
-
-        // Check if ID is provided
-        if (!userId) {
-            return res.status(400).send('Query parameter is required');
+        // Check if user is authenticated
+        if (!req.user) {
+            return res.redirect('/login'); // Redirect to login page if not logged in
         }
-
+    
+        const userId = req.user.id;
+    
         try {
-            // Fetch business details by ID
+            // Fetch user details by ID
             const userDetails = await BusinessModel.getUserByUserId(userId);
-
+    
             if (!userDetails) {
-                return res.status(404).send('Business not found');
+                return res.status(404).send('User not found');
             }
-
-            // Assuming the business details contain a toggle value
-            const toggle = req.session.toggle || userDetails.toggle || false; // Use session toggle or the business-specific toggle
+    
+            // Assuming the user details contain a toggle value
+            const toggle = req.session.toggle || userDetails.toggle || false; // Use session toggle or user-specific toggle
             userDetails.profile_image = userDetails.profile_image
-            ? `/uploads/${userDetails.profile_image}` // Adjust the path as needed
-            : null;
-
-            // Render the edit page with business details and the toggle value
+                ? `/uploads/${userDetails.profile_image}` // Adjust the path as needed
+                : null;
+    
+            // Render the edit page with user details and toggle value
             res.render('edit', {
                 user: req.user || null,
                 userDetails,
                 toggle
             });
         } catch (error) {
-            // Send an error response if something goes wrong
+            console.error("Error fetching user details:", error);
             res.status(500).json({ message: `Server error: ${error.message}` });
         }
     }
-
-
-
-
-
-
-    //  async editUser(req, res) {
-    //     const id = req.params.id;
-
-    //     // Check if ID is provided
-    //     if (!id) {
-    //         return res.status(400).send('Query parameter is required');
-    //     }
-
-    //     try {
-    //         // Fetch business details by ID
-    //         const businessDetails = await BusinessModel.getBusinessDetailsById(id);
-
-    //         if (!businessDetails) {
-    //             return res.status(404).send('Business not found');
-    //         }
-
-    //         // Assuming the business details contain a toggle value
-    //         const toggle = req.session.toggle || businessDetails.toggle || false; // Use session toggle or the business-specific toggle
-
-    //         // Render the edit page with business details and the toggle value
-    //         res.render('edit', { 
-    //             user: req.user,
-    //             // user:req.name, 
-    //             businessDetails, 
-    //             toggle 
-    //         });
-    //     } catch (error) {
-    //         console.error('Database error:', error);
-    //         res.status(500).json({ error: "Failed to fetch business details" });
-    //     }
-    // }
-
+    
     // user update information name 
 
     async updateInformation(req, res) {
         try {
-            const { name, phoneNumber } = req.body;
-            const userId = req.user?.id; // Ensure `req.user` exists
-            let profileImage = req.file ? req.file.filename : null; 
+            const { userId, name, phoneNumber, email } = req.body;
+            let profileImage = req.file ? req.file.filename : null;
     
             if (!userId) {
-                return res.status(401).json({ message: 'Unauthorized: User not logged in' });
+                return res.status(401).json({ success: false, message: 'Unauthorized: User not logged in' });
             }
+            console.log("Updating User ID:", userId);
     
             // Input validation
             if (!name || !phoneNumber) {
-                return res.status(400).json({ message: 'Name and phone number are required' });
+                return res.status(400).json({ success: false, message: 'Name and phone number are required' });
             }
     
-           
-    
-            console.log(`User ID ${userId} update attempt: name = "${name}", phoneNumber = "${phoneNumber}"`);
-    
-            const result = await BusinessModel.updateName(userId, name, phoneNumber, profileImage);
+            // Perform update
+            const result = await BusinessModel.updateName(userId, name, phoneNumber, email, profileImage);
+            console.log("Update Result:", result);
     
             if (result.affectedRows === 0) {
-                return res.status(200).json({ message: 'No changes were made' }); // Handle unchanged data
+                return res.status(200).json({ success: false, message: 'No changes were made' });
             }
     
-            res.status(200).json({ message: 'User information updated successfully' });
+            // If email is updated, destroy session and force re-login
+            if (email) {
+                req.session.destroy((err) => {
+                    if (err) {
+                        console.error("Error destroying session:", err);
+                        return res.status(500).json({ success: false, message: "Error updating session" });
+                    }
+                    res.clearCookie("connect.sid");
+                    res.json({ 
+                        success: true, 
+                        message: "Email updated. Please log in again.", 
+                        redirect: "/login" 
+                    });
+                });
+                return; 
+            }
+    
+            // Successful update response
+            res.status(200).json({ success: true, message: 'User information updated successfully' });
+    
         } catch (error) {
             console.error('Error updating user:', error);
-            res.status(500).json({ error: 'Database update failed', details: error.message });
+            res.status(500).json({ success: false, message: 'Database update failed', details: error.message });
         }
-
-        
     }
-
-
-
+    
+    
+    
     //rendering footer-review-form
-    async formfooter (req, res) {
+    async formfooter(req, res) {
         try {
-          res.render('form', {
-            title: 'Your Form Page',
-            user: req.user,          // Passing user info from the request
-            toggle: req.user?.toggle // Optional chaining to avoid errors if user is undefined
-          });
+            // Ensure user is authenticated
+            if (!req.user || !req.user.id) {
+                return res.redirect('/login')
+            }
+    
+            const user_id = req.user.id;
+    
+            // Fetch existing testimonial data for the user
+            const existingTestimonial = await BusinessModel.getTestimonialByUserId(user_id);
+    
+            res.render('form', {
+                title: 'Your Form Page',
+                user: req.user,      
+                toggle: req.session.toggle, 
+                testimonial: existingTestimonial // Pass testimonial data to the form
+            });
+    
         } catch (error) {
-          res.status(500).send('Error rendering the form');
+            console.error('Error rendering the form:', error.message);
+            res.status(500).send('Error rendering the form');
         }
-      }; 
+    }
+    
 
 
     // Method to search for businesses based on location and category
     async searchBusiness(req, res) {
-        
-        const query = req.query.city;  // Location query parameter from the request
+        const city = req.query.city;  // Location query parameter from the request
         const category = req.query.category; // Category query parameter from the request
-        const toggle = req.session.toggle || false; // Retrieve toggle state from session (if any)
-
-        // Check if either location or category is provided
-        if (!query && !category) {
+        const toggles = req.session.toggle || {}; // Retrieve toggle state from session (default to empty object)
+    
+        const page = parseInt(req.query.page) || 1; // Default to page 1
+        const limit = 10; // Number of businesses per page
+        const offset = (page - 1) * limit; // Calculate offset for pagination
+    
+        // Check if either city or category is provided
+        if (!city && !category) {
             return res.status(400).json({ error: "At least one of location or category must be provided" });
         }
-
+    
         try {
-            // Fetch businesses based on location and/or category
-            const businesses = await BusinessModel.filterBusiness(query, category);
-            console.log(businesses)
-            // Render the results or return the data
+            // Fetch businesses based on city, category, toggles, and pagination
+            const { businesses, total } = await BusinessModel.filterBusiness(city, category, toggles, limit, offset);
+            
+            // console.log(businesses);
+    
+            // Calculate total pages for pagination
+            const totalPages = Math.ceil(total / limit);
+    
+            // Render the results
             res.render('show-business', {
-                businesses: businesses,  // Businesses fetched from the model
-                category: category,      // Category from query (if provided)
-                query: query,            // Location query from the search
-                user: req.user,          // User information from session (if available)
-                toggle: toggle           // Toggle value from session (if available)
+                businesses,  // Businesses fetched from the model
+                category,      // Category from query (if provided)
+                query: city,   // Location query from the search
+                user: req.user, // User information from session (if available)
+                toggle: toggles, // Toggle values from session (if available)
+                currentPage: page,
+                totalPages
             });
-
+    
         } catch (error) {
             console.error("Error fetching businesses:", error);
             res.status(500).json({ error: "Failed to fetch businesses" });
         }
     }
+    
+    
 //show what we do function 
-    async showWhatWeDo(req,res){
+async showWhatWeDo(req, res) {
+    try {
         const toggle = req.session.toggle || false;
 
         res.render('what-we-do', {
-                   // Pass the list of services to the view
-            toggle , // Pass session toggle state
-            user: req.user       // Pass user details (logged-in user)
+            toggle, // Pass session toggle state
+            user: req.user // Pass user details (logged-in user)
         });
-
+    } catch (error) {
+        console.error("Error in showWhatWeDo:", error);
+        res.status(500).send("An error occurred while loading the page.");
     }
-    async findWhatYouWant(req,res){
+}
+
+async findWhatYouWant(req, res) {
+    try {
         const toggle = req.session.toggle || false;
 
         res.render('find-what-you-want', {
-                   // Pass the list of services to the view
-            toggle , // Pass session toggle state
-            user: req.user       // Pass user details (logged-in user)
+            toggle, // Pass session toggle state
+            user: req.user // Pass user details (logged-in user)
         });
-
+    } catch (error) {
+        console.error("Error in findWhatYouWant:", error);
+        res.status(500).send("An error occurred while loading the page.");
     }
-    async setupYourBusiness(req,res){
+}
+
+async setupYourBusiness(req, res) {
+    try {
         const toggle = req.session.toggle || false;
 
         res.render('setup-your-business', {
-                   // Pass the list of services to the view
-            toggle , // Pass session toggle state
-            user: req.user       // Pass user details (logged-in user)
+            toggle, // Pass session toggle state
+            user: req.user // Pass user details (logged-in user)
         });
-
+    } catch (error) {
+        console.error("Error in setupYourBusiness:", error);
+        res.status(500).send("An error occurred while loading the page.");
     }
+}
+
+
+
     async addBusinessHours(req, res) {
         try {
             const { businessId, schedule } = req.body;
     
             // Logging received values for debugging
-            console.log("Received Data:");
-            console.log("Business ID:", businessId);
-            console.log("Schedule:", schedule);
+        //    console.log ("Received Data:");
+        //     console.log("Business ID:", businessId);
+        //     console.log("Schedule:", schedule);
     
             // Validate the schedule to ensure it contains all 7 days with the correct data
             if (!schedule || schedule.length !== 7) {
@@ -921,36 +937,29 @@ async updateBusinessDetails(req, res) {
         }
     }
     
-    // Helper function to validate time format (if needed)
-    // async function isValidTime(time) {
-    //     // Simple time validation (HH:mm) - You can adjust this based on your needs
-    //     const timePattern = /^([01]?[0-9]|2[0-3]):([0-5][0-9])$/;
-    //     return timePattern.test(time);
-    // }
-    
     
     async updateBusinessHours(req, res) {
         try {
             const { businessId, selectedDays, opening_time, closing_time } = req.body;
     
             // Log incoming request data for debugging
-            console.log("Received request to update business hours:");
-            console.log("businessId:", businessId);
-            console.log("selectedDays:", selectedDays);
-            console.log("opening_time:", opening_time);
-            console.log("closing_time:", closing_time);
+            // console.log("Received request to update business hours:");
+            // console.log("businessId:", businessId);
+            // console.log("selectedDays:", selectedDays);
+            // console.log("opening_time:", opening_time);
+            // console.log("closing_time:", closing_time);
     
             // Call the businessModel to update business hours
             const result = await BusinessModel.updateBusinessHours(businessId, selectedDays, opening_time, closing_time);
     
             // Log the result of the database update
-            console.log("Database update result:", result);
+            // console.log("Database update result:", result);
     
             // Send success response
             res.json({ message: "Business hours updated successfully" });
         } catch (error) {
             // Log the error if any occurs
-            console.error("Error updating business hours:", error);
+            // console.error("Error updating business hours:", error);
     
             // Send error response
             res.status(500).json({ error: error.message });
@@ -987,12 +996,408 @@ async updateBusinessDetails(req, res) {
             return res.status(500).json({ error: "Internal server error" });
         }
     }
+
+
+    // login page 
+    userLogin(req, res) {
+        try {
+            if (req.user) {
+                return res.redirect('/');  // ✅ Return to prevent multiple responses
+            }
     
+            res.render('login', { toggle: req.session.toggle });
+        } catch (error) {
+            console.error("Error in userLogin:", error);
+            res.status(500).send("An error occurred while loading the login page.");
+        }
+    }
+    
+    //   business Profile render page
+    async businessProfile(req, res) {
+        try {
+            res.render('business-profile', { 
+                user: req.user, // Pass user data if exists
+                toggle: req.session.toggle // Pass toggle value if user exists
+            });
+        } catch (error) {
+            console.error("Error in businessProfile:", error);
+            res.status(500).send("An error occurred while loading the business profile page.");
+        }
+    }
+    
+
+// delete business 
+
+static async deleteBusiness(req, res) {
+    const { businessId } = req.params;
+    
+    // if (!req.user) {
+    //     return res.status(401).send('Unauthorized');
+    // }
+
+    try {
+        const deleted = await BusinessModel.deleteBusinessById(businessId);
+        if (deleted) {
+            return res.redirect('/your-business/<%user.id%>'); // Redirect after successful deletion
+        } else {
+            return res.status(403).send("You don't have permission to delete this business.");
+        }
+    } catch (error) {
+        console.error("Error deleting business:", error);
+        res.status(500).send("Failed to delete business");
+    }
+}
+
+// comming -soon 
+comingSoon(req, res) {
+    try {
+        res.render('coming-soon', { 
+            user: req.user, 
+            toggle: req.session.toggle 
+        });
+    } catch (error) {
+        console.error("Error in comingSoon:", error);
+        res.status(500).send("An error occurred while loading the coming soon page.");
+    }
+}
+
+async showDriverDashboard(req,res){
+    try{
+        if (!req.user) {
+            // return res.status(401).json({ message: "Unauthorized" });
+            return res.redirect('/login')
+        }
+        const userId = req.user ? req.user.id : null;
+        const driverDetails = userId ? await BusinessModel.getDriverByUserId(userId) : null;
+
+        if (!driverDetails) {
+            return res.redirect('/register-driver');
+        }
+
+        res.render('driver-dashboard',{
+            user: req.user,
+                userId,
+                toggle: req.session.toggle,
+                driverDetails
+        })
+        
+    } catch (error) {
+        console.error('Error fetching driver details:', error);
+        res.status(500).send('Internal Server Error');
+    }
+
+}
+async showPinkDriverDashboard(req, res) {
+    try {
+        if (!req.user) {
+            return res.redirect('/login');
+        }
+
+        const userId = req.user ? req.user.id : null;
+        const driverDetails = userId ? await BusinessModel.getPinkDriverByUserId(userId) : null;
+
+        if (!driverDetails) {
+            return res.redirect('/register-pink-driver');
+        }
+
+        res.render('pink-driver-dashboard', {
+            user: req.user,
+            userId,
+            toggle: req.session.toggle,
+            driverDetails
+        });
+
+    } catch (error) {
+        console.error('Error fetching driver details:', error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+
+
+async  showDriverRegistration(req, res) {
+    try {
+        if (!req.user) {
+            // return res.status(401).json({ message: "Unauthorized" });
+            return res.redirect('/login')
+        }
+        const userId = req.user ? req.user.id : null;
+        const driverDetails = userId ? await BusinessModel.getDriverByUserId(userId) : null;
+        console.log(driverDetails)
+
+        if (driverDetails) {
+           res.redirect('/driver-dashboard')
+        }
+        else{
+            res.render('driver-registration', {
+                user: req.user,
+                userId,
+                toggle: req.session.toggle,
+                driverDetails
+            });
+        }
+
+       
+    } catch (error) {
+        console.error('Error fetching driver details:', error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+async showPinkDriverRegistration(req,res){
+    try {
+        if (!req.user) {
+            // return res.status(401).json({ message: "Unauthorized" });
+            return res.redirect('/login')
+        }
+        const userId = req.user ? req.user.id : null;
+        const driverDetails = userId ? await BusinessModel.getPinkDriverByUserId(userId) : null;
+        console.log(driverDetails)
+
+        if (driverDetails) {
+           res.redirect('/pink-driver-dashboard')
+        }
+        else{
+            res.render('pink-driver-registration', {
+                user: req.user,
+                userId,
+                toggle: req.session.toggle,
+                driverDetails
+            });
+        }
+
+       
+    } catch (error) {
+        console.error('Error fetching driver details:', error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+async registerDriver(req, res) {
+    try {
+        
+
+        const {
+            driverUserId, name, phone, email, age, gender, experience,
+            city, state, vehicleType, vehicleName, licensePlate,
+            currentAddress, licenseAddress, licenseNumber
+        } = req.body;
+
+        // Check if required fields are missing
+        if (!driverUserId || !name || !phone || !email || !age || !gender || !experience ||
+            !city || !state || !vehicleType || !vehicleName || !licensePlate ||
+            !currentAddress || !licenseAddress || !licenseNumber) {
+            return res.status(400).json({ message: 'All fields are required', isSuccess: false });
+        }
+
+        // Check if email, licenseNumber, or licensePlate already exist
+        const existingDriver = await BusinessModel.checkExistingDriver(email, licenseNumber, licensePlate);
+
+        if (existingDriver) {
+            return res.status(400).json({ message: 'Driver with provided email, license number, or license plate already exists', isSuccess: false });
+        }
+
+        // Define base path for driver uploads
+        const basePath = `uploads/${driverUserId}/driver/`;
+
+        // Get uploaded files from Multer with full path
+        const vehicleImage = req.files['vehicleImage'] ? basePath + req.files['vehicleImage'][0].filename : null;
+        const licenseFront = req.files['licenseFront'] ? basePath + req.files['licenseFront'][0].filename : null;
+        const licenseBack = req.files['licenseBack'] ? basePath + req.files['licenseBack'][0].filename : null;
+        const driverPhoto = req.files['driverPhoto'] ? basePath + req.files['driverPhoto'][0].filename : null;
+
+        if (!vehicleImage || !licenseFront || !licenseBack || !driverPhoto) {
+            return res.status(400).json({ message: 'All required images must be uploaded', isSuccess: false });
+        }
+
+        // Prepare data for database insertion
+        const driverData = {
+            driverUserId, name, phone, email, age, gender, experience,
+            city, state, vehicleType, vehicleName, licensePlate,
+            currentAddress, licenseAddress, licenseNumber,
+            vehicleImage, licenseFront, licenseBack, driverPhoto
+        };
+
+        // Insert new driver
+        await BusinessModel.registerDriver(driverData);
+        res.status(201).json({ message: 'Driver registered successfully', redirectUrl: '/driver-dashboard', isSuccess: true });
+
+    } catch (error) {
+        console.error('Error registering driver:', error);
+        res.status(500).json({ message: 'Internal server error', isSuccess: false });
+    }
+}
+
+
+
+async registerPinkDriver(req, res) {
+    try {
+        const {
+            driverUserId, name, phone, email, age, experience,
+            city, state, vehicleType, vehicleName, licensePlate,
+            currentAddress, licenseAddress, licenseNumber
+        } = req.body;
+
+        // Check if the driver already exists
+        const existingDriver = await BusinessModel.checkPinkExistingDriver(email, licenseNumber, licensePlate);
+        if (existingDriver) {
+            return res.status(400).json({ 
+                message: 'Driver with provided email, license number, or license plate already exists', 
+                isSuccess: false 
+            });
+        }
+
+        // Define base path for driver uploads
+        const basePath = `uploads/${driverUserId}/driver/`;
+
+        // Get uploaded files from Multer with full path
+        const vehicleImage = req.files['vehicleImage'] ? basePath + req.files['vehicleImage'][0].filename : null;
+        const licenseFront = req.files['licenseFront'] ? basePath + req.files['licenseFront'][0].filename : null;
+        const licenseBack = req.files['licenseBack'] ? basePath + req.files['licenseBack'][0].filename : null;
+        const driverPhoto = req.files['driverPhoto'] ? basePath + req.files['driverPhoto'][0].filename : null;
+
+        // Ensure all images are uploaded
+        if (!vehicleImage || !licenseFront || !licenseBack || !driverPhoto) {
+            return res.status(400).json({ 
+                message: 'All required images must be uploaded', 
+                isSuccess: false 
+            });
+        }
+
+        // Prepare data for database insertion
+        const driverData = {
+            driverUserId, name, phone, email, age, experience,
+            city, state, vehicleType, vehicleName, licensePlate,
+            currentAddress, licenseAddress, licenseNumber,
+            vehicleImage, licenseFront, licenseBack, driverPhoto
+        };
+
+        // Insert driver data into the database
+        const insertResult = await BusinessModel.registerPinkDriver(driverData);
+
+        if (insertResult) {
+            return res.status(201).json({ 
+                message: 'Pink Driver registered successfully', 
+                redirectUrl: '/pink-driver-dashboard', 
+                isSuccess: true 
+            });
+        } else {
+            return res.status(500).json({ 
+                message: 'Failed to register driver, please try again', 
+                isSuccess: false 
+            });
+        }
+
+    } catch (error) {
+        console.error('Error registering driver:', error);
+        res.status(500).json({ 
+            message: 'Internal server error', 
+            isSuccess: false 
+        });
+    }
+}
+
+
+
+ async updateDriverStatus(req, res) {
+    try {
+        const {  status } = req.body;
+        const userId = req.user.id;
+
+        // Ensure status is only 1 or 0
+        if (![0, 1].includes(status)) {
+            return res.status(400).json({ success: false, message: 'Invalid status value' });
+        }
+
+        const result = await BusinessModel.updateDriverStatus(userId, status);
+
+        if (result.affectedRows > 0) {
+            return res.json({ success: true, message: 'Status updated successfully' });
+        } else {
+            return res.json({ success: false, message: 'No rows affected' });
+        }
+    } catch (error) {
+        console.error('Error updating driver status:', error);
+        return res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+}
+async updatePinkDriverStatus(req, res) {
+    try {
+        const {  status } = req.body;
+        const userId = req.user.id;
+
+        // Ensure status is only 1 or 0
+        if (![0, 1].includes(status)) {
+            return res.status(400).json({ success: false, message: 'Invalid status value' });
+        }
+
+        const result = await BusinessModel.updatePinkDriverStatus(userId, status);
+
+        if (result.affectedRows > 0) {
+            return res.json({ success: true, message: 'Status updated successfully' });
+        } else {
+            return res.json({ success: false, message: 'No rows affected' });
+        }
+    } catch (error) {
+        console.error('Error updating driver status:', error);
+        return res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+}
+
+showTaxiPage(req, res) {
+    res.render('book-your-taxi', { user: req.user || null, toggle:  req.session.toggle  });
+}
+
+async  showAvailableTaxi(req, res) {
+    try {
+        if (!req.user) {
+            // return res.status(401).json({ message: "Unauthorized" });
+            return res.redirect('/login')
+        }
+        const availableTaxis = await BusinessModel.getAvailableTaxis();
+
+        console.log("Available Taxis:", availableTaxis); // Debugging log
+
+        res.render('available-taxis', {  // Render your EJS page
+            user: req.user,
+            availableTaxis,
+            toggle: req.session.toggle
+        });
+    } catch (error) {
+        console.error("Error fetching available taxis:", error);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+async  showAvailablePinkTaxi(req, res) {
+
+    try {
+        if (!req.user) {
+            // return res.status(401).json({ message: "Unauthorized" });
+            return res.redirect('/login')
+        }
+        const availableTaxis = await BusinessModel.getAvailablePinkTaxis();
+
+        console.log("Available Taxis:", availableTaxis); // Debugging log
+
+        res.render('available-pink-taxi', {  // Render your EJS page
+            user: req.user,
+            availableTaxis,
+            toggle: req.session.toggle
+        });
+    } catch (error) {
+        console.error("Error fetching available taxis:", error);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+
     
 }
 
 
- // Export the controller as an instance for usage in routes
+
+
+
 
 
 

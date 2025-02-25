@@ -1,0 +1,325 @@
+.find-what-you-want-do-page-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
+
+.find-what-you-want-do-page-container-one{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.find-what-you-want-do-page-container-one h1{
+    font-size: 2.5rem;
+    color: #000000;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.find-what-you-want-do-page-content-box{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 50px;
+    width: 90%;
+    margin-top: 50px;
+}
+
+.find-what-you-want-do-page-p-one{
+    position: relative;
+    background-color: #f3f3f3;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    height: 25vh;
+}
+
+.find-what-you-want-do-page-p-one h4{
+    width: 70px;
+    height: 70px;
+    text-align: center;
+    font-size: 1.9rem;
+    color: #ffffff;
+    font-weight: 600;
+    position: absolute;
+    top: -20px;
+    left: 10px;
+    background-color: #000000;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.find-what-you-want-do-page-p-one p{
+    font-size: 1rem;
+    color: #000000;
+    margin-top: 60px;
+}
+
+.find-what-you-want-do-page-ul-main-section{
+    position: relative;
+    background-color: #f3f3f3;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    /* height: 70vh; */
+}
+
+.find-what-you-want-do-page-ul-main-section h4{
+    width: 70px;
+    height: 70px;
+    text-align: center;
+    font-size: 1.9rem;
+    color: #ffffff;
+    font-weight: 600;
+    position: absolute;
+    top: -20px;
+    left: 10px;
+    background-color: #000000;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.find-what-you-want-do-page-ul-main-section p{
+    font-size: 1rem;
+    color: #000000;
+    margin-top: 60px;
+}
+
+.find-what-you-want-do-page-ul{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+   margin: auto;
+    /* margin-top: 20px; */
+}
+
+.find-what-you-want-do-page-ul .find-what-you-want-do-page-li{
+    font-size: 1rem;
+  
+    color: #000000;
+    list-style: none;
+    margin-bottom: 10px;
+   
+    padding: 10px 40px;
+    width: 300px;
+    text-align: center;
+
+    background-color: #e4e4e4;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+.find-what-you-want-do-page-p-three{
+    position: relative;
+    background-color: #f3f3f3;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    height: 25vh;
+}
+
+.find-what-you-want-do-page-p-three h4{
+    width: 70px;
+    height: 70px;
+    text-align: center;
+    font-size: 1.9rem;
+    color: #ffffff;
+    font-weight: 600;
+    position: absolute;
+    top: -20px;
+    left: 10px;
+    background-color: #000000;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.find-what-you-want-do-page-p-three p{
+    font-size: 1rem;
+    color: #000000;
+    margin-top: 60px;
+}
+
+.find-what-you-want-do-page-container-two{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 50px;
+}
+
+.find-what-you-want-do-page-container-two h1{
+    font-size: 2.5rem;
+    color: #000000;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.find-what-you-want-do-page-p-one-of-one{
+    position: relative;
+    background-color: #f3f3f3;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    height: 30vh;
+}
+
+.find-what-you-want-do-page-p-one-of-one h4{
+    width: 70px;
+    height: 70px;
+    text-align: center;
+    font-size: 1.9rem;
+    color: #ffffff;
+    font-weight: 600;
+    position: absolute;
+    top: -20px;
+    left: 10px;
+    background-color: #000000;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.find-what-you-want-do-page-p-one-of-one p{
+    font-size: 1rem;
+    color: #000000;
+    margin-top: 60px;
+}
+
+/* Updated Responsive Design */
+@media screen and (max-width: 1200px) {
+    .find-what-you-want-do-page-content-box {
+        width: 95%;
+        gap: 30px;
+    }
+
+    .find-what-you-want-do-page-p-one,
+    .find-what-you-want-do-page-ul-main-section,
+    .find-what-you-want-do-page-p-three,
+    .find-what-you-want-do-page-p-one-of-one {
+        width: 32%;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .find-what-you-want-do-page-content-box {
+        flex-direction: column;
+        align-items: center;
+        gap: 50px;
+    }
+
+    .find-what-you-want-do-page-p-one,
+    .find-what-you-want-do-page-ul-main-section,
+    .find-what-you-want-do-page-p-three,
+    .find-what-you-want-do-page-p-one-of-one {
+        width: 80%;
+        max-width: 500px;
+    }
+
+    .find-what-you-want-do-page-ul-main-section {
+        height: 410px;
+    }
+
+    .find-what-you-want-do-page-ul .find-what-you-want-do-page-li-one,
+    .find-what-you-want-do-page-ul .find-what-you-want-do-page-li-two,
+    .find-what-you-want-do-page-ul .find-what-you-want-do-page-li-three,
+    .find-what-you-want-do-page-ul .find-what-you-want-do-page-li-four,
+    .find-what-you-want-do-page-ul .find-what-you-want-do-page-li-five {
+        width: 80%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .find-what-you-want-do-page-container-one h1,
+    .find-what-you-want-do-page-container-two h1 {
+        font-size: 2rem;
+        padding: 0 20px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .find-what-you-want-do-page-p-one,
+    .find-what-you-want-do-page-ul-main-section,
+    .find-what-you-want-do-page-p-three,
+    .find-what-you-want-do-page-p-one-of-one {
+        width: 90%;
+    }
+
+    .find-what-you-want-do-page-ul .find-what-you-want-do-page-li-one,
+    .find-what-you-want-do-page-ul .find-what-you-want-do-page-li-two,
+    .find-what-you-want-do-page-ul .find-what-you-want-do-page-li-three,
+    .find-what-you-want-do-page-ul .find-what-you-want-do-page-li-four,
+    .find-what-you-want-do-page-ul .find-what-you-want-do-page-li-five {
+        width: 85%;
+    }
+
+    .find-what-you-want-do-page-p-one,
+    .find-what-you-want-do-page-p-three,
+    .find-what-you-want-do-page-p-one-of-one {
+        height: auto;
+        min-height: 25vh;
+        padding-bottom: 20px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .find-what-you-want-do-page-container-one h1,
+    .find-what-you-want-do-page-container-two h1 {
+        font-size: 1.8rem;
+    }
+
+    .find-what-you-want-do-page-p-one,
+    .find-what-you-want-do-page-ul-main-section,
+    .find-what-you-want-do-page-p-three,
+    .find-what-you-want-do-page-p-one-of-one {
+        width: 95%;
+    }
+
+    .find-what-you-want-do-page-ul .find-what-you-want-do-page-li-one,
+    .find-what-you-want-do-page-ul .find-what-you-want-do-page-li-two,
+    .find-what-you-want-do-page-ul .find-what-you-want-do-page-li-three,
+    .find-what-you-want-do-page-ul .find-what-you-want-do-page-li-four,
+    .find-what-you-want-do-page-ul .find-what-you-want-do-page-li-five {
+        width: 90%;
+        font-size: 0.9rem;
+        padding: 8px 15px;
+    }
+
+    .find-what-you-want-do-page-p-one h4,
+    .find-what-you-want-do-page-ul-main-section h4,
+    .find-what-you-want-do-page-p-three h4,
+    .find-what-you-want-do-page-p-one-of-one h4 {
+        width: 60px;
+        height: 60px;
+        font-size: 1.6rem;
+    }
+
+    .find-what-you-want-do-page-p-one p,
+    .find-what-you-want-do-page-ul-main-section p,
+    .find-what-you-want-do-page-p-three p,
+    .find-what-you-want-do-page-p-one-of-one p {
+        font-size: 0.9rem;
+        margin-top: 50px;
+        padding: 0 10px;
+    }
+
+    .find-what-you-want-do-page-content-box {
+        gap: 40px;
+    }
+}

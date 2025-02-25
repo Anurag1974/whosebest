@@ -1,0 +1,110 @@
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: white;
+} */
+
+.setup-business-page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.setup-business-page-section-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.setup-business-page-box-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+}
+
+.setup-business-page-box-container-one {
+    background-color: #f3f3f3;
+    border-radius: 10px;
+    padding: 25px;
+    width: calc(33.33% - 20px);
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.setup-business-page-box-container-one:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.setup-business-page-box-container-one h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #000;
+}
+
+.setup-business-page-box-container-one p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #333;
+}
+
+.setup-business-page-box-one {
+    margin-bottom: 60px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1200px) {
+    .setup-business-page-container {
+        padding: 30px 15px;
+    }
+    
+    .setup-business-page-box-container-one {
+        width: calc(50% - 15px);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .setup-business-page-section-title {
+        font-size: 2rem;
+        margin-bottom: 30px;
+    }
+    
+    .setup-business-page-box-container {
+        gap: 20px;
+    }
+    
+    .setup-business-page-box-container-one {
+        width: calc(50% - 10px);
+        padding: 20px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .setup-business-page-section-title {
+        font-size: 1.8rem;
+    }
+    
+    .setup-business-page-box-container-one {
+        width: 100%;
+        min-height: 180px;
+    }
+    
+    .setup-business-page-box-container-one h4 {
+        font-size: 1.1rem;
+    }
+    
+    .setup-business-page-box-container-one p {
+        font-size: 0.95rem;
+    }
+}

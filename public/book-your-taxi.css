@@ -1,0 +1,474 @@
+.taxi-booking-landing-container {
+    width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+/* Hero Section */
+.taxi-booking-hero-section {
+    position: relative;
+    background: #F4F4F4;
+    padding: 2rem 5% 0;
+    overflow: hidden;
+    min-height: 500px;
+}
+
+.taxi-booking-hero-section::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    right: -5%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.taxi-booking-hero-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" preserveAspectRatio="none"><path d="M0,0 L1000,0 L1000,100 L0,100 Z" fill="white"/></svg>') no-repeat;
+    background-size: cover;
+    z-index: 1;
+}
+
+.taxi-booking-hero-section .bg-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%),
+        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%),
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+    pointer-events: none;
+}
+
+.taxi-booking-hero-section .bg-dots {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at center, rgba(255,255,255,0.2) 2px, transparent 2px);
+    background-size: 50px 50px;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.taxi-booking-hero-section .bg-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(45deg, transparent 48%, rgba(255,255,255,0.1) 49%, rgba(255,255,255,0.1) 51%, transparent 52%) 0 0 / 50px 50px,
+        linear-gradient(-45deg, transparent 48%, rgba(255,255,255,0.1) 49%, rgba(255,255,255,0.1) 51%, transparent 52%) 0 0 / 50px 50px;
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.taxi-booking-hero-content {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: 2rem;
+    z-index: 2;
+}
+
+.taxi-booking-hero-text {
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 2rem;
+}
+
+.taxi-booking-hero-text h1 {
+    font-size: 3.8rem;
+    line-height: 1.2;
+    margin-bottom: 0.7rem;
+    color: #1a1a1a;
+}
+
+.taxi-booking-tagline {
+    font-size: 1.25rem;
+    color: #1a1a1a;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.taxi-booking-subtagline {
+    font-size: 1rem;
+    color: #1a1a1a;
+    margin-bottom: 2rem;
+}
+
+.taxi-booking-hero-cta {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.taxi-booking-primary-btn,
+.taxi-booking-secondary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 2rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 500;
+    min-width: 200px;
+    transition: all 0.3s ease;
+}
+
+.taxi-booking-primary-btn {
+    background: #fff;
+    color: #1a1a1a;
+    border: 2px solid transparent;
+}
+
+.taxi-booking-secondary-btn {
+    background: #1a1a1a;
+    color: #fff;
+}
+
+.taxi-booking-primary-btn:hover,
+.taxi-booking-secondary-btn:hover {
+    transform: translateY(-2px);
+}
+
+.taxi-booking-hero-image {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    animation: subtleFloat 4s ease-in-out infinite;
+}
+
+.taxi-booking-hero-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
+}
+
+.taxi-booking-city-skyline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" preserveAspectRatio="none"><path d="M0,50 L100,25 L200,75 L300,50 L400,75 L500,25 L600,50 L700,75 L800,50 L900,75 L1000,50 L1000,100 L0,100 Z" fill="white" stroke="none"/></svg>') repeat-x bottom;
+    background-size: contain;
+    z-index: 1;
+}
+
+/* Services Section */
+.taxi-booking-services-section {
+    padding: 4rem 2rem;
+    /* background: #f4f4f4; */
+}
+
+.taxi-booking-section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.taxi-booking-section-header h2 {
+    font-size: 2.5rem;
+    color: #000000;
+    margin-bottom: 1rem;
+}
+
+.taxi-booking-section-header p {
+    color: #000000;
+    font-size: 1.2rem;
+}
+
+.taxi-booking-service-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.taxi-booking-service-card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+/* .taxi-booking-service-card-pink {
+    background: pink;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.pink{
+    color: rgb(244, 0, 170);
+} */
+
+.taxi-booking-service-card:hover {
+    transform: translateY(-5px); 
+}
+
+.taxi-booking-service-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.taxi-booking-service-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.taxi-booking-service-content {
+    padding: 1.5rem;
+}
+
+.taxi-booking-service-content h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: #000000;
+}
+
+.taxi-booking-service-content ul {
+    list-style: none;
+    margin-bottom: 1.5rem;
+}
+
+.taxi-booking-service-content ul li {
+    margin: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #575757;
+}
+
+.taxi-booking-service-content ul li i {
+    color: #FFD700;
+}
+
+.taxi-booking-card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #1c1c1c;
+    text-decoration: none;
+    font-weight: 500;
+    transition: gap 0.3s ease;
+}
+
+.taxi-booking-card-cta:hover {
+    gap: 0.75rem;
+}
+
+/* Testimonials Section */
+.taxi-booking-testimonials-section {
+    padding: 4rem 2rem;
+    background: #ffffff;
+}
+
+.taxi-booking-testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.taxi-booking-testimonial-card {
+    background: #fafafa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.taxi-booking-testimonial-rating {
+    margin-bottom: 1rem;
+}
+
+.taxi-booking-testimonial-rating i {
+    color: #ffd700;
+    margin-right: 0.25rem;
+}
+
+.taxi-booking-testimonial-card p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    color: #666666;
+    font-style: italic;
+}
+
+.taxi-booking-testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.taxi-booking-testimonial-author img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.taxi-booking-testimonial-author h4 {
+    color: #FFD700;
+    margin-bottom: 0.25rem;
+    font-size: 1rem;
+}
+
+.taxi-booking-testimonial-author span {
+    color: #666666;
+    font-size: 0.875rem;
+}
+
+/* Steps Section */
+.taxi-booking-steps-section {
+    padding: 4rem 5%;
+    background: #fff;
+}
+
+.taxi-booking-steps-title {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.taxi-booking-steps-title h2 {
+    font-size: 2.5rem;
+    color: #1a1a1a;
+    margin-bottom: 0.5rem;
+}
+
+.taxi-booking-steps-title p {
+    font-size: 1.2rem;
+    color: #1a1a1a;
+}
+
+.taxi-booking-steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.taxi-booking-step-card {
+    position: relative;
+    padding: 2rem;
+    text-align: left;
+}
+
+.taxi-booking-step-number {
+    font-size: 8rem;
+    font-weight: bold;
+    color: #FFD700;
+    line-height: 1;
+    margin-bottom: 1rem;
+    font-family: Arial, sans-serif;
+}
+
+.taxi-booking-step-content h3 {
+    font-size: 1.25rem;
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+}
+
+.taxi-booking-step-content p {
+    color: #666666;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .taxi-booking-hero-section {
+        padding: 3rem 5% 0;
+    }
+    
+    .taxi-booking-hero-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 3rem;
+    }
+
+    .taxi-booking-hero-text h1 {
+        font-size: 3.5rem;
+    }
+
+    .taxi-booking-hero-cta {
+        justify-content: center;
+    }
+
+    .taxi-booking-hero-image {
+        max-width: 400px;
+        margin: 0 auto 40px auto;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .taxi-booking-hero-image {
+        margin: 10px auto 50px auto;
+    }
+
+    .taxi-booking-hero-text h1 {
+        font-size: 2.8rem;
+    }
+
+    .taxi-booking-tagline {
+        font-size: 1.5rem;
+    }
+
+    .taxi-booking-hero-cta {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .taxi-booking-primary-btn,
+    .taxi-booking-secondary-btn {
+        width: 100%;
+    }
+
+    .taxi-booking-service-cards,
+    .taxi-booking-testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .taxi-booking-section-header h2 {
+        font-size: 2rem;
+    }
+
+    .taxi-booking-hero-text h1 {
+        font-size: 2rem;
+    }
+
+    .taxi-booking-steps-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .taxi-booking-step-card {
+        text-align: center;
+    }
+    
+    .taxi-booking-steps-title {
+        text-align: center;
+    }
+}

@@ -1,0 +1,100 @@
+ <!-- City Filter Section -->
+ <link rel="stylesheet" href="/available-taxis.css">
+ <div class="pink-drivers-profile-for-viewers-filter-section">
+    <div class="pink-drivers-profile-for-viewers-filters-container">
+        <div class="pink-drivers-profile-for-viewers-search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="pink-drivers-profile-for-viewers-city-search" placeholder="Search by city...">
+            <div id="pink-drivers-profile-for-viewers-city-suggestions" class="pink-drivers-profile-for-viewers-suggestions"></div>
+        </div>
+        <div class="pink-drivers-profile-for-viewers-vehicle-filter">
+            <select id="pink-drivers-profile-for-viewers-vehicle-type">
+                <option value="">All Vehicles</option>
+                <option value="bike">Bike</option>
+                <option value="car">Car</option>
+            </select>
+        </div>
+    </div>
+</div>
+<div class="pink-drivers-profile-for-viewers-drivers-grid">
+    <!-- Driver Profile Card 1 -->
+    <% availableTaxis.forEach((taxi) => { %>
+    <div class="pink-drivers-profile-for-viewers-driver-profile-card">
+        <div class="pink-drivers-profile-for-viewers-profile-header">
+            <div class="pink-drivers-profile-for-viewers-profile-image">
+                <img src="<%= taxi.driver_image %>" onclick="openImageModal(this.src)">
+            </div>
+            <div class="pink-drivers-profile-for-viewers-profile-info">
+                <div class="pink-drivers-profile-for-viewers-name-badge">
+                    <h2 class="pink-drivers-profile-for-viewers-driver-name"><%= taxi.name %></h2>
+                    <span class="pink-drivers-profile-for-viewers-verified-badge" title="Verified Driver">
+                        <i class="fas fa-check-circle"></i>
+                    </span>
+                </div>
+                <div class="pink-drivers-profile-for-viewers-location-info">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span class="pink-drivers-profile-for-viewers-city"><%= taxi.city %></span>
+                </div>
+                <% if (taxi.vehicle_type === 'cab') { %>
+                    <div class="pink-drivers-profile-for-viewers-vehicle-info">
+                        <i class="fas fa-car"></i>
+                        <span class="pink-drivers-profile-for-viewers-vehicle-type">Car</span>
+                    </div>
+                <% } else if (taxi.vehicle_type === 'bike') { %>
+                    <div class="pink-drivers-profile-for-viewers-vehicle-info">
+                        <i class="fa-solid fa-motorcycle"></i>
+                        <span class="pink-drivers-profile-for-viewers-vehicle-type">Bike</span>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+
+        <div class="pink-drivers-profile-for-viewers-card-details">
+            <div class="pink-drivers-profile-for-viewers-detail-item">
+                <i class="fas fa-user"></i>
+                <span><%= taxi.age %> years</span>
+            </div>
+            <div class="pink-drivers-profile-for-viewers-detail-item">
+                <i class="fas fa-road"></i>
+                <span><%= taxi.driving_experience %> exp</span>
+            </div>
+            <% if (taxi.vehicle_type === 'cab') { %>
+                <div class="pink-drivers-profile-for-viewers-detail-item">
+                    <i class="fas fa-car"></i>
+                    <span><%= taxi.vehicle_number %></span>
+                </div>
+            <% } else if (taxi.vehicle_type === 'bike') { %>
+                <div class="pink-drivers-profile-for-viewers-detail-item">
+                    <i class="fa-solid fa-motorcycle"></i>
+                    <span><%= taxi.vehicle_number %></span>
+                </div>
+            <% } %>
+            
+        </div>
+
+        <div class="pink-drivers-profile-for-viewers-vehicle-preview">
+            <img src="<%= taxi.vehicle_image %>" onclick="openImageModal(this.src)">
+        </div>
+
+        <div class="pink-drivers-profile-for-viewers-card-actions">
+            <a href="tel:<%= taxi.phone %>" class="pink-drivers-profile-for-viewers-action-btn pink-drivers-profile-for-viewers-phone-btn">
+                <i class="fas fa-phone"></i>
+                <span>Call Now</span>
+            </a>
+            <a href="<%= taxi.whatsapp %>" class="pink-drivers-profile-for-viewers-action-btn pink-drivers-profile-for-viewers-whatsapp-btn" target="_blank">
+                <i class="fab fa-whatsapp"></i>
+                <span>WhatsApp</span>
+            </a>
+        </div>
+    </div>
+    <% }); %>
+    
+</div>
+
+<!-- Image Modal -->
+<div id="pink-drivers-profile-for-viewers-image-modal" class="pink-drivers-profile-for-viewers-modal">
+    <span class="pink-drivers-profile-for-viewers-close-modal" onclick="closeImageModal()">&times;</span>
+    <img id="pink-drivers-profile-for-viewers-modal-image" src="" alt="Full size image">
+</div>
+
+<script src="/available-pink-taxi.js"></script>

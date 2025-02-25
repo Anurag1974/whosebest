@@ -1,101 +1,92 @@
+<link rel="stylesheet" href="/userupdate.css">
 
-<div class="bg-light">
 
-    <!-- Main Wrapper -->
-    <div class="d-flex min-vh-100 bg-light">
 
+<div class="application-main-container">
+    
+    <div class="layout-main-wrapper">
         <!-- Navigation Menu (Sidebar) -->
-        <nav id="navMenu" class="bg-white p-3 shadow-lg" style="width: 250px; height: 100vh;">
-            <!-- Profile Image -->
-            <div class="text-center mb-4">
-                
-
-                <img  src="<%= userDetails.profile_image %>" alt="Profile Picture" class="rounded-circle mb-3" style="width: 80px; height: 80px;">
-                <p class="fw-bold text-dark"><%= userDetails.name  %></p>
+        <nav id="navMenu" class="sidebar-navigation-menu-container">
+            <!-- Profile Image Section -->
+            <div class="sidebar-profile-details-container">
+                <img src="<%= user.profile_image ?   user.profile_image : '/images/dummy/dummy profile.jpg' %>"  alt="User Profile Picture" class="sidebar-user-profile-image">
+                <!-- <img src="<%= userDetails.profile_image %>" alt="User Profile Picture" class="sidebar-user-profile-image"> -->
+                <p class="sidebar-user-name-text"><%= userDetails.name %></p>
             </div>
 
             <!-- Navigation Links -->
-            <ul class="list-unstyled">
-                <li>
-                    <a href="#" class="d-flex align-items-center p-2 bg-light text-primary fw-bold rounded">
-                        <span>📋</span>
-                        <span class="ms-2">User Details</span>
+            <ul class="sidebar-navigation-links-list">
+                <li class="sidebar-navigation-item user-details-item">
+                    <a href="/your-business/<%=user.id%>" class="sidebar-navigation-link user-details-link">
+                        <span class="navigation-icon user-details-icon">📋</span>
+                        <span class="navigation-link-text user-details-text">Manage Business</span>
                     </a>
                 </li>
-                <li>
-                    <a href="/logout" class="d-flex align-items-center p-2 text-dark rounded hover-bg-light">
-                        <span>🚪</span>
-                        <span class="ms-2">Logout</span>
+                <li class="sidebar-navigation-item logout-item">
+                    <a href="/logout" class="sidebar-navigation-link logout-link">
+                        <span class="navigation-icon logout-icon">🚪</span>
+                        <span class="navigation-link-text logout-text">Logout</span>
                     </a>
                 </li>
             </ul>
         </nav>
 
-        <!-- Main Content -->
-        <div class="flex-grow-1 p-3">
-            
-            <!-- Banner Section -->
-            <div class="banner">
-                <!-- Profile Image inside the banner -->
-                <img  src="<%= userDetails.profile_image %>" alt="Profile Image" class="profile-image">
-            </div>
-
-            <!-- Content Section -->
-            <div class="container">
-                <div class="row">
+        <!-- Main Content Section -->
+        <div class="content-main-wrapper">
+            <!-- Detailed Content Section -->
+            <div class="detailed-content-section">
+                <div class="content-rows-wrapper">
                     <!-- Personal Details Section -->
-                    <div class="col-md-6 mb-4">
-                        <h3>Personal Details</h3>
-                        <form>
-                            <div class="mb-2">
-                                <label for="name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="user-name" placeholder="Name" value="<%= userDetails.name %>">
+                    <div class="user-personal-details-section">
+                        <h3 class="section-title personal-details-title">Personal Details</h3>
+                        <form class="personal-details-form-container">
+                            <div class="form-group-wrapper personal-name-group">
+
+                              
+                                <input type="hidden" id="updateUserId" value="<%=  userDetails.user_id %>">
+
+                                <label for="name" class="form-label personal-name-label">Name</label>
+                                <input type="text" id="user-name" placeholder="Enter your name" value="<%= userDetails.name %>" class="form-input personal-name-input">
                             </div>
-                            <!-- <div class="mb-2">
-                                <label for="middleName" class="form-label">Middle Name</label>
-                                <input type="text" class="form-control" id="middleName" placeholder="Middle Name">
+                            <div class="form-group-wrapper personal-email-group">
+                                <label for="email" class="form-label personal-email-label">Email</label>
+                                <input type="email" id="user-email" placeholder="Enter your email" value="<%= userDetails.email %>" class="form-input personal-email-input">
                             </div>
-                            <div class="mb-2">
-                                <label for="lastName" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="lastName" placeholder="Last Name">
-                            </div>
-                            <div class="mb-2">
-                                <label for="uersid" class="form-label">Uers id</label>
-                                <input type="text" class="form-control" id="uersid" placeholder="Uers id">
-                            </div> -->
                         </form>
                     </div>
 
                     <!-- Account Details Section -->
-                    <div class="col-md-6 mb-4">
-                        <h3>Account Details</h3>
-                        <form>
-                            <!-- <div class="mb-3">
-                                <label for="email" class="form-label">Email Address</label>
-                                <input type="email" class="form-control" id="email" placeholder="Email Address"  value="<%= userDetails.email%>">
-                            </div> -->
-                            <div class="mb-3">
-                                <label for="phone_number" class="form-label">Phone Number</label>
-                                <input type="number" class="form-control" id="phone-number" placeholder="Phone Number" value="<%= userDetails.phone_number %>" >
+                    <div class="user-account-details-section">
+                        <h3 class="section-title account-details-title">Account Details</h3>
+                        <form class="account-details-form-container">
+                            <div class="form-group-wrapper phone-number-group">
+                                <label for="phone_number" class="form-label phone-number-label">Phone Number</label>
+                                <input type="number" id="phone-number" placeholder="Enter your phone number" value="<%= userDetails.phone_number %>" class="form-input phone-number-input">
                             </div>
-                            <div class="mb-3">
-                                <label for="profileImage" class="form-label">Upload Profile Picture</label>
-                                <input type="file" class="form-control" name="profileImage" id="profileImage">
+                            <div class="form-group-wrapper profile-picture-upload-group">
+                                <label for="profileImage" class="form-label profile-picture-upload-label">Upload Profile Picture</label>
+                                <input type="file" name="profileImage" id="profileImage" class="form-file-input profile-picture-upload-input">
                             </div>
-                            
                         </form>
                     </div>
                 </div>
 
-
-
                 <!-- Save and Cancel Buttons -->
-                <div class="text-end">
-                    
-                    <button onclick="updateUserInformation()" class="btn btn-success">Save</button>
+                <div class="form-action-buttons-container ">
+                    <button onclick="updateUserInformation()" class="action-button save-user-information-button">Save</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    <div id="update-user-successModal" class="update-user-modal">
+        <div class="update-user-modal-content">
+            <span class="update-user-close">&times;</span>
+            <div id="update-user-modalIcon" class="update-user-modal-icon"></div> 
+            <p id="update-user-modalMessage">Default Message</p>
+        </div>
+    </div>
     
+   
+</div>
+<script src="/edit.js"></script>
+

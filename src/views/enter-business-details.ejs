@@ -1,127 +1,137 @@
+<link rel="stylesheet" href="/enter-business-detial.css">
 
-<div class="enter-business-detail-container my-5">
-    <h2 class="enter-business-detail-title text-center mb-4">Enter Your Business Details</h2>
-    <form id="business-details-form">
-        
-        <div class="enter-business-detail-row">
-            <div class="enter-business-detail-col">
-                <label for="name">Business Name</label>
-                <input type="text" class="form-control" id="business-name" name="name" required>
-            </div>
-            <div class="enter-business-detail-col">
-                <label for="category">Category</label>
-               
-               
-                <select id="business-category" class="form-control" required>
-                    <option value="" disabled selected>Select Category</option>
-                    <option value="Restaurants">Restaurants</option>
-                    <option value="Hotels">Hotels</option>
-                    <option value="Colleges">Colleges</opttion>
-                    <option value="Hospitals">Hospitals</opttion>
-                    <option value="PGHotels">PG/Hostels</opttion>
-                    <option value="Dentists">Dentist</opttion>
-                    <option value="Gym">Gym</opttion>
-                    <option value="ACService">AC Services</opttion>
-                    <option value="HomeStays">Homestay</opttion>
-                    <option value="cafe">Cafe</opttion>
-                    <option value="destination_wedding">Destination Wedding</opttion>
-                </select>
-            </div>
-        </div>
 
-        <div class="enter-business-detail-row">
-            <div class="enter-business-detail-col">
-                <label for="latitude">Latitude</label>
-                <input type="text" class="form-control" id="latitude" name="latitude" required>
-            </div>
-            <div class="enter-business-detail-col">
-                <label for="longitude">Longitude</label>
-                <input type="text" class="form-control" id="longitude" name="longitude" required>
-            </div>
-        </div>
 
-        <div class="enter-business-detail-row enter-business-detail-location-container">
-            <div class="enter-business-detail-col enter-business-detail-full">
-                <label for="address">Address</label>
-                <div class="enter-business-detail-location-wrapper">
-                    <input type="text" class="form-control" id="address" name="address" required>
-                    <button type="button" class="enter-business-detail-location-btn" onclick="setCurrentLocation()"><i class="fa-solid fa-location-dot" style="color: #0b5ed7;"></i></button>
-                </div>
-            </div>
-        </div>
-
-        <div class="enter-business-detail-row">
-            <div class="enter-business-detail-col">
-                <label for="city">City</label>
-                <input type="text" class="form-control" id="add-city" name="city" required>
-            </div>
-            <div class="enter-business-detail-col">
-                <label for="state">State</label>
-                <input type="text" class="form-control" id="add-state" name="state" required>
-            </div>
-        </div>
-
-        <div class="enter-business-detail-row">
-            <div class="enter-business-detail-col">
-                <label for="phone">Phone</label>
-                <input type="phone" class="form-control" id="phone" name="phone" required>
-            </div>
-            <div class="enter-business-detail-col">
-                <label for="website">Website</label>
-                <input type="text" class="form-control" id="website" name="website">
-            </div>
-        </div>
-
-        <div class="enter-business-detail-row">
-            <div class="enter-business-detail-col enter-business-detail-full">
-                <label for="ev-charging">Does your business have an EV charging facility? <span style="color: red;">*</span></label>
-                <select id="ev-charging" class="form-control" required>
-                    <option value="" disabled selected>Select</option>
-                    <option value="1">Yes</option>
-                    <option value="0">No</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- <div class="enter-business-detail-row">
-            <div class="enter-business-detail-col enter-business-detail-full">
-                <label for="images">Upload Images:</label>
-                <input type="file" id="images" name="images" multiple accept="image/*" onchange="previewImages()">
-                <div id="image-preview-container" class="image-preview-container mt-3"></div>
-            </div>
-        </div> -->
-
-        <button type="button" class="enter-business-detail-btn" onclick="addBusinessDetails()">Add Business</button>
-    </form>
+<div id="enter-business-details-successModal" class="enter-business-details-modal">
+    <div class="enter-business-details-modal-content">
+        <span class="enter-business-details-close">&times;</span>
+        <div id="enter-business-details-modalIcon" class="enter-business-details-modal-icon"></div>
+        <p id="enter-business-details-modalMessage">Default Message</p>
+    </div>
 </div>
 
-
-
-<script>
-    // Function to preview selected images
-    function previewImages() {
-        const fileInput = document.getElementById('images');
-        const previewContainer = document.getElementById('image-preview-container');
-        
-        // Clear previous previews
-        previewContainer.innerHTML = '';
-
-        // Loop through selected files and create image previews
-        for (let i = 0; i < fileInput.files.length; i++) {
-            const file = fileInput.files[i];
-            
-            // Create a new image element for each file
-            const img = document.createElement('img');
-            const reader = new FileReader();
-
-            // When the file is read, set the image source
-            reader.onload = function(event) {
-                img.src = event.target.result;
-                previewContainer.appendChild(img);
-            };
-
-            // Read the file as a data URL
-            reader.readAsDataURL(file);
-        }
-    }
-</script>
+<div class="business-details-container-wrapper">
+    <div class="business-details-container">
+        <div class="business-details-header">
+            <i class="fas fa-building header-icon"></i>
+            <h2>Business Registration</h2>
+            <p class="header-subtitle">Enter your business details carefully</p>
+        </div>
+        <form id="business-details-form" class="business-details-form">
+            <div class="form-group form-group-row">
+                <div class="input-wrapper half-width">
+                    <label for="business-name">
+                        <i class="fas fa-tag"></i> Business Name
+                    </label>
+                    <input type="text" id="business-name" name="name" placeholder="Enter your business name" required>
+                </div>
+                <div class="input-wrapper half-width">
+                    <label for="business-category">
+                        <i class="fas fa-briefcase"></i> Category
+                    </label>
+                    <div class="enter-business-detail-dropdown-wrapper">
+                        <button class="enter-business-detail-dropdown-btn">Select Category</button>
+                        <ul class="enter-business-detail-dropdown-list">
+                            <li data-value="Restaurants">Restaurants</li>
+                            <li data-value="Hotels">Hotels</li>
+                            <li data-value="Colleges">Colleges</li>
+                            <li data-value="Hospitals">Hospitals</li>
+                            <li data-value="PG/Hostels">PG/Hostels</li>
+                            <li data-value="Dentists">Dentist</li>
+                            <li data-value="Gym">Gym</li>
+                            <li data-value="ACService">AC Services</li>
+                            <li data-value="HomeStays">Homestay</li>
+                            <li data-value="cafe">Cafe</li>
+                            <li data-value="destination_wedding">Destination Wedding</li>
+                            <li data-value="solar_panels">Solar Panels</li>
+                            <li data-value="advocates">Advocates</li>
+                        </ul>
+                        <input type="hidden" id="business-category" name="category" required>
+                    </div>
+                </div>
+                
+            </div>
+            <!-- <div class="form-group form-group-row">
+                <div class="input-wrapper half-width">
+                    <label for="latitude">
+                        <i class="fas fa-map-marker-alt"></i> Latitude
+                    </label>
+                    <input type="text" id="latitude" name="latitude" placeholder="Enter latitude" required>
+                </div>
+                <div class="input-wrapper half-width">
+                    <label for="longitude">
+                        <i class="fas fa-map-marker-alt"></i> Longitude
+                    </label>
+                    <input type="text" id="longitude" name="longitude" placeholder="Enter longitude" required>
+                </div>
+            </div> -->
+            <div class="form-group">
+                <label for="address">
+                    <i class="fas fa-map-marker-alt"></i> Address
+                </label>
+                <div class="input-wrapper input-with-button">
+                    <input type="text" id="address" name="address" placeholder="Enter address" required>
+                    <!-- <button type="button" class="current-location-button" onclick="setCurrentLocation()">
+                        <i class="fas fa-location-arrow"></i>
+                    </button> -->
+                </div>
+            </div>
+            <div class="form-group form-group-row">
+                <div class="input-wrapper half-width">
+                    <label for="add-city">
+                        <i class="fas fa-city"></i> City
+                    </label>
+                    <input type="text" id="add-city" name="city" placeholder="Enter city" required>
+                </div>
+                <div class="input-wrapper half-width">
+                    <label for="add-state">
+                        <i class="fas fa-map"></i> State
+                    </label>
+                    <input type="text" id="add-state" name="state" placeholder="Enter state" required>
+                </div>
+            </div>
+            <div class="form-group form-group-row">
+                <div class="input-wrapper half-width">
+                    <label for="phone">
+                        <i class="fas fa-phone"></i> Phone
+                    </label>
+                    <input type="phone" id="phone" name="phone" placeholder="Enter phone number" required>
+                </div>
+                <div class="input-wrapper half-width">
+                    <label for="website">
+                        <i class="fas fa-globe"></i> Website
+                    </label>
+                    <input type="text" id="website" name="website" placeholder="Enter website">
+                </div>
+            </div>
+            <div class="form-group form-group-row">
+                <div class="input-wrapper half-width">
+                    <label for="ev-charging">
+                        <i class="fas fa-bolt"></i> EV Charging Facility
+                    </label>
+                    <select id="ev-charging" name="ev-charging" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                <div class="input-wrapper half-width">
+                    <label for="women-owned">
+                        <i class="fas fa-venus"></i> Women Owned
+                    </label>
+                    <select id="women-owned" name="women-owned" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group submit-group">
+                <button type="button" class="submit-btn" onclick="addBusinessDetails()">
+                    <i class="fas fa-paper-plane"></i> Add Business
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="/enter-business-detail.js"></script>

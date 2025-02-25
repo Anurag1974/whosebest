@@ -1,41 +1,146 @@
-<div class="your-business-container my-5">
-    <h2 class="your-business-title text-center mb-4">Your Listed Businesses</h2>
-    <div class="d-flex justify-content-center mb-4">
-        <a href="/enter-business-details" class="btn your-business-enter-btn">
-            Enter Business Details
-        </a>
-    </div>
-    <div class="your-business-row row">
-        <% if (registeredBusiness && registeredBusiness.length > 0) { %>
-            <% registeredBusiness.forEach(business => { %>
-                <div class="col-md-4 mb-4">
-                    <div class="your-business-card card">
-                        <div class="your-business-card-body card-body">
-                            <h5 class="your-business-card-title card-title"><%= business.name %></h5>
-                            <p class="your-business-card-text card-text"><strong>Name:</strong> <%= business.business_name %></p>
-                            <p class="your-business-card-text card-text"><strong>Category:</strong> <%= business.category %></p>
-                            <p class="your-business-card-text card-text"><strong>Phone:</strong> <%= business.phone %></p>
-                            <p class="your-business-card-text card-text"><strong>Address:</strong> <%= business.address %></p>
+<link rel="stylesheet" href="/your-business.css">
 
-                            <% if (business.website) { %>
-                                <p class="your-business-card-text card-text"><strong>Website:</strong> <a href="<%= business.website %>" target="_blank" class="your-business-card-link card-link"> <%= business.website %></a></p>
-                            <% } %>
 
-                            <!-- <p class="your-business-card-text card-text"><strong>Coordinates:</strong> <%= business.latitude %>, <%= business.longitude %></p> -->
-                            <a href="/manage-business/<%= business.id %>" class="btn btn-sm your-business-edit-btn">Edit</a>
-                        </div>
-                    </div>
-                </div>
-            <% }) %>
-        <% } else { %>
-            <div class="col-12 text-center">
-                <p>No registered businesses found.</p>
-                <a href="/enter-business-details" class="btn your-business-enter-btn">
-                    Enter Business Details
-                </a>
-            </div>
-        <% } %>
+<div class="countdownpage-time-countdown-container">
+    <h2>FREE LISTING 180 DAY</h2>
+    <div class="countdownpage-time-timer">
+        <div class="countdownpage-time-circle">
+            <svg>
+                <circle cx="50" cy="50" r="45"></circle>
+                <circle id="days-progress" class="progress" cx="50" cy="50" r="45"></circle>
+            </svg>
+            <div class="countdownpage-time-label"><span id="days">180</span><br>DAYS</div>
+        </div>
+        <div class="countdownpage-time-circle">
+            <svg>
+                <circle cx="50" cy="50" r="45"></circle>
+                <circle id="hours-progress" class="progress" cx="50" cy="50" r="45"></circle>
+            </svg>
+            <div class="countdownpage-time-label"><span id="hours">00</span><br>HOURS</div>
+        </div>
+        <div class="countdownpage-time-circle">
+            <svg>
+                <circle cx="50" cy="50" r="45"></circle>
+                <circle id="minutes-progress" class="progress" cx="50" cy="50" r="45"></circle>
+            </svg>
+            <div class="countdownpage-time-label"><span id="minutes">00</span><br>MINUTES</div>
+        </div>
+        <div class="countdownpage-time-circle">
+            <svg>
+                <circle cx="50" cy="50" r="45"></circle>
+                <circle id="seconds-progress" class="progress" cx="50" cy="50" r="45"></circle>
+            </svg>
+            <div class="countdownpage-time-label"><span id="seconds">00</span><br>SECONDS</div>
+        </div>
     </div>
 </div>
 
+<section class="business-listing-section">
+    <div class="business-listing-container">
+        <header class="business-listing-header">
+            <h2 class="business-listing-title">Your Listed Businesses</h2>
+            <div class="business-action-container">
+                <a href="/enter-business-details" class="business-add-details-button">
+                    + Add Business
+                </a>
+            </div>
+        </header>
+        
+        <main class="business-list-grid">
+            <% if (registeredBusiness && registeredBusiness.length > 0) { %>
+                <% registeredBusiness.forEach(business => { %>
+                    <article class="business-card">
+                        <div class="business-card-image-container">
+                            <img src="<%= business.image_source || '/images/dummy/dummy business.jpeg' %>" 
+                                 alt="<%= business.name %> Business Image" 
+                                 class="business-card-image">
+                        </div>
+                
+                        <div class="business-card-body">
+                            <h3 class="business-card-title"><%= business.name %></h3>
+                            <div class="business-card-details">
+                                <p><strong>Business:</strong> <%= business.business_name %></p>
+                                <p><strong>Category:</strong> <%= business.category %></p>
+                                <p><strong>Phone:</strong> <%= business.phone %></p>
+                                <p class="business-card-details-address-section"><strong>Address:</strong> <%= business.address %></p>
+                                
+                                <% if (business.website) { %>
+                                    <p class="business-card-website">
+                                        <strong>Website:</strong> 
+                                        <a href="<%= business.website %>" target="_blank">
+                                            <%= business.website %>
+                                        </a>
+                                    </p>
+                                <% } %>
+                            </div>
+                            
+                            <div class="business-card-actions ">
+                                <a href="/manage-business/<%= business.id %>" class=" universal-btn">Edit</a>
+                                <form action="/manage-business/<%= business.id %>/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete this business?');">
+                                    <button type="submit" class="universal-btn-class" style="background:rgb(245, 28, 28)">Delete</button>
+                                </form>
+                            </div>
+                            
+                        </div>
+                    </article>
+                <% }); %>
+            <% } else { %>
+                <div class="no-business-found-container">
+                    <p class="no-business-found-message">No registered businesses found.</p>
+                    <a href="/enter-business-details" class="business-add-details-button">
+                        Enter Business Details
+                    </a>
+                </div>
+            <% } %>
+        </main>
+    </div>
+</section>
+<script>
+    let endDate = localStorage.getItem("countdownEndDate");
+
+if (!endDate) {
+    endDate = new Date();
+    endDate.setDate(endDate.getDate() + 180);
+    localStorage.setItem("countdownEndDate", endDate);
+} else {
+    endDate = new Date(endDate);
+}
+
+function updateCountdown() {
+    const now = new Date();
+    const timeDiff = endDate - now;
+
+    if (timeDiff <= 0) {
+        document.getElementById("days").innerText = "00";
+        document.getElementById("hours").innerText = "00";
+        document.getElementById("minutes").innerText = "00";
+        document.getElementById("seconds").innerText = "00";
+        return;
+    }
+
+    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((timeDiff / (1000 * 60)) % 60);
+    const seconds = Math.floor((timeDiff / 1000) % 60);
+
+    document.getElementById("days").innerText = days.toString().padStart(2, '0');
+    document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+    document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+    document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+
+    updateProgress(days, 180, "days-progress");
+    updateProgress(hours, 24, "hours-progress");
+    updateProgress(minutes, 60, "minutes-progress");
+    updateProgress(seconds, 60, "seconds-progress");
+}
+
+function updateProgress(value, max, id) {
+    const circle = document.getElementById(id);
+    const dashOffset = 283 - (283 * value) / max;
+    circle.style.strokeDashoffset = dashOffset;
+}
+
+setInterval(updateCountdown, 1000);
+updateCountdown();
+</script>
 

@@ -1,282 +1,221 @@
+<link rel="stylesheet" href="/manage-business.css">
+<link rel="stylesheet" href="/enter-business-detial.css">
+
+<div id="manage-business-details-successModal" class="manage-business-details-modal">
+    <div class="manage-business-details-modal-content">
+        <span class="manage-business-details-close">&times;</span>
+        <div id="manage-business-details-modalIcon" class="manage-business-details-modal-icon"></div>
+        <p id="manage-business-details-modalMessage">Default Message</p>
+    </div>
+</div>
+
+
 <% if(!business){ %>
-    <div class="alert alert-danger" role="alert">
+    <div class="alert-notification-container-business-details-missing">
         You have not entered your business details yet. Please enter your business details to continue.
     </div>
-    <% } %>
-        <div class="container mt-5">
-            <h1 class="text-center">Manage Your Business</h1>
+<% } %>
+<div class="main-container-business-management-interface">
+    <h1 class="heading-primary-business-management-page">Manage Your Business</h1>
 
-            <!-- Card with tabs for different sections -->
-            <div class="card">
-                <div class="card-header">
-                    <ul class="nav nav-tabs card-header-tabs" id="businessTabs" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="details-tab" data-bs-toggle="tab" href="#details" role="tab"
-                                aria-controls="details" aria-selected="true">Business Details</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="products-tab" data-bs-toggle="tab" href="#products" role="tab"
-                                aria-controls="products" aria-selected="false">Update Contact Info</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="feedback-tab" data-bs-toggle="tab" href="#feedback" role="tab"
-                                aria-controls="feedback" aria-selected="false">Reviews</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="hours-tab" data-bs-toggle="tab" href="#hours" role="tab"
-                                aria-controls="hours" aria-selected="false">Business Hours</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content" id="businessTabsContent">
-                        <!-- Business Details Tab -->
-                        <div class="tab-pane fade show active" id="details" role="tabpanel"
-                            aria-labelledby="details-tab">
-                            <h4>Business Information</h4>
-                            <form id="updateBusinessForm">
-
+    <!-- Section Card for Business Management -->
+    <div class="card-container-business-management-tabs-wrapper">
+        <div class="card-header-business-navigation-tab-section">
+            <ul class="list-business-navigation-tab-buttons" id="businessTabs">
+                <li class="list-item-business-tab-navigation-button">
+                    <a class="button-tab-navigation tab-button active" data-tab="details">Business Details</a>
+                </li>
+                <li class="list-item-business-tab-navigation-button">
+                    <a class="button-tab-navigation tab-button" data-tab="feedback">Reviews</a>
+                </li>
+                <li class="list-item-business-tab-navigation-button">
+                    <a class="button-tab-navigation tab-button" data-tab="hours">Business Hours</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body-container-business-tab-content">
+            <div class="content-wrapper-all-tabs-business-management" id="businessTabsContent">
+                <!-- Business Details Tab -->
+                <div class="tab-pane tab-content active" id="details-tab">
+                    <div class="business-details-container-wrapper">
+                        <div class="business-details-container">
+                            <div class="business-details-header">
+                                <i class="fas fa-building header-icon"></i>
+                                <h2>Manage Business </h2>
+                                <p class="header-subtitle">Enter your business details carefully</p>
+                            </div>
+                            <form id="updateBusinessForm" class="business-details-form">
                                 <input type="hidden" id="businessId" value="<%= business.id %>">
-                                <!-- <input type="hidden" id="ownerName" value="<%= business.ownerName%>"> -->
-                                <input type="hidden" id="ownerId" value="<%= business.user_id%>">
-                                <div class="mb-3">
-                                    <label for="businessName" class="form-label">Business Name</label>
-                                    <input type="text" class="form-control" id="businessName"
-                                        placeholder="Enter business name" value=" <%= business.business_name %>">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="businessAddress" class="form-label">Address</label>
-                                    <input type="text" class="form-control" id="businessAddress"
-                                        placeholder="Enter business address" value="<%= business.address %>">
-                                </div>
-                                <!-- <div class="mb-3">
-                                    <label for="pincode" class="form-label">Pincode</label>
-                                    <input type="number" class="form-control" id="pincode" placeholder="Enter Pincode"
-                                        value="<%= business.pincode %>">
-                                </div> -->
-                                <!-- City -->
-                                <div class="mb-3">
-                                    <label for="city" class="form-label">City</label>
-                                    <input type="text" class="form-control" id="businessCity" name="city"
-                                        value="<%= business.city %>" required>
-                                </div>
-
-                                <!-- State -->
-                                <div class="mb-3">
-                                    <label for="state" class="form-label">State</label>
-                                    <input type="text" class="form-control" id="businessState" name="state"
-                                        value="<%= business.state %>" required>
-                                </div>
-                                <!-- Category -->
-                                <div class="mb-3">
-                                    <label for="category" class="form-label">Category</label>
-                                    <input type="text" class="form-control" id="businessCategory" name="category"
-                                        value="<%= business.category %>" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="businessPhone" class="form-label">Phone</label>
-                                    <input type="text" class="form-control" id="businessPhone"
-                                        placeholder="Enter business phone" value="<%= business.phone %>">
-                                </div>
-
-                                <!-- Website -->
-                                <div class="mb-3">
-                                    <label for="website" class="form-label">Website</label>
-                                    <input type="text" class="form-control" id="businessWebsite"
-                                        value="<%= business.website %>" name="website">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="images">Upload Images:</label>
-                                    <input type="file" id="images" name="images" multiple accept="image/*" >
-                                    <div id="image-preview-container" class="image-preview-container mt-3"></div>
-                                </div>
-
-
-                                <button type="submit" class="btn btn-primary" onclick="updateBusinessDetails(event)">Save Changes</button>
-                            </form>
-                        </div>
-
-                        <!-- update email Tab -->
-                        <div class="tab-pane fade" id="products" role="tabpanel" aria-labelledby="products-tab">
-                            <h4>Update Email</h4>
-
-                            <div class="table-responsive">
-                                <input type="email" class="form-control mb-3" placeholder="Enter updated email"
-                                    value="<%= email %>" id="newEmail">
-                            </div>
-                            <button class="btn btn-success" onclick="updateEmail()">Send Otp</button>
-                        </div>
-
-                        <!-- Reviews Tab -->
-                        <div class="tab-pane fade" id="feedback" role="tabpanel" aria-labelledby="feedback-tab">
-                            <h4>Customer Feedback</h4>
-                            <div class="list-group">
-                                <!-- Example Feedback -->
-                                <a href="#" class="list-group-item list-group-item-action">
-                                    <h5 class="mb-1">Customer Name</h5>
-                                    <p class="mb-1">Great service, highly recommend!</p>
-                                    <small>Rating: ★★★★☆</small>
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- hours Tab -->
-                        <div class="tab-pane fade" id="hours" role="tabpanel" aria-labelledby="hours-tab">
-                            <h4>Customer Feedback</h4>
-                            <div class="list-group">
-                                <!-- Example Feedback -->
-
-                                <h2>Select Business Days</h2>
-
-                                <form id="businessHoursForm">
-                                    <label><input type="checkbox" name="days" value="Monday"> Monday</label>
-                                    <label><input type="checkbox" name="days" value="Tuesday"> Tuesday</label>
-                                    <label><input type="checkbox" name="days" value="Wednesday"> Wednesday</label>
-                                    <label><input type="checkbox" name="days" value="Thursday"> Thursday</label>
-                                    <label><input type="checkbox" name="days" value="Friday"> Friday</label>
-                                    <label><input type="checkbox" name="days" value="Saturday"> Saturday</label>
-                                    <label><input type="checkbox" name="days" value="Sunday"> Sunday</label>
-                                    <input type="hidden" id="existing_hours"
-                                        value="<%= businessHours.length > 0 ? 'true' : 'false' %>">
-
-
-                                    <div class="time-input" id="timeSelection">
-                                        <h3>Set Common Business Hours</h3>
-                                        Open: <input type="time" id="opening_time">
-                                        Close: <input type="time" id="closing_time">
+                                <input type="hidden" id="ownerId" value="<%= business.user_id %>">
+                                
+                                <div class="form-group form-group-row">
+                                    <div class="input-wrapper half-width">
+                                        <label for="businessName"><i class="fas fa-tag"></i> Business Name</label>
+                                        <input type="text" id="businessName" placeholder="Enter business name" value="<%= business.business_name %>">
                                     </div>
-
-
-                                    <button type="submit">Save Schedule</button>
-                                </form>
-                            </div>
+                                    <div class="input-wrapper half-width">
+                                        <label for="businessCategory"><i class="fas fa-briefcase"></i> Category</label>
+                                        <input type="text" id="businessCategory" value="<%= business.category %>" readonly>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="businessAddress"><i class="fas fa-map-marker-alt"></i> Address</label>
+                                    <input type="text" id="businessAddress" placeholder="Enter business address" value="<%= business.address %>">
+                                </div>
+                                
+                                <div class="form-group form-group-row">
+                                    <div class="input-wrapper half-width">
+                                        <label for="businessCity"><i class="fas fa-city"></i> City</label>
+                                        <input type="text" id="businessCity" value="<%= business.city %>">
+                                    </div>
+                                    <div class="input-wrapper half-width">
+                                        <label for="businessState"><i class="fas fa-map"></i> State</label>
+                                        <input type="text" id="businessState" value="<%= business.state %>">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group form-group-row">
+                                    <div class="input-wrapper half-width">
+                                        <label for="businessPhone"><i class="fas fa-phone"></i> Phone</label>
+                                        <input type="text" id="businessPhone" placeholder="Enter business phone" value="<%= business.phone %>">
+                                    </div>
+                                    <div class="input-wrapper half-width">
+                                        <label for="businessWebsite"><i class="fas fa-globe"></i> Website</label>
+                                        <input type="text" id="businessWebsite" value="<%= business.website %>">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="businessOverview"><i class="fas fa-info-circle"></i> Overview</label>
+                                    <input type="text" id="businessOverview" value="<%= business.overview %>">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="businessUsp"><i class="fas fa-star"></i> USP (Unique Selling Point)</label>
+                                    <input type="text" id="businessUsp" value="<%= business.usp %>">
+                                </div>
+                                
+                                <h3>Services</h3>
+                                <hr>
+                                <div class="form-group form-group-row">
+                                    <div class="input-wrapper half-width">
+                                        <label for="businessService1">Service 1</label>
+                                        <input type="text" id="businessService1" value="<%= business.services1 %>">
+                                    </div>
+                                    <div class="input-wrapper half-width">
+                                        <label for="businessService2">Service 2</label>
+                                        <input type="text" id="businessService2" value="<%= business.services2 %>">
+                                    </div>
+                                </div>
+                                <div class="form-group form-group-row">
+                                    <div class="input-wrapper half-width">
+                                        <label for="businessService3">Service 3</label>
+                                        <input type="text" id="businessService3" value="<%= business.services3 %>">
+                                    </div>
+                                    <div class="input-wrapper half-width">
+                                        <label for="businessService4">Service 4</label>
+                                        <input type="text" id="businessService4" value="<%= business.services4 %>">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="thumbnail"><i class="fas fa-image"></i> Thumbnail Image</label>
+                                    <input type="file" id="thumbnail" name="thumbnail" accept="image/*">
+                                </div>
+                                
+                                
+                                
+                                <div class="form-group">
+                                    <label for="images"><i class="fas fa-upload"></i> Upload Images</label>
+                                    <input 
+                                        type="file" 
+                                        id="images" 
+                                        name="images" 
+                                        multiple 
+                                        accept="image/*" 
+                                        <% if (remainingImages <= 0) { %> 
+                                            disabled 
+                                        <% } %> 
+                                    >
+                                </div>
+                                <div id="remaining-count" data-remaining-images="<%= remainingImages %>">
+                                    Remaining images: <%= remainingImages %>
+                                </div>
+                                <p id="error-msg" style="color: red;"></p>
+                                
+                                
+                                
+                                
+                                
+                                <!-- Toast Message -->
+                                <div id="toast" style="display: none; background-color: red; color: white; padding: 10px; margin-top: 10px; margin-bottom: 10px; border-radius: 5px;">
+                                    Image size must be less than 3MB.
+                                </div>
+                                
+                                <div class="form-group submit-group">
+                                    <button type="submit" class="submit-btn" onclick="updateBusinessDetails(event)">
+                                        <i class="fas fa-save"></i> Save Changes
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
+
+                <!-- Reviews Tab -->
+                <div class="tab-pane tab-content" id="feedback-tab">
+                    <div class="list-container-customer-feedback-items">
+                        <% if (reviews.length > 0) { %>
+                            <% reviews.forEach(review => { %>
+                                <div class="feedback-item-container-customer-review">
+                                    <h5 class="feedback-heading-customer-name"><%= review.name %></h5>
+                                    <p class="feedback-text-review-content"><%= review.review %></p>
+                                    <small class="feedback-text-rating-stars">Rating: 
+                                        <%= '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating) %>
+                                    </small>
+                                    <span class="feedback-date">Posted on <%= new Date(review.created_at).toLocaleDateString() %></span>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <p class="no-reviews-message">No reviews yet. Be the first to leave a review!</p>
+                        <% } %>
+                    </div>
+                    
+                </div>
+
+                <!-- Business Hours Tab -->
+                <div class="tab-pane tab-content" id="hours-tab">
+
+                    <div class="form-container-business-hours-schedule-section">
+                        <h2 class="heading-secondary-business-days-selection">Select Business Days</h2>
+
+                        <form id="businessHoursForm" class="form-business-hours-schedule-details">
+                            <label class="checkbox-label-business-operating-day"><input type="checkbox" name="days" value="Monday"> Monday</label>
+                            <label class="checkbox-label-business-operating-day"><input type="checkbox" name="days" value="Tuesday"> Tuesday</label>
+                            <label class="checkbox-label-business-operating-day"><input type="checkbox" name="days" value="Wednesday"> Wednesday</label>
+                            <label class="checkbox-label-business-operating-day"><input type="checkbox" name="days" value="Thursday"> Thursday</label>
+                            <label class="checkbox-label-business-operating-day"><input type="checkbox" name="days" value="Friday"> Friday</label>
+                            <label class="checkbox-label-business-operating-day"><input type="checkbox" name="days" value="Saturday"> Saturday</label>
+                            <label class="checkbox-label-business-operating-day"><input type="checkbox" name="days" value="Sunday"> Sunday</label>
+                            <input type="hidden" id="existing_hours" value="<%= businessHours.length > 0 ? 'true' : 'false' %>">
+
+                            <div class="time-picker-container-business-hours">
+                                <h3 class="heading-tertiary-business-operating-hours">Set Common Business Hours</h3>
+                                Open: <input type="time" class="time-input-opening-hours-business" id="opening_time">
+                                Close: <input type="time" class="time-input-closing-hours-business" id="closing_time">
+                            </div>
+
+                            <button type="submit" class="button-submit-form-save-business-hours">Save Schedule</button>
+                        </form>
+                    </div>
+                </div>
             </div>
-
         </div>
-
-        <script>
-            // document.addEventListener("DOMContentLoaded", async () => {
-            //     const businessId = "123";  // Replace with dynamic ID if necessary
-            //     const response = await fetch(`/business-hours/${businessId}`);
-            //     const businessHours = await response.json();
-
-            //     // Pre-select checkboxes and set time
-            //     businessHours.forEach(({ day_of_week, opening_time, closing_time }) => {
-            //         const checkbox = document.querySelector(`input[value="${day_of_week}"]`);
-            //         if (checkbox) {
-            //             checkbox.checked = true;
-            //         }
-            //         document.getElementById("openingTime").value = opening_time;
-            //         document.getElementById("closingTime").value = closing_time;
-            //     });
-            // });
-            const checkboxes = document.querySelectorAll('input[name="days"]');
-            const timeInputSection = document.getElementById("timeSelection");
-
-            // Show time input only when at least one day is selected
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', function () {
-                    timeInputSection.style.display = document.querySelector('input[name="days"]:checked') ? "block" : "none";
-                });
-            });
+    </div>
+</div>
 
 
 
-
-
-            document.getElementById("businessHoursForm").addEventListener("submit", function (event) {
-                event.preventDefault();
-
-                // Collect the form data
-                const opening_time = document.getElementById("opening_time").value;
-                const closing_time = document.getElementById("closing_time").value;
-
-                // Define all the days
-                const allDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
-                // Collect selected days from the checked checkboxes
-                const selectedDays = [];
-                document.querySelectorAll('input[name="days"]:checked').forEach(checkbox => {
-                    selectedDays.push(checkbox.value);
-                    console.log(selectedDays)
-                });
-
-                // Prepare the schedule with days and times
-                const schedule = allDays.map(day => {
-                    const isSelected = selectedDays.includes(day); // Check if the day is selected
-                    return {
-                        day: day,
-                        openingTime: isSelected ? opening_time : "CLOSED", // If selected, use opening time
-                        closingTime: isSelected ? closing_time : "CLOSED" // If selected, use closing time
-                    };
-                });
-
-                // Prepare the formData object to send to the backend
-                const formData = {
-                    businessId: document.getElementById('businessId').value, // Add businessId to formData
-                    schedule: schedule
-                };
-
-                // Check if we need to POST (insert) or PUT (update)
-                const existingHoursValue = document.getElementById("existing_hours").value;
-                const method = "POST"; // Use PUT for update, POST for new
-
-                // Send the request to the backend
-                fetch("/business-hours", {
-                    method: method,
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(formData) // Send the formData as JSON
-                })
-                    .then(response => response.json())
-                    .then(result => {
-                        alert(result.message);
-                    })
-                    .catch(error => {
-                        console.error("Error:", error);
-                    });
-            });
-            function populateForm(response) {
-                const businessHours = response.businessHours;  // Accessing the array from the response
-                console.log(businessHours);  // Check if the array is correctly populated
-                const allDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
-                businessHours.forEach(hour => {
-                    const day = hour.day_of_week;
-                    const openingTime = hour.opening_time;
-                    const closingTime = hour.closing_time;
-
-                    const checkbox = document.querySelector(`input[name="days"][value="${day}"]`);
-                    if (checkbox) {
-                        checkbox.checked = openingTime !== "00:00:00" && closingTime !== "00:00:00";
-                    }
-
-                    if (openingTime !== "00:00:00" && closingTime !== "00:00:00") {
-                        document.getElementById("opening_time").value = openingTime;
-                        document.getElementById("closing_time").value = closingTime;
-                    }
-                });
-            }
-
-
-            document.addEventListener("DOMContentLoaded", async () => {
-                const businessId = document.getElementById("businessId").value;
-
-
-                try {
-                    const response = await fetch(`/business-hours/${businessId}`);
-                    const businessHours = await response.json();
-
-
-                    populateForm(businessHours);
-                } catch (error) {
-                    console.error("Error fetching business hours:", error);
-                }
-            });
-
-
-        </script>
+ 
+<script src="/manage-business.js"></script>

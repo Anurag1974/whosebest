@@ -1,27 +1,81 @@
-<h1>Rate This Business</h1>
 
-<form id="ratingForm" method="POST" action="/submit-rating/<%= businessId %>">
-    <div class="rating">
-        <% for (let i=1; i <=5; i++) { %>
-            <span class="star" data-value="<%= i %>">★</span>
-            <% } %>
+
+<link rel="stylesheet" href="/rate.css">
+<div class="business-review-feedback-container global-user-interaction-wrapper">
+    <div class="business-review-content-section primary-feedback-form-layout">
+        <h1 class="business-review-main-title user-feedback-section-primary-title-heading">Rate This Business</h1>
+
+        <form 
+    id="ratingForm" 
+    method="POST" 
+    action="/submit-rating/<%= businessId %>" 
+    class="user-interaction-feedback-rating-and-review-form-container comprehensive-feedback-submission-form"
+>
+    <div class="star-rating-selection-interactive-display-wrapper rating-input-container">
+        <% for (let i = 1; i <= 5; i++) { %>
+            <span 
+                class="star-rating-individual-icon-element interactive-selection-trigger <%= ratingData.rating && ratingData.rating >= i ? 'selected' : '' %>" 
+                data-value="<%= i %>"
+            >
+                ★
+            </span>
+        <% } %>
     </div>
-    <input type="hidden" name="rating" id="rating" value="0" required>
-    <textarea class="form-control mt-3" placeholder="Write a review..." name="review" id="review" required></textarea>
-    <button type="submit" class="btn btn-primary mt-3">Submit Review</button>
-</form>
 
+    <input 
+        type="hidden" 
+        name="rating" 
+        id="rating" 
+        value="<%= ratingData.rating ? ratingData.rating : 0 %>" 
+        class="hidden-rating-value-data-input-storage-field mandatory-form-data-element" 
+        required
+    >
+
+    <textarea 
+        class="user-feedback-detailed-review-textarea-input-field large-text-content-area comprehensive-review-text-input" 
+        placeholder="Write a detailed review describing your experience with this business..." 
+        name="review" 
+        id="review" 
+        required
+    ><%= ratingData.review ? ratingData.review : '' %></textarea>
+
+    <button 
+        type="submit" 
+        class="feedback-and-rating-submit-review-action-button primary-interaction-trigger-button comprehensive-submission-button"
+    >
+        <%= ratingData.rating ? 'Update Your Review' : 'Submit Your Feedback, Review, and Rating' %>
+    </button>
+</form>
+    </div>
+</div>
 <script>
-    document.querySelectorAll('.star').forEach(star => {
-        star.addEventListener('click', (event) => {
-            const rating = event.target.getAttribute('data-value');
-            document.getElementById('rating').value = rating;
-            document.querySelectorAll('.star').forEach(s => {
-                s.classList.remove('filled');
-            });
-            for (let i = 0; i < rating; i++) {
-                document.querySelectorAll('.star')[i].classList.add('filled');
+    document.addEventListener("DOMContentLoaded", function () {
+    const stars = document.querySelectorAll(".star-rating-individual-icon-element");
+    const ratingInput = document.getElementById("rating");
+    const currentRating = parseInt(ratingInput.value) || 0;
+
+    // ✅ Ensure the existing rating is displayed on load
+    function updateStars(rating) {
+        stars.forEach((star, index) => {
+            if (index < rating) {
+                star.classList.add("filled"); // Highlight selected stars
+            } else {
+                star.classList.remove("filled"); // Remove highlight from unselected stars
             }
         });
+    }
+
+    // ✅ Initialize stars based on the existing rating
+    updateStars(currentRating);
+
+    // ✅ Add click event for updating rating
+    stars.forEach(star => {
+        star.addEventListener("click", function () {
+            const rating = parseInt(this.getAttribute("data-value"));
+            ratingInput.value = rating;
+            updateStars(rating);
+        });
     });
+});
+
 </script>

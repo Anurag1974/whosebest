@@ -10,6 +10,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Kumar+One&display=swap"
     rel="stylesheet">
@@ -17,77 +18,9 @@
 
 
   <!-- Optional custom styles -->
-  <style>
-    html,
-    body {
-      height: 100%;
-      margin: 0;
-    }
-
-    /* start right side nav*/
-    .sidenav {
-      height: 100%;
-      width: 0;
-      position: fixed;
-      z-index: 1;
-      top: 0;
-      right: 0;
-      /* Changed from 'left' to 'right' */
-      background-color: #111;
-      overflow-x: hidden;
-      transition: 0.5s;
-      padding-top: 20px;
-    }
-
-    .sidenav a {
-      padding: 8px 8px 8px 32px;
-      text-decoration: none;
-      font-size: 25px;
-      color: #818181;
-      display: block;
-      transition: 0.3s;
-    }
-
-    .sidenav a:hover {
-      color: #f1f1f1;
-    }
-
-    .sidenav .closebtn {
-      position: absolute;
-      top: 0;
-      left: 120px;
-      /* Changed from 'right' to 'left' */
-      font-size: 36px;
-      margin-left: 50px;
-    }
-
-    .btn {
-      background-color: #0B5ED7;
-      /* Blue color */
-      color: white;
-    }
-
-    .btn:hover {
-      background-color: #0651c2;
-      /* Blue color */
-      color: white;
-
-    }
-
-    @media screen and (max-height: 450px) {
-      .sidenav {
-        padding-top: 15px;
-      }
-
-      .sidenav a {
-        font-size: 18px;
-      }
-    }
-
-    /* endright side nav */
-  </style>
+ 
   <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/responsive.css">
+  
 
 
 
@@ -103,240 +36,333 @@
 </head>
 
 <body>
-  <section class="top-area">
-    <div class="header-area">
-      <!-- Start Navigation -->
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container mb-2 mt-2">
-          <a class="navbar-brand" href="/">Who's<span> Best</span></a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
-            aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-
-
-          <div class="input-search-container">
-            <form class="d-flex " action="/show-business" method="get">
-              <div class="input-group">
-                <input class="form-control me-2 location-input" type="text" placeholder="Search with city" id="city"
-                  name="city">
-                <!-- <div id="suggestions-box">
-                                    <button>location</button>
-                                </div> -->
-              </div>
-
-
-              <input class="form-control me-2" type="text" placeholder="Category..." id="searchBar" name="category">
-
-
-
-              <button class="btn btn-primary d-flex align-items-center justify-content-center gap-1" type="submit"
-                id="searchBtn">
-                Search
-                <i data-feather="search" width="15" height="15"></i>
-              </button>
-            </form>
-
-
-          </div>
-
-          <div class="collapse navbar-collapse" id="navbar-menu">
-            <div class="container  text-center ">
-              <label class="toggle-switch">
-                <input type="checkbox" id="evToggle" <%=toggle ? 'checked' : '' %>>
-                <span class="slider text-light">EV</span>
-              </label>
-            </div>
-            <ul class="navbar-nav ms-auto">
-              <% if(user) {%>
-                <li class="nav-item">
-                  <a class="nav-link" href="/your-business/<%= user.id %>">Manage Business</a>
-
-                </li>
-                <!-- <li class="nav-item">
-                                    <a class="nav-link" href="logout">Logout</a>
-                                </li>
-                                 -->
-
-                <!--  start right nav bar  -->
-                <div id="mySidenav" class="sidenav">
-                  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                  <!-- <li class="nav-item">
-                                       <a class="nav-link" href="logout">Login</a>
-                                    </li>  -->
-                  <li class="nav-item">
-                    <a class="nav-link" href="/logout">Logout</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/edit">Edit</a>
-                  </li>
+  <header class="main-header">
+    <div class="header-web">
+        <div class="web-header-content">
+            <div class="web-header-top-main-content">
+                <div class="web-header-logo">
+                    <h5>Whose Best</h5>
                 </div>
+                <div class="web-city-category-search-input">
+                    <div class="web-category-search">
+                        <input type="text" id="categoryInput" placeholder="Category..." readonly>
+                        <input type="hidden" id="categoryValue" name="category">
+                        <div class="select-wrapper">
+                            <ul>
+                                <li data-value="Restaurants">Restaurants</li>
+                                <li data-value="Hotels">Hotels</li>
+                                <li data-value="Colleges">Colleges</li>
+                                <li data-value="Hospitals">Hospitals</li>
+                                <li data-value="PGHotels">PG/Hostels</li>
+                                <li data-value="Dentists">Dentist</li>
+                                <li data-value="Gym">Gym</li>
+                                <li data-value="ACService">AC Services</li>
+                                <li data-value="HomeStays">Homestay</li>
+                                <li data-value="cafe">Cafe</li>
+                                <li data-value="destination_wedding">Destination Wedding</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="web-city-search">
+                        <input type="text" placeholder="Search by city">
+                    </div>
+                    <div class="web-search-icon">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                </div>
+                <div class="web-header-login-menubar">
+                  
+                  <% if (typeof user !== 'undefined' && user) { %>
+                    <!-- Show Manage Business if user is logged in -->
+                     <!-- use same classes of login  -->
+                    <div class="web-header-login">
+                        <a href="/your-business/<%= user.id %>" class="signup-btn">Manage Business</a>
+                    </div>
+                <% } else { %>
+                    <!-- Show Login & Signup if user is not logged in -->
+                    <div class="web-header-login" id="open-modal">
+                        <a href="/login" class="login-btn">Login</a>
+                        <a href="/login" class="signup-btn">Sign Up</a>
+                    </div>
+                <% } %>
+                    
+                <div class="web-header-menubar">
+                  <i class="fa-solid fa-ellipsis-vertical"></i>
+                  <div class="web-menu-header-slider-multi-option-when-clicked">
+                      
+                    <% if (typeof user !== 'undefined' && user) { %>
+                          <!-- If User is Logged In -->
+                          <div class="web-header-user-profile">
+                          
+                            <img src="<%= user.profile_image ? user.profile_image : '/images/dummy/dummy profile.jpg' %>" 
+                            alt="User Profile">
+                              <div class="webs-user-name-city">
+                                  <h5><%= user.name %></h5>
+                              </div>
+                          </div>
+                          <div class="web-user-free-listing-option-btn">
+                            <a href="/edit">Edit profile</a>
+                        </div>
+                          
+                          <div class="web-user-free-listing-option-btn">
+                            <a href="/business-profile">Free listing</a>
+                        </div>
+                        <div class="web-user-profile-logout">
+                          <a href="/book-your-taxi">Book a taxi</a>
+                        </div>
+                        <div class="web-user-profile-logout">
+                          <a href="/coming-soon">Book a guide</a>
+                        </div>
+                        <div class="web-user-profile-logout">
+                          <a href="/coming-soon">Build a Community</a>
+                        </div>
+                        <div class="web-user-profile-logout">
+                          <a href="/logout">Logout</a>
+                        </div>
+                        
+              
+                      <% } else { %>
+                          <!-- If No User is Logged In -->
+                          <div class="web-header-user-profile">
+                              <img src="/images/dummy/dummy profile.jpg" alt="User Profile">
+                              <div class="webs-user-name-city">
+                                  <h5>Guest</h5>
+                              </div>
+                              
 
-                <span style=" padding:5px;margin:13px;cursor:pointer;" class="btn btn-primary"
-                  onclick="openNav()">User&#9776;</span>
-
-                <script>
-                  function openNav() {
-                    document.getElementById("mySidenav").style.width = "250px";
-                  }
-
-                  function closeNav() {
-                    document.getElementById("mySidenav").style.width = "0";
-                  }
-                </script>
-
-                <!--end right bar  -->
-
-
-
-                <% } else{ %>
-                  <li class="nav-item">
-                    <a class="nav-link" href="business-login">Free Listing</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="btn btn-primary m-3  " href="#" id="loginButton" data-bs-toggle="modal"
-                      data-bs-target="#loginModal">Login/Signup</a>
-                  </li>
-
-
-                  <% } %>
-            </ul>
-          </div>
-
-
+                          </div>
+                          <div class="web-user-free-listing-option-btn">
+                            <a href="/login">Login</a>
+                        </div>
+                          <div class="web-user-free-listing-option-btn">
+                            <a href="/business-profile">Free Listing</a>
+                        </div>
+                        <div class="web-user-profile-logout">
+                          <a href="/book-your-taxi">Book taxi</a>
+                        </div>
+                        <div class="web-user-profile-logout">
+                          <a href="/coming-soon">Book a guide</a>
+                        </div>
+                        <div class="web-user-profile-logout">
+                          <a href="/coming-soon">Build a Community</a>
+                        </div>
+                        
+                      <% } %>
+              
+                     
+              
+                  </div>
+              </div>
+              
+                </div>
+            </div>
+            <div class="web-header-bottom-main-content">
+                <div class="web-header-all-toggle-btns">
+                    <div class="web-header-ev-toggle-btn">
+                        <span class="toggle-label">Switch to EV</span>
+                        <label class="toggle-switch ">
+                            <input type="checkbox" id="ev-toggle" <%= toggle.ev ? 'checked' : '' %>>
+                            <span class="slider round ev-toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="web-header-weman-toggle-btn">
+                        <span class="toggle-label">Women Owned Business</span>
+                        <label class="toggle-switch ">
+                            <input type="checkbox" id="weman-toggle" <%= toggle.women ? 'checked' : '' %>>
+                            <span class="slider round wemen-toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            </div>
+        <div class="phone-header-content">
+            <div class="phone-header-main-content">
+                <div class="phone-header-main-logo">
+                    <a href="/">Whoes Best</a>
+                </div>
+                <div class="phone-header-login-signup-menu-dot">
+                    <div class="phone-header-login">
+                      <% if (typeof user !== 'undefined' && user) { %>
+                      <a href="/your-business/<%= user.id %>"  class="login-btn">Manage Business</a>
+                      
+                      <% } else { %>
+                        <a href="/login" class="login-btn">Login</a>
+                      <a href="/login" class="signup-btn">Sign Up</a>
+                      <% } %>
+                    </div>
+                    <div class="phone-header-menubar">
+                      <i class="fa-solid fa-ellipsis-vertical"></i>
+                      <div class="phone-menu-header-slider-multi-option-when-clicked">
+                          <h4 class="phone-who-best-title">Whose Best</h4>
+                          <div class="phone-search-category-city">
+                              <div class="phone-city-category-search-input">
+                                  <div class="phone-category-search">
+                                      <input type="text" id="phoneCategoryInput" placeholder="Category..." readonly>
+                                      <input type="hidden" id="phoneCategoryValue" name="phone-category">
+                                      <div class="phone-select-wrapper">
+                                          <ul>
+                                              <li data-value="Restaurants">Restaurants</li>
+                                              <li data-value="Hotels">Hotels</li>
+                                              <li data-value="Colleges">Colleges</li>
+                                              <li data-value="Hospitals">Hospitals</li>
+                                              <li data-value="PGHotels">PG/Hostels</li>
+                                              <li data-value="Dentists">Dentist</li>
+                                              <li data-value="Gym">Gym</li>
+                                              <li data-value="ACService">AC Services</li>
+                                              <li data-value="HomeStays">Homestay</li>
+                                              <li data-value="cafe">Cafe</li>
+                                              <li data-value="destination_wedding">Destination Wedding</li>
+                                          </ul>
+                                      </div>
+                                  </div>
+                                  <div class="phone-city-search">
+                                      <input type="text" placeholder="Search by city">
+                                      <div class="phone-city-search-input-icon">
+                                          <i class="fa-solid fa-magnifying-glass"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                  
+                          <div class="phone-all-toggle-btns">
+                              <div class="phone-ev-toggle-btn-container">
+                                  <span class="phone-toggle-label">Switch to EV</span>
+                                  <label class="phone-toggle-switch">
+                                      <input type="checkbox" id="phone-ev-toggle-input" <%= toggle.ev ? 'checked' : '' %>>
+                                      <span class="phone-slider phone-round phone-ev-toggle-slider"></span>
+                                  </label>
+                              </div>
+                              <div class="phone-weman-toggle-btn-container">
+                                  <span class="phone-toggle-label">Women Owned Business</span>
+                                  <label class="phone-toggle-switch">
+                                      <input type="checkbox" id="phone-weman-toggle-input" <%= toggle.women ? 'checked' : '' %>>
+                                      <span class="phone-slider phone-round phone-wemen-toggle-slider"></span>
+                                  </label>
+                              </div>
+                          </div>
+                  
+                          <% if (typeof user !== 'undefined' && user) { %>
+                              <!-- Show user profile only if logged in -->
+                              <div class="phone-user-profile">
+                                  <div class="phone-user-profile-img">
+                                    <img src="<%= user.profile_image ? user.profile_image : '/images/dummy/dummy profile.jpg' %>" >
+                                  </div>
+                                  <div class="phone-user-profile-name-city">
+                                      <p><%= user.name %></p>
+                                    
+                                  </div>
+                              </div>
+                              <div class="phone-user-free-listing-option-btn">
+                                <a href="/edit">Edit profile</a>
+                            </div>
+                            <div class="phone-user-free-listing-option-btn">
+                              <a href="/business-profile">Free Listing</a>
+                          </div>
+                              <div class="phone-user-free-listing-option-btn">
+                                <a href="/book-your-taxi">Book a taxi</a>
+                            </div>
+                            <div class="phone-user-free-listing-option-btn">
+                              <a href="/coming-soon">Book a guide</a>
+                          </div>
+                          <div class="phone-user-free-listing-option-btn">
+                            <a href="/coming-soon">Build a Community</a>
+                        </div>
+                              <!-- Show Logout button if user is logged in -->
+                              <div class="phone-user-profile-logout">
+                                  <a href="/logout">Logout</a>
+                              </div>
+                          <% } else { %>
+                              <!-- If no user is logged in, show login button -->
+                              <div class="phone-user-profile-logout">
+                                  <a href="/login">Login</a>
+                              </div>
+                              <div class="phone-user-free-listing-option-btn">
+                                <a href="/business-profile">Free Listing</a>
+                            </div>
+                              <div class="phone-user-free-listing-option-btn">
+                                <a href="/book-your-taxi">Book a taxi</a>
+                            </div>
+                            <div class="phone-user-free-listing-option-btn">
+                              <a href="/coming-soon">Book a guide</a>
+                          </div>
+                        
+                          <% } %>
+                  
+                      </div>
+                  </div>
+                  
+                </div>
+            </div>
         </div>
-      </nav>
     </div>
-  </section>
+</header>
+
+
   <%- body %>
     <!-- footer -->
-    <footer class="bg-dark text-white py-5">
-      <div class="container">
-        <!-- Title Section -->
-        <div class="row mb-4">
-          <div class="col-md-12 text-left">
-            <h2>Whose's Best</h2>
-          </div>
-        </div>
-
-        <div class="row">
-          <!-- Left Column: Services We Provide -->
-          <div class="col-md-6 mb-4">
-            <h3 class="h5 mb-3">Services We Provide</h3>
-            <ul class="list-unstyled">
-              <li><a href="#" class="text-white text-decoration-none">Whose's Best</a></li>
-              <li><a href="#" class="text-white text-decoration-none">Sales Analytics</a></li>
-              <li><a href="#" class="text-white text-decoration-none">Customer Support</a></li>
-              <li><a href="#" class="text-white text-decoration-none">Automation Tools</a></li>
-            </ul>
-          </div>
-
-          <!-- Right Column: Contact Us and Follow Us side by side -->
-          <div class="col-md-6 mb-4">
-            <div class="row">
-              <!-- Contact Us Section -->
-              <div class="col-md-6">
-                <h3 class="h5 mb-3">Contact Us</h3>
-                <ul class="list-unstyled">
-                  <li class="text-white"><strong>Address:</strong> Bhauwala, Dehradun, India</li>
-                  <li class="text-white"><strong>Phone:</strong> +91 1234566789</li>
-                  <li class="text-white"><strong>Email:</strong> knoqlogico@gmail.com</li>
-                </ul>
-              </div>
-
-              <!-- Follow Us Section -->
-              <div class="col-md-6">
-                <h3 class="h5 mb-3">Follow Us</h3>
-                <div class="d-flex">
-                  <a href="#" class="text-white me-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-facebook"
-                      viewBox="0 0 16 16" width="24" height="24">
-                      <path
-                        d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm.5 12.5H7V8H5.5v4.5H3v-5h2.5V5.5C5.5 3.57 6.98 2 8.75 2c.77 0 1.5.14 2.25.14v2.86h-1.5c-1.16 0-1.5.69-1.5 1.33v1.67h3L11 12.5H8.5z" />
-                    </svg>
-                  </a>
-                  <a href="#" class="text-white me-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-twitter"
-                      viewBox="0 0 16 16" width="24" height="24">
-                      <path
-                        d="M5.026 15c6.03 0 9.344-5.013 9.344-9.344 0-.14-.003-.28-.01-.42a6.687 6.687 0 0 0 1.625-1.703 6.28 6.28 0 0 1-1.824.502 3.236 3.236 0 0 0 1.417-1.784 6.472 6.472 0 0 1-2.072.79A3.225 3.225 0 0 0 9.667 6.262c-1.94 0-3.509 1.572-3.509 3.509 0 .274.032.54.094.793A9.174 9.174 0 0 1 1.114 4.322a3.489 3.489 0 0 0-.475 1.766c0 1.222.619 2.295 1.558 2.927a3.243 3.243 0 0 1-1.594-.44v.045c0 1.708 1.214 3.141 2.834 3.465a3.275 3.275 0 0 1-1.563.06c.433 1.351 1.692 2.33 3.182 2.362a6.51 6.51 0 0 1-4.022 1.381c-.261 0-.518-.014-.772-.045a9.144 9.144 0 0 0 4.963 1.43" />
-                    </svg>
-                  </a>
-                  <a href="#" class="text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-linkedin"
-                      viewBox="0 0 16 16" width="24" height="24">
-                      <path
-                        d="M0 1a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V1zM3 3h2v10H3V3zm1-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zM13 3h2v10h-2V3zm1-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
-                    </svg>
-                  </a>
+    <div class="footer">
+        <div class="footer-content-container">
+            <div class="whose-best-footer-main-content">
+                <div class="whose-best-footer-logo">
+                    <a href="/">
+                        <h1>WhoseBest</h1>
+                    </a>
                 </div>
-              </div>
+                <div class="whose-best-footer-social-links">
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
             </div>
-          </div>
+            <div class="whose-best-footer-navigation-links">
+                <div class="whose-best-footer-quick-links">
+                    <h3>Quick Links</h3>
+                    <div class="whose-best-footer-links">
+                        <a href="#">Home</a>
+                        <a href="#">About Us</a>
+                        <a href="#">Services</a>
+                        <a href="#">Contact Us</a>
+                    </div>
+                </div>
+                <div class="whose-best-footer-policy-links">
+                    <h3>Policy</h3>
+                    <div class="whose-best-footer-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms & Conditions</a>
+                        <a href="#">Sitemap</a>
+                    </div>
+                </div>
+                <div class="whose-best-footer-news-letter-review">
+                    <div class="whose-best-footer-news-letter">
+                        <h3>Leave a Review</h3>
+                        <!-- <div class="whose-best-footer-news-letter-input">
+                            <input type="email" placeholder="Enter your email">
+                            <a href="#">Subscribe</a>
+                        </div> -->
+                    </div>
+                    <div class="whose-best-footer-review">
+                        <p><a href="/form">Leave a Review</a> for whose best</p>
+                    </div>
+                </div>
+            </div>
+            <div class="whose-best-footer-copyright">
+                <p>© 2023 Whose Best. All rights reserved.</p>
+                <a href="mailto:support.whosebest@knoqlogico.com">Get Support</a>
+            </div>
         </div>
-
-        <!-- "Liked us? Leave a Review" Section -->
-        <div class="row mb-4">
-          <div class="col-md-12 text-left">
-            <p class="text-white">❤ Liked us?
-              <a href="/form" class="text-white  review-link">Leave a Review</a>
-            </p>
-          </div>
-        </div>
-
-        <!-- Footer Bottom Section -->
-        <div class="mt-4 border-top pt-4">
-          <p class="text-white text-center">&copy; 2025 Online Businesses Management | Sales Whose's Best. All rights
-            reserved.</p>
-        </div>
-      </div>
-    </footer>
+    </div>
 
     <div class="container mt-4">
 
     </div>
-    <!-- Login Modal -->
-    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="loginModalLabel">Enter Your Details</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form id="details-form">
-              <!-- Name -->
-              <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="email" required>
-                <button id="sendOtpButton" type="button" onclick="sendOtpPopup()">Send OTP</button>
-              </div>
-
-              <!-- enter otp -->
-
-
-              <div id="verify-otp-box" class="mb-3 d-none">
-                <p>We have sent an OTP to <span id="otp-email"></span>
-                  <label for="otp">Enter OTP:</label>
-                  <input type="text" id="otp-pop" name="otp" required />
-                  <button type="button" onclick="verifyOtpPopup()">Verify</button>
-              </div>
-
-
-
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+ 
+ 
 
 
 
 
-    <!-- Popper.js and Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-      crossorigin="anonymous"></script>
+   
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
       integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
       crossorigin="anonymous"></script>
@@ -348,165 +374,29 @@
     </script>
 
     <script>
-      //            const locationInputs = document.querySelectorAll('.location-input');
+     
 
-      // // Add event listener to each input field
-      // locationInputs.forEach(locationInput => {
-      //     // Create the suggestions box
-      //     const suggestionsBox = document.createElement('div');
-      //     suggestionsBox.classList.add('suggestions-box');
-      //     locationInput.parentNode.appendChild(suggestionsBox);
+      
 
-      //     // Create the "Get current location" button
-      //     const getLocationBtn = document.createElement('button');
-      //     getLocationBtn.textContent = "Get current location";
-      //     getLocationBtn.classList.add('get-location-btn');
-      //     getLocationBtn.style.display = "none";
+      // document.getElementById('evToggle').addEventListener('change', function () {
+      //   console.log("toggle function hit");
+      //   const toggleValue = this.checked; // Get toggle value (true/false)
 
-      //     getLocationBtn.addEventListener('click', async (e) => {
-      //         e.preventDefault();
+      //   // Send the value to the server using Fetch API or AJAX
+      //   fetch('/update-toggle', {
+      //     method: 'POST',
+      //     headers: { 'Content-Type': 'application/json' },
+      //     body: JSON.stringify({ toggle: toggleValue }),
+      //   })
+      //     .then(response => response.json())
+      //     .then(data => {
+      //       console.log('Toggle updated:', data.message);
 
-      //         if (!navigator.geolocation) {
-      //             alert('Geolocation is not supported by your browser.');
-      //             return;
-      //         }
+      //       window.location.reload();
 
-      //         navigator.geolocation.getCurrentPosition(
-      //             (position) => {
-      //                 const latitude = position.coords.latitude;
-      //                 const longitude = position.coords.longitude;
-      //                 console.log('Location accessed:', { latitude, longitude });
-
-      //                 // Get the address from latitude and longitude
-      //                 getAddressFromLatLng(latitude, longitude);
-      //             },
-      //             (error) => {
-      //                 switch (error.code) {
-      //                     case error.PERMISSION_DENIED:
-      //                         alert('Please allow location permission.');
-      //                         break;
-      //                     case error.POSITION_UNAVAILABLE:
-      //                         alert('Location information is unavailable.');
-      //                         break;
-      //                     case error.TIMEOUT:
-      //                         alert('Request to get location timed out.');
-      //                         break;
-      //                     default:
-      //                         alert('An unknown error occurred while accessing location.');
-      //                 }
-      //             }
-      //         );
-      //     });
-
-      //     // Append the button to the suggestions box initially
-      //     suggestionsBox.appendChild(getLocationBtn);
-
-      //     // Show the suggestions box and button when the input is focused
-      //     locationInput.addEventListener('focus', () => {
-      //         suggestionsBox.style.display = 'block';
-      //         getLocationBtn.style.display = 'inline-block';
-      //     });
-
-      //     // Fetch and display suggestions on input
-      //     locationInput.addEventListener('input', async () => {
-      //         const query = locationInput.value.trim();
-      //         if (query.length < 3) {
-      //             suggestionsBox.style.display = 'none'; // Hide if query is too short
-      //             clearSuggestions();
-      //             return;
-      //         }
-
-      //         try {
-      //             const response = await fetch(`/api/location?q=${encodeURIComponent(query)}`);
-      //             const suggestions = await response.json();
-      //             console.log('Suggestions:', suggestions);
-
-      //             clearSuggestions(); // Clear previous suggestions while preserving the button
-
-      //             if (suggestions.length > 0) {
-      //                 suggestionsBox.style.display = 'block'; // Show dropdown
-
-      //                 suggestions.forEach(suggestion => {
-      //                     const div = document.createElement('div');
-      //                     div.textContent = suggestion.address; // Show address in the dropdown
-      //                     div.classList.add('suggestion-item');
-      //                     div.addEventListener('click', () => {
-      //                         locationInput.value = suggestion.address; // Set address in the input field
-      //                         console.log('Selected Location:', {
-      //                             name: suggestion.address,
-      //                             latitude: suggestion.lat,
-      //                             longitude: suggestion.lng,
-      //                         });
-      //                         suggestionsBox.style.display = 'none';
-      //                         clearSuggestions();
-      //                     });
-      //                     suggestionsBox.appendChild(div);
-      //                 });
-      //             } else {
-      //                 suggestionsBox.style.display = 'none'; // Hide if no suggestions
-      //             }
-      //         } catch (error) {
-      //             console.error('Error fetching suggestions:', error);
-      //         }
-      //     });
-
-      //     // Hide suggestions box when clicking outside
-      //     document.addEventListener('click', (e) => {
-      //         if (!suggestionsBox.contains(e.target) && e.target !== locationInput) {
-      //             suggestionsBox.style.display = 'none';
-      //             clearSuggestions();
-      //         }
-      //     });
-
-      //     // Function to clear suggestions but preserve the button
-      //     function clearSuggestions() {
-      //         suggestionsBox.innerHTML = '';
-      //         suggestionsBox.appendChild(getLocationBtn);
-      //     }
-
-      //     // Function to get address from latitude and longitude using OpenCage API
-      //     function getAddressFromLatLng(latitude, longitude) {
-      //         const apiKey = 'd9a0d19eb39945f98c94b9138eb8d6d0'; // Your OpenCage API key
-      //         const url = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}&language=en&pretty=1`;
-
-      //         fetch(url)
-      //             .then(response => response.json())
-      //             .then(data => {
-      //                 if (data.results.length > 0) {
-      //                     const address = data.results[0].formatted;
-      //                     locationInput.value = address; // Update the input field with the address
-      //                     console.log('Address from coordinates:', address);
-      //                 } else {
-      //                     alert('No address found for this location.');
-      //                 }
-      //             })
-      //             .catch(error => {
-      //                 alert('Error fetching address: ' + error.message);
-      //             });
-      //     }
+      //     })
+      //     .catch(error => console.error('Error:', error));
       // });
-
-      // ṭoggle================================================
-
-      document.getElementById('evToggle').addEventListener('change', function () {
-        console.log("toggle function hit");
-        const toggleValue = this.checked; // Get toggle value (true/false)
-
-        // Send the value to the server using Fetch API or AJAX
-        fetch('/update-toggle', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ toggle: toggleValue }),
-        })
-          .then(response => response.json())
-          .then(data => {
-            console.log('Toggle updated:', data.message);
-
-            window.location.reload();
-
-          })
-          .catch(error => console.error('Error:', error));
-      });
 
 
 
@@ -515,6 +405,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 
     <script src="/main.js"></script>
+    <script src="/toggle.js"></script>
+    
 </body>
 
 </html>

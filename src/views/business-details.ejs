@@ -1,292 +1,255 @@
-<div class="container mt-4">
-  <div class="row">
-    <h2 class="text-center my-4">All Photos Restaurant</h2>
-
-    <!-- Horizontal Scrollable Container -->
-    <div class="d-flex overflow-auto align-items-center">
-      <div class="flex-shrink-0 me-1">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="setModalImage('modalImage')">
-          <img src='<%=businessDetails.image_source %>' alt="Image 1" class="img-fluid rounded" style="height: 150px;
-          object-fit: cover;">
-        </a>
-      </div>
-      <!-- <div class="flex-shrink-0 me-1">
-            <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="setModalImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQaXo3tkYzRGOhSuTe8RQexHHSH7onZLNj5g&s')">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQaXo3tkYzRGOhSuTe8RQexHHSH7onZLNj5g&s" alt="Image 2" class="img-fluid rounded" style="height: 150px; object-fit: cover;">
-            </a>
-        </div>
-        <div class="flex-shrink-0 me-1">
-            <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="setModalImage('modalImage')">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjsKPIssWvJmg9HTqYBNmDP9oImx7NQNIS7g&s" alt="Image 3" class="img-fluid rounded" style="height: 150px; object-fit: cover;">
-            </a>
-        </div>
-        <div class="flex-shrink-0 me-1">
-            <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="setModalImage('modalImage')">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQaXo3tkYzRGOhSuTe8RQexHHSH7onZLNj5g&s" alt="Image 4" class="img-fluid rounded" style="height: 150px; object-fit: cover;">
-            </a>
-        </div>
-        <div class="flex-shrink-0">
-            <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="setModalImage('modalImage')">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjsKPIssWvJmg9HTqYBNmDP9oImx7NQNIS7g&s" alt="Image 5" class="img-fluid rounded" style="height: 150px; object-fit: cover;">
-            </a>
-        </div> -->
-    </div>
-
-
-    <!-- Image Modal -->
-    <!-- <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="imageModalLabel">Image Preview</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center">
-                <img id="modalImage" src=<%=businessDetails.image_source%> alt="Full Image" class="img-fluid rounded" width="100%">
-            </div>
-        </div>
-    </div>-->
-  </div>
-
-
-
-
-
-
-  <!-- Header Section -->
-  <div class="row align-items-center mt-4">
-    <div class="col-md-8">
-      <h1 class="h4">
-        <%= businessDetails.business_name %>
-      </h1>
-      <div class="d-flex align-items-center">
-        <span class="badge bg-success me-2">
-          <%= businessDetails.rating %>⭐
-        </span>
-        <span>345 Ratings</span>
-        <span class="mx-2">•</span>
-        <span>1 Year in Business</span>
-      </div>
-      <p>Dehradun • Open until 9:30 pm</p>
-    </div>
-    <div class="col-md-4 d-flex justify-content-start justify-content-md-end ">
-      <a href="tel:<%= businessDetails.phone %>" class="btn btn-primary me-2"><i class="bi bi-chat-dots-fill"></i>
-        Enquire Now</a>
-      <a href="tel:<%= businessDetails.phone %>" class="btn btn-success me-2"><i class="bi bi-telephone"></i> Call</a>
-      <a href="tel:<%= businessDetails.phone %>" class="btn border border-black"><i class="bi bi-whatsapp"></i>
-        WhatsApp</a>
-    </div>
-  </div>
-
-  <div class="business-details">
-    div.business-details
-
-  </div>
-  <div class="opening-hours"></div>
-
-  <!-- Tabs Section -->
-  <ul style="position:sticky;
- top:99px;
- background-color: white;
- /* border-bottom: 1px solid black; */
- " class="nav nav-tabs mt-4 sticky-tabs p-2" id="myTab" role="tablist">
-    <li class="nav-item" role="presentation">
-      <a href="#overview" class="nav-link " id="overview-tab">Overview</a>
-    </li>
-    <li class="nav-item " role="presentation">
-      <a href="#catalogue" class="nav-link" id="catalogue-tab">Catalogue</a>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a href="#quickinfo" class="nav-link" id="quickinfo-tab">Quick Info</a>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a href="#services" class="nav-link" id="services-tab">Services</a>
-    </li>
-    <!-- <li class="nav-item" role="presentation">
-      <a href="#photos" class="nav-link" id="photos-tab">Photos</a>
-    </li> -->
-    <li class="nav-item" role="presentation">
-      <a href="#keyinsights" class="nav-link" id="keyinsights-tab">Key Insights</a>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a href="#reviews" class="nav-link" id="reviews-tab">Reviews</a>
-    </li>
-  </ul>
-
-  <!-- Tab Content -->
-  <div class="tab-content mt-4 " id="myTabContent">
-    <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
-      <div class="row">
-        <div class="col-md-4 mb-3" id="overview">
-          <h4>Overview</h4>
-          <p>Welcome to our restaurant! We offer the best culinary experience in Dehradun.</p>
-
-
-        </div>
-
-
-      </div>
-
-      <div class="row">
-        <div class="col-md-4 mb-3" id="catalogue">
-          <h4>Catalogue</h4>
-          <p>Explore our diverse menu of delicious dishes.</p>
-        </div>
-        <div class="row">
-          <div class="col-md-4 mb-3">
-            <h4 id="quickinfo">Quick Info</h4>
-            <p>Open hours: 10:00 AM - 9:30 PM</p>
-            <p>Location: <%= businessDetails.address %>
-            </p>
-
-          </div>
-
-        </div>
-        <div class="row">
-          <h4 id="services">Services</h4>
-          <div>
-            <ul>
-              <li>Dine-in</li>
-              <li>Takeaway</li>
-              <li>Home Delivery</li>
-            </ul>
-          </div>
-        </div>
-        <!-- <div class="row" id="photos">
-          <h2>Photos</h2>
-          <div class="col-md-4">
-            <img src="" alt="Photos 1" class="img-fluid mb-3">
-          </div>
-          <div class="col-md-4">
-            <img src="" alt="Photos 2" class="img-fluid mb-3">
-          </div>
-          <div class="col-md-4">
-            <img src="" alt="Photos 3" class="img-fluid mb-3">
-          </div>
-        </div> -->
-      </div>
-
-      <div class="mt-4" id="keyinsights">
-        <h4>Key Insights</h4>
-        <p>We have been serving delicious meals for over 1 year!</p>
-      </div>
-
-      <div class="mt-4" id="reviews">
-        <h3>Reviews & Ratings</h3>
-
-        <% if(user){ %>
-
-          <% if(!hasReviewed){ %>
-            <a href="/rate/<%= businessDetails.id %>" class="btn btn-primary">Rate this business 1<%= hasReviewed %></a>
-
-
-            <% } %>
-
-              <% }else{ %>
-
-                <a class="btn btn-primary " href="#" id="loginButton" data-bs-toggle="modal"
-                  data-bs-target="#loginModal">Rate this business</a>
-
+<link rel="stylesheet" href="/business-details.css">
+<main class="main-container">
+    <section class="hero-section">
+        <h2 class="section-title" style="text-transform: capitalize;">
+            <i class="fas fa-store"></i> <%= businessDetails.business_name %>
+        </h2>
+        
+        <div class="image-gallery">
+            <div class="gallery-container">
+                <% if (images.length > 0) { %>
+                    <% images.forEach(image => { %>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="setModalImage('modalImage')">
+                            <img src="<%= image.image_source %>" 
+                                 alt="<%= businessDetails.business_name %> Business Image" 
+                                 class="gallery-image">
+                        </a>
+                    <% }); %>
+                <% } else { %>
+                    <p>No images available</p>
                 <% } %>
-
-                  <% if (businessDetails.reviews && businessDetails.reviews.length> 0) { %>
-
-                    <!-- Display Average Rating -->
-                    <div class="display-4 mb-2 btn btn-primary">
-                      <%= businessDetails.rating || "No Ratings Yet" %>
-                    </div>
-
-
-                    <!-- Rating Trend -->
-                    <h5>Recent Reviews Trend</h5>
-                    <!-- <div class="d-flex gap-2 mb-4">
-            <% businessDetails.reviews.forEach(review => { %>
-              
-            <% }); %>
-            </div> -->
-
-                    <!-- Sorting Options -->
-                    <!-- <h5>User Reviews</h5>
-             <div class="d-flex mb-3">
-            <button class="btn btn-outline-primary me-2">Relevant</button>
-            <button class="btn btn-outline-primary me-2">Latest</button>
-            <button class="btn btn-outline-primary">High to Low</button>
-              </div> -->
-
-
-                    <!-- User Reviews -->
-                    <% businessDetails.reviews.forEach(review=> { %>
-                      <div class="review-card d-flex align-items-center mb-4">
-                        
-                        <img src="/uploads/<%= review.profile_image %>" alt="Profile Image"
-                          class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
-                        <div class="ms-3">
-                          <h6 class="mb-1">
-                            <%= review.name || "Anonymous" %>
-                          </h6>
-                          <!-- <h6 class="text-muted mb-2"><%= review.totalReviews || 0 %> reviews</h6> -->
-                          <div class="text-warning">
-                            <%= "★" .repeat(review.rating) %>
-                              <%= "☆" .repeat(5 - review.rating) %>
-                          </div>
-                          <p>
-                            <%= review.review || "No comment provided." %>
-                          </p>
-                          <div class="d-flex gap-3">
-                            <a href="#" class="text-muted">Helpful</a>
-
-                            <% if (user && user.id && review.user_id==user.id) { %>
-
-                              <button id="delete-review-btn" data-id="<%= review.review_id %>"
-                                onclick="deleteReview()">Delete Review</button>
-
-                              <% } %>
-
-                          </div>
-                        </div>
-                      </div>
-                      <% }); %>
+            </div>
+        </div>
+    </section>
+    
+    <header class="business-header">
+        <div class="business-info">
+            <div class="business-meta">
+                <div class="rating-badge">
+                    <i class="fas fa-star"></i>
+                    <span><%= averageRating %></span>
+                </div>
+                <div class="meta-details">
+                    <span><i class="fas fa-comment"></i> <%= reviewCount %> Ratings</span>
+                </div>
+            </div>
+            <p class="location-status">
+                <i class="fas fa-map-marker-alt"></i> <%= businessDetails.address || 'Location not available' %>
+                <span class="separator">•</span> 
+                <i class="fas fa-door-open"></i> Open until <%= businessDetails.closing_time ? businessDetails.closing_time.slice(0, -3) : 'N/A' %>
+            </p>
+        </div>
+        <div class="action-buttons">
+            <a href="tel:<%= businessDetails.phone %>" class="btn btn-primary">
+                <i class="fas fa-comments"></i> Enquire Now
+            </a>
+            <a href="tel:<%= businessDetails.phone %>" class="btn btn-success">
+                <i class="fas fa-phone"></i> Call
+            </a>
+            <a href="tel:<%= businessDetails.phone %>" class="btn btn-outline">
+                <i class="fab fa-whatsapp"></i> WhatsApp
+            </a>
+            <a href="https://www.google.com/maps/search/<%= businessDetails.address %>" target="_blank" class="btn btn-outline">
+                <i class="fa-solid fa-map-location-dot"></i> Map
+            </a>
+        </div>
+    </header>
+  
+    <nav class="tab-navigation">
+        <ul class="nav-tabs">
+            <li><a href="#overview" class="active"><i class="fas fa-home"></i> Overview</a></li>
+            <li><a href="#quickinfo"><i class="fas fa-info-circle"></i> Quick Info</a></li>
+            <li><a href="#services"><i class="fas fa-concierge-bell"></i> Services</a></li>
+            <li><a href="#keyinsights"><i class="fas fa-lightbulb"></i> Key Insights</a></li>
+            <li><a href="#reviews"><i class="fas fa-star"></i> Reviews</a></li>
+        </ul>
+    </nav>
+  
+    <div class="tab-content">
+        <section id="overview" class="tab-pane active">
+            <h3><i class="fas fa-info-circle"></i> Overview</h3>
+            <p><%= businessDetails.overview || 'N/A' %></p>
+        </section>
+  
+        <section id="quickinfo" class="tab-pane">
+            <h3><i class="fas fa-clock"></i> Quick Info</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <i class="fas fa-clock"></i>
+                    <h4>Hours</h4>
+                    <p><%= businessDetails.opening_time && businessDetails.closing_time 
+                        ? businessDetails.opening_time.slice(0, -3) + ' - ' + businessDetails.closing_time.slice(0, -3) 
+                        : 'N/A' 
+                    %></p>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h4>Location</h4>
+                    <p><%= businessDetails.address || 'N/A' %></p>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-calendar-times"></i>
+                    <h4>Off Days</h4>
+                    <p>
+                        <% if (offDays.length) { %>
+                            <% offDays.forEach((day, index) => { %>
+                                <%= day %><%= index < offDays.length - 1 ? ' - ' : '' %>
+                            <% }) %>
                         <% } else { %>
-                          <p>Be the first one to Rate this business.</p>
-
-          <% } %>
-      </div>
-
+                            None
+                        <% } %>
+                    </p>
+                </div>
+            </div>
+        </section>
+  
+        <section id="services" class="tab-pane">
+            <h3><i class="fas fa-concierge-bell"></i> Services</h3>
+            <div class="services-grid">
+                <% let servicesCount = 0; %>
+                <% if (businessDetails.services1 && businessDetails.services1 !== 'N/A') { %>
+                    <div class="service-item">
+                        <i class="fas fa-check-circle"></i>
+                        <p><%= businessDetails.services1 %></p>
+                    </div>
+                    <% servicesCount++; %>
+                <% } %>
+                <% if (businessDetails.services2 && businessDetails.services2 !== 'N/A') { %>
+                    <div class="service-item">
+                        <i class="fas fa-check-circle"></i>
+                        <p><%= businessDetails.services2 %></p>
+                    </div>
+                    <% servicesCount++; %>
+                <% } %>
+                <% if (businessDetails.services3 && businessDetails.services3 !== 'N/A') { %>
+                    <div class="service-item">
+                        <i class="fas fa-check-circle"></i>
+                        <p><%= businessDetails.services3 %></p>
+                    </div>
+                    <% servicesCount++; %>
+                <% } %>
+                <% if (businessDetails.services4 && businessDetails.services4 !== 'N/A') { %>
+                    <div class="service-item">
+                        <i class="fas fa-check-circle"></i>
+                        <p><%= businessDetails.services4 %></p>
+                    </div>
+                    <% servicesCount++; %>
+                <% } %>
+                <% if (servicesCount === 0) { %>
+                    <div class="service-item">
+                        <i class="fas fa-check-circle"></i>
+                        <p>N/A</p>
+                    </div>
+                <% } %>
+            </div>
+        </section>
+  
+        <section id="keyinsights" class="tab-pane">
+            <h3><i class="fas fa-lightbulb"></i> Key Insights</h3>
+            <div class="insights-container">
+                <div class="insight-item">
+                    <i class="fas fa-trophy"></i>
+                    <p><%= businessDetails.usp || 'N/A' %></p>
+                </div>
+            </div>
+        </section>
+  
+        <section id="reviews" class="tab-pane">
+            <h3><i class="fas fa-star"></i> Reviews & Ratings</h3>
+            
+            <div class="review-actions">
+                <% if(user){ %>
+                    <% if(!hasReviewed){ %>
+                        <a href="/rate/<%= businessDetails.id %>" class="universal-btn">
+                            <i class="fas fa-pencil-alt" style="margin-right: 10px;"></i> Write a Review
+                        </a>
+                    <% } %>
+                <% } else { %>
+                    <a href="/login" class="universal-btn">
+                        <i class="fas fa-sign-in-alt" style="margin-right: 10px;"></i> Login to Review
+                    </a>
+                <% } %>
+            </div>
+  
+            <div class="reviews-summary">
+                <div class="rating-overview">
+                    <% if (reviewCount && reviewCount > 0) { %>
+                        <div class="total-reviews">
+                            <i class="fas fa-users"></i>
+                            <span><%= reviewCount %> Total Reviews</span>
+                        </div>
+                    <% } else { %>
+                        <p>No Ratings Yet</p>
+                    <% } %>
+                </div>
+            </div>
+  
+            <div class="reviews-list" role="list">
+                <% if (businessDetails.reviews && businessDetails.reviews.length > 0) { %>
+                    <% businessDetails.reviews.forEach(review => { %>
+                        <div class="review-card" role="listitem">
+                            <div class="review-header">
+                                <img src="/uploads/<%= review.profile_image %>" 
+                                     alt="Profile Image"
+                                     class="reviewer-image"
+                                     onerror="this.onerror=null; this.src='/images/dummy/dummy profile.jpg';">
+                                <div class="reviewer-info">
+                                    <h4><%= review.name || "Anonymous" %></h4>
+                                    <div class="rating-stars">
+                                        <%= review.rating %>
+                                        <% for (let i = 0; i < 5; i++) { %>
+                                            <i class="fas fa-star <%= i < review.rating ? 'filled' : '' %>"></i>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="review-text"><%= review.review || "No comment provided." %></p>
+                            <div class="review-footer">
+                                <% if (user && user.id && review.user_id == user.id) { %>
+                                    <button class="btn-delete" id="delete-review-button" data-id="<%= review.review_id %>" onclick="deleteReview()">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p class="no-reviews">Be the first one to review this business!</p>
+                <% } %>
+            </div>
+        </section>
     </div>
-  </div>
-  <!-- Modal Structure for Share Button -->
-  <div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="shareModalLabel">Share this Review</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>Share this review with your friends:</p>
-          <div class="d-flex gap-3">
-            <a href="https://www.facebook.com/sharer/sharer.php?u=#" target="_blank" class="btn btn-primary">
-              <i class="bi bi-facebook"></i> Facebook
-            </a>
-            <a href="https://wa.me/?text=Check%20this%20out!%20#" target="_blank" class="btn btn-success">
-              <i class="bi bi-whatsapp"></i> WhatsApp
-            </a>
-            <a href="mailto:?subject=Check%20this%20out!&body=Visit%20this%20link%20#" target="_blank"
-              class="btn btn-secondary">
-              <i class="bi bi-link-45deg"></i> Link
-            </a>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-    <!-- </div> -->
+  </main>
+  
+
+<!-- Share Modal -->
+<div class="modal" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+  <div class="modal-content">
+      <!-- Share modal content here -->
   </div>
 </div>
-  <!-- </div> -->
 
 <script>
+  // Add tab navigation functionality
+  document.addEventListener('DOMContentLoaded', function() {
+      const tabs = document.querySelectorAll('.nav-tabs a');
+      const panes = document.querySelectorAll('.tab-pane');
+
+      tabs.forEach(tab => {
+          tab.addEventListener('click', (e) => {
+              e.preventDefault();
+              
+              // Remove active class from all tabs and panes
+              tabs.forEach(t => t.classList.remove('active'));
+              panes.forEach(p => p.classList.remove('active'));
+              
+              // Add active class to clicked tab and corresponding pane
+              tab.classList.add('active');
+              const targetId = tab.getAttribute('href').substring(1);
+              document.getElementById(targetId).classList.add('active');
+          });
+      });
+  });
+
 
 </script>

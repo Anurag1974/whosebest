@@ -1,0 +1,233 @@
+<link rel="stylesheet" href="/driver-dashboard.css">
+<div class="drivers-landing-page-container">
+    <!-- Verification Message Section -->
+    <% if (driverDetails.verified == 0) { %>
+    <div class="drivers-landing-page-verification-banner">
+        <i class="fas fa-clock"></i>
+        <p>Your profile is under verification process. Please wait for 2-3 business days for any update.</p>
+    </div>
+    <% } %>
+    <% if (driverDetails.verified == 1) { %>
+        <!-- Driver Profile Section -->
+        <div class="drivers-landing-page-profile-section">
+            <div class="drivers-landing-page-profile-header">
+                <div class="drivers-landing-page-header-left">
+                    <div class="drivers-landing-page-profile-image">
+                        <img src="<%=driverDetails.driver_image%>"
+                            alt="Driver Profile" class="drivers-landing-page-clickable-image"
+                            onclick="openModal(this.src)">
+                        <div class="drivers-landing-page-verified-badge-large">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Verified</span>
+                        </div>
+                    </div>
+                    <div class="drivers-landing-page-basic-info">
+                        <h1><%=driverDetails.name%></h1>
+                        <!-- <div class="drivers-landing-page-ratings">
+                            <div class="drivers-landing-page-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span>4.8</span>
+                            </div>
+                            <div class="drivers-landing-page-reviews">
+                                <i class="fas fa-comment"></i>
+                                <span>128 Reviews</span>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <!-- <div class="drivers-landing-page-status-toggle">
+                    <span>Profile Status</span>
+                    <label class="drivers-landing-page-switch">
+                        <input type="checkbox" id="profileStatusToggle" data-id="<%= driverDetails.id %>" <%= driverDetails.status ? 'checked' : '' %>>
+                        <span class="drivers-landing-page-slider"></span>
+                    </label>
+                </div> -->
+                <div class="drivers-landing-page-status-toggle">
+                    <span>Profile Status</span>
+                    <label class="drivers-landing-page-switch">
+                        <input type="checkbox" class="driver-status-toggle" data-user-id="<%= driverDetails.user_id %>" <%= driverDetails.status === 1 ? 'checked' : '' %>>
+                        <span class="drivers-landing-page-slider"></span>
+                    </label>
+                </div>
+            </div>
+    
+            <div class="drivers-landing-page-profile-content">
+                <div class="drivers-landing-page-info-card">
+                    <div class="drivers-landing-page-info-section">
+                        <h2><i class="fas fa-user"></i> Personal Information</h2>
+                        <div class="drivers-landing-page-info-grid">
+                            <div class="drivers-landing-page-info-item">
+                                <span class="drivers-landing-page-label">Age</span>
+                                <span class="drivers-landing-page-value"><%=driverDetails.age%> years</span>
+                            </div>
+                            <div class="drivers-landing-page-info-item">
+                                <span class="drivers-landing-page-label">Experience</span>
+                                <span class="drivers-landing-page-value"><%=driverDetails.driving_experience%></span>
+                            </div>
+                            <div class="drivers-landing-page-info-item">
+                                <span class="drivers-landing-page-label">Phone</span>
+                                <span class="drivers-landing-page-value">
+                                    <i class="fas fa-phone"></i>
+                                    <%=driverDetails.phone_number%>
+                                </span>
+                            </div>
+                            <div class="drivers-landing-page-info-item">
+                                <span class="drivers-landing-page-label">Email</span>
+                                <span class="drivers-landing-page-value">
+                                    <i class="fas fa-envelope"></i>
+                                    <%=driverDetails.email%>
+                                </span>
+                            </div>
+                            <div class="drivers-landing-page-info-item">
+                                <span class="drivers-landing-page-label">Registered Since</span>
+                                <span class="drivers-landing-page-value">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <%= new Date(driverDetails.registered_date).toDateString() %>
+                                </span>
+                            </div>
+                            <div class="drivers-landing-page-info-item">
+                                <span class="drivers-landing-page-label">Vehicle Type</span>
+                                <span class="drivers-landing-page-value">
+                                    <i class="fas fa-car"></i>
+                                    <%=driverDetails.vehicle_type%>
+                                </span>
+                            </div>
+                        </div>
+    
+                        <div class="drivers-landing-page-addresses">
+                            <div class="drivers-landing-page-address-item">
+                                <div class="drivers-landing-page-address-header">
+                                    <i class="fas fa-home"></i>
+                                    <span>Current Address</span>
+                                </div>
+                                <div class="drivers-landing-page-address-content">
+                                    <%=driverDetails.current_address%>
+                                </div>
+                            </div>
+    
+                            <div class="drivers-landing-page-address-item">
+                                <div class="drivers-landing-page-address-header">
+                                    <i class="fas fa-id-card"></i>
+                                    <span>License Address</span>
+                                </div>
+                                <div class="drivers-landing-page-address-content">
+                                    <%=driverDetails.license_address%>
+                                </div>
+                            </div>
+                        </div>
+                    
+    
+                    <div class="drivers-landing-page-info-section">
+                        <h2><i class="fas fa-car"></i> Vehicle Information</h2>
+                        <div class="drivers-landing-page-info-grid">
+                            <div class="drivers-landing-page-info-item">
+                                <span class="drivers-landing-page-label">Model</span>
+                                <span class="drivers-landing-page-value"><%=driverDetails.name%></span>
+                            </div>
+                            <div class="drivers-landing-page-info-item">
+                                <span class="drivers-landing-page-label">Number</span>
+                                <span class="drivers-landing-page-value"><%=driverDetails.vehicle_number%></span>
+                            </div>
+                        </div>
+                        <div class="drivers-landing-page-vehicle-image">
+                            <img src="<%=driverDetails.vehicle_image%>"
+                                alt="Vehicle Image" class="drivers-landing-page-clickable-image"
+                                onclick="openModal(this.src)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="drivers-landing-page-reviews-section">
+            <h2><i class="fas fa-comments"></i> Customer Reviews</h2>
+            <div class="drivers-landing-page-reviews-container">
+                <!-- Review cards go here -->
+            </div>
+        </div>
+    <% } %>
+    
+</div>
+<script>
+    // JavaScript for Image Popup with Animations
+
+    
+
+    function openModal(imageSrc) {
+        // Create the modal if it doesn't already exist
+        let modal = document.querySelector('.popup-modal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.className = 'popup-modal';
+            modal.innerHTML = `
+        <div class="popup-modal-content">
+            <button class="popup-modal-close" onclick="closeModal()">×</button>
+            <img src="" alt="Popup Image">
+        </div>
+    `;
+            document.body.appendChild(modal);
+        }
+
+        // Set the image source and show the modal
+        const modalImage = modal.querySelector('img');
+        modalImage.src = imageSrc;
+
+        modal.style.display = 'flex';
+        modal.classList.remove('fade-out'); // Remove fade-out animation if applied
+        modal.classList.add('fade-in'); // Add fade-in animation
+    }
+
+    function closeModal() {
+        const modal = document.querySelector('.popup-modal');
+        if (modal) {
+            modal.classList.remove('fade-in'); // Remove fade-in animation if applied
+            modal.classList.add('fade-out'); // Add fade-out animation
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300); // Match the animation duration (0.3s)
+        }
+    }
+
+    // Optional: Close the modal when clicking outside the content
+    document.addEventListener('click', function (e) {
+        const modal = document.querySelector('.popup-modal');
+        const content = modal?.querySelector('.popup-modal-content');
+        if (modal && e.target === modal && !content.contains(e.target)) {
+            closeModal();
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".driver-status-toggle").forEach(toggle => {
+        toggle.addEventListener("change", async function () {
+            const userId = this.getAttribute("data-user-id");
+            const newStatus = this.checked ? 1 : 0;
+
+            try {
+                const response = await fetch("/update-driver-status", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ userId, status: newStatus }),
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    console.log("Status updated successfully");
+                } else {
+                    console.error("Failed to update status");
+                    this.checked = !this.checked; // Revert if update fails
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                this.checked = !this.checked; // Revert toggle in case of error
+            }
+        });
+    });
+});
+
+</script>

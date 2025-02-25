@@ -1,0 +1,46 @@
+.Error-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    background-color: #fff;
+    gap: 20px; /* Adds spacing between elements */
+}
+
+/* Error Image */
+.Error-page-container img {
+    max-width: 100%;
+    height: auto;
+    width: 600px;
+    height: 700px;
+}
+
+/* Error Heading */
+.Error-page-p {
+    position: absolute;
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 440px;
+}
+
+/* Back Button */
+.Error-page-btn {
+    position: absolute;
+    display: inline-block;
+    padding: 10px 25px 10px 16px;
+    font-size: 1.2rem;
+    color: white;
+    background-color: #007bff;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: background-color 0.3s ease-in-out;
+    margin-top: 430px;
+    cursor: pointer;
+    border: none;
+}
+
+.Error-page-btn:hover {
+    background-color: #0056b3;
+}

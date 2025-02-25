@@ -1,0 +1,274 @@
+/* Import Font Awesome for icons */
+/* @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'); */
+
+/* Main Container */
+.business-listing-main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* General Reset */
+/* body, h1, h4, p {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f9f9f9;
+    color: #333;
+    padding: 20px;
+} */
+
+/* Header Section */
+.business-header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.business-header-title {
+    font-size: 2rem;
+    color: #000;
+}
+
+.business-sorting-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.business-sorting-label {
+    font-weight: bold;
+}
+
+.business-sorting-dropdown {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+/* Business List */
+.business-listing-title {
+    margin-top: 40px;
+    font-size: 2.5rem;
+    text-align: center;
+    color: #000;
+}
+
+.business-listing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.business-item-container {
+    background-color: #fff;
+    border-radius: 8px;
+    margin-bottom: 50px;
+    overflow: hidden;
+    border: 1px solid #a0a0a079;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.business-item-container:hover {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Business Card Layout */
+.business-card {
+    display: flex;
+    flex-direction: row;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.business-image-wrapper {
+    flex: 0 0 250px;
+    /* height: 250px; */
+    min-width: 340px;
+    
+    max-height: 270px;
+}
+
+.business-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.business-info-wrapper {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+}
+
+.business-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #000;
+}
+
+.business-rating-and-details {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.business-address-text,
+.business-city-and-timings {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+/* Business Actions */
+.business-actions-wrapper {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.business-details-button, 
+.business-enquiry-button, 
+.business-call-button,
+.business-whatsapp-button {
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+}
+
+.business-details-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.business-enquiry-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+}
+
+.business-call-button {
+    background-color: #ffc107;
+    color: black;
+}
+
+.business-whatsapp-button {
+    background-color: #25D366;
+    color: white;
+}
+
+.business-details-button:hover, 
+.business-enquiry-button:hover, 
+.business-call-button:hover,
+.business-whatsapp-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.15);
+}
+
+.business-details-button::before, 
+.business-enquiry-button::before, 
+.business-call-button::before,
+.business-whatsapp-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: all 0.5s ease;
+}
+
+.business-details-button:hover::before, 
+.business-enquiry-button:hover::before, 
+.business-call-button:hover::before,
+.business-whatsapp-button:hover::before {
+    left: 100%;
+}
+
+/* Button Icons */
+.business-actions-wrapper i {
+    margin-right: 5px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 920px) {
+    .business-card {
+        flex-direction: column;
+        
+    }
+    
+    .business-image-wrapper {
+        flex: 0 0 250px;
+        width: 100%;
+    }
+    
+    .business-info-wrapper {
+        padding: 15px;
+    }
+   .business-item-container{
+    margin-left: 20px;
+    margin-right: 20px;
+
+   }
+   
+   
+}
+
+/* Pagination */
+.business-pagination-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 50px;
+    margin-top: 20px;
+}
+
+.pagination-button {
+    padding: 8px 16px;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #007bff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.pagination-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    background-color: #007bff;
+    color: white;
+}
+
+.active-page-button {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.inactive-page-button {
+    opacity: 0.8;
+}

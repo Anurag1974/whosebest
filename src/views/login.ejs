@@ -1,0 +1,456 @@
+
+<link rel="stylesheet" href="/login.css">
+
+<div id="user-login-successModal" class="user-login-modal">
+    <div class="user-login-modal-content">
+        <span class="user-login-close">&times;</span>
+        <div id="user-login-modalIcon" class="user-login-modal-icon">✔</div>
+        <p id="user-login-modalMessage">Default Message</p>
+    </div>
+</div>
+
+<div class="authentication-page-container">
+    <div class="authentication-form-wrapper">
+        <div class="authentication-form-header">
+            <div class="authentication-form-toggle">
+                <button class="authentication-toggle-button active" data-form="login">
+                    Login
+                </button>
+                <button class="authentication-toggle-button" data-form="signup">
+                    Sign Up
+                </button>
+            </div>
+        </div>
+
+        <form class="authentication-login-form authentication-form active" id="login-authentication-form">
+            <div class="authentication-input-group">
+                <label for="user-email-input" class="authentication-input-label">Email Address</label>
+                <div class="authentication-input-container">
+                    <i class="authentication-input-icon authentication-email-icon"></i>
+                    <input 
+                        type="email" 
+                        id="user-email-input" 
+                        class="authentication-input-field" 
+                        placeholder="Enter your email" 
+                        required
+                    >
+                </div>
+                <span class="authentication-input-error" id="email-validation-error">
+                    Please enter a valid email address
+                </span>
+            </div>
+
+            <div class="authentication-input-group">
+                <label for="user-password-input" class="authentication-input-label">Password</label>
+                <div class="authentication-input-container">
+                    <i class="authentication-input-icon authentication-password-icon"></i>
+                    <input 
+                        type="password" 
+                        id="user-password-input" 
+                        class="authentication-input-field" 
+                        placeholder="Enter your password" 
+                        required
+                    >
+                    <!-- <button 
+                        type="button" 
+                        class="authentication-password-toggle-visibility"
+                    >
+                        
+                    </button> -->
+                </div>
+                <span class="authentication-input-error" id="password-validation-error">
+                    Password must be at least 8 characters long
+                </span>
+            </div>
+
+            <div class="authentication-form-actions">
+                <button 
+                    type="submit" 
+                    class="authentication-primary-action-button"
+                >
+                    Sign In
+                </button>
+            </div>
+
+            <!-- <div class="authentication-form-footer">
+                <p class="authentication-signup-prompt">
+                    Don't have an account? 
+                    <a href="#" class="authentication-signup-link">Sign Up</a>
+                </p>
+                <a href="#" class="authentication-forgot-password-link">
+                    Forgot Password?
+                </a>
+            </div> -->
+        </form>
+
+        <form class="authentication-signup-form authentication-form" id="signup-authentication-form" action="/signup" method="post">
+            <div class="authentication-input-group">
+                <label for="signup-username-input" class="authentication-input-label">Name</label>
+                <div class="authentication-input-container">
+                    <i class="authentication-input-icon authentication-username-icon"></i>
+                    <input 
+                        type="text" 
+                        id="signup-username-input" 
+                        class="authentication-input-field" 
+                        placeholder="Enter your name" 
+                        required
+                    >
+                </div>
+                <span class="authentication-input-error" id="username-validation-error">
+                    Username must be at least 3 characters long
+                </span>
+            </div>
+
+            <div class="authentication-input-group">
+                <label for="signup-email-input" class="authentication-input-label">Email Address</label>
+                <div class="authentication-input-container authentication-email-verification-container">
+                    <i class="authentication-input-icon authentication-email-icon"></i>
+                    <input 
+                        type="email" 
+                        id="signup-email-input" 
+                        class="authentication-input-field" 
+                        placeholder="Enter your email" 
+                        required
+                    >
+                    
+                    <button 
+                        type="button" 
+                        id="email-verify-button" 
+                        class="authentication-email-verify-button" onclick="generateOTP()"
+                    >
+                        send OTP
+                    </button>
+                    <!-- <p id="countdown-timer" style="display: none; color: red; font-weight: bold;"></p> -->
+                </div>
+                <p id="countdown-timer" style="display: none; color: grey; font-size: 12px; margin-top: 5px;"></p>
+                <span class="authentication-input-error" id="signup-email-validation-error">
+                    Please enter a valid email address
+                </span>
+            </div>
+
+            <div id="email-otp-verification" class="authentication-input-group ">
+                <label for="signup-email-otp-input" class="authentication-input-label">
+                    Enter OTP sent to <span id="otp-email-display"></span>
+                </label>
+                <div class="authentication-input-container authentication-otp-container">
+                    <i class="authentication-input-icon authentication-otp-icon"></i>
+                    <input 
+                        type="text" 
+                        id="signup-email-otp-input" 
+                        class="authentication-input-field" 
+                        placeholder="6-digit OTP" 
+                        maxlength="6"
+                        required
+                    >
+                    <button 
+                        type="button" 
+                        id="email-otp-confirm-button" 
+                        class="authentication-otp-confirm-button" onclick="verifyOTP()"
+                    >
+                        Confirm
+                    </button>
+                </div>
+                <span class="authentication-input-error" id="signup-email-otp-validation-error">
+                    Please enter a valid 6-digit OTP
+                </span>
+               
+                <div class="authentication-otp-resend-container">
+                     <span id="otp-countdown-timer"></span>
+                   
+                </div>
+            </div>
+
+            <div class="authentication-input-group">
+                <label for="signup-phone-input" class="authentication-input-label">Phone Number</label>
+                <div class="authentication-input-container">
+                    <i class="authentication-input-icon authentication-phone-icon"></i>
+                    <input 
+                        type="tel" 
+                        id="signup-phone-input" 
+                        class="authentication-input-field" 
+                        placeholder="Enter your phone number" 
+                        required
+                    >
+                </div>
+                <span class="authentication-input-error" id="signup-phone-validation-error">
+                    Please enter a valid 10-digit phone number
+                </span>
+            </div>
+
+            <div class="authentication-input-group">
+                <label for="signup-password-input" class="authentication-input-label">Password</label>
+                <div class="authentication-input-container">
+                    <i class="authentication-input-icon authentication-password-icon"></i>
+                    <input 
+                        type="password" 
+                        id="signup-password-input" 
+                        class="authentication-input-field" 
+                        placeholder="Create a password" 
+                        required
+                    >
+                    <!-- <button 
+                        type="button" 
+                        class="authentication-password-toggle-visibility"
+                    >
+                    
+                    </button> -->
+                </div>
+                <span class="authentication-input-error" id="signup-password-validation-error">
+                    Password must be at least 8 characters long
+                </span>
+            </div>
+
+            <!-- <div class="authentication-input-group">
+                <label for="signup-confirm-password-input" class="authentication-input-label">Confirm Password</label>
+                <div class="authentication-input-container">
+                    <i class="authentication-input-icon authentication-password-icon"></i>
+                    <input 
+                        type="password" 
+                        id="signup-confirm-password-input" 
+                        class="authentication-input-field" 
+                        placeholder="Confirm your password" 
+                        required
+                    >
+                </div>
+                <span class="authentication-input-error" id="confirm-password-validation-error">
+                    Passwords do not match
+                </span>
+            </div> -->
+
+            <div class="authentication-form-actions">
+                <button 
+                    type="submit" 
+                    class="authentication-primary-action-button"
+                >
+                    Sign Up
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+       
+    function userLoginShowModal(message, isSuccess = true) {
+    const modal = document.getElementById('user-login-successModal');
+    const messageElement = document.getElementById('user-login-modalMessage');
+    const iconElement = document.getElementById('user-login-modalIcon');
+
+    if (messageElement) {
+        messageElement.innerHTML = message; // Set dynamic message
+    }
+
+    // Change icon based on success or error
+    if (iconElement) {
+        if (isSuccess) {
+            iconElement.innerHTML = "✔"; // Success checkmark
+            iconElement.style.color = "#4CAF50"; // Green color for success
+        } else {
+            iconElement.innerHTML = "Error!"; // Error cross mark
+            iconElement.style.color = "#F44336"; // Red color for errors
+        }
+    }
+
+    modal.style.display = 'block';
+
+    // Close modal when clicking on "X"
+    document.querySelector('.user-login-close').onclick = function () {
+        modal.style.display = 'none';
+    };
+
+    // Close modal when clicking outside of it
+    window.onclick = function (event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    };
+
+    // Auto-hide modal after 3 seconds
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 3000);
+}
+
+    
+    
+async function generateOTP() {
+    let otp = Math.floor(100000 + Math.random() * 900000).toString();
+    let name = document.getElementById("signup-username-input").value;
+    let email = document.getElementById("signup-email-input").value;
+    let button = document.getElementById("email-verify-button");
+    let countdownElement = document.getElementById("countdown-timer");
+
+    if (!email && !name) {
+        userLoginShowModal("Please enter your name and email.", false);
+        return;
+    }
+
+    // Store OTP locally
+    localStorage.setItem("otp", otp);
+
+    try {
+        let response = await fetch("/send-otp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, otp }),
+        });
+
+        let result = await response.json();
+        console.log("Server Response:", result);
+
+        if (result.success) {
+            userLoginShowModal("OTP sent successfully!", true);
+
+            // Disable button and start countdown only if OTP is sent successfully
+            button.disabled = true;
+            button.style.backgroundColor = "grey";
+            button.style.cursor = "not-allowed";
+
+            // Start Countdown
+            countdownElement.style.display = "block"; // Show the countdown
+            let timeLeft = 60; // 60 seconds
+
+            let countdownInterval = setInterval(() => {
+                countdownElement.textContent = `Retry in ${timeLeft} seconds`;
+                timeLeft--;
+
+                if (timeLeft < 0) {
+                    clearInterval(countdownInterval);
+                    countdownElement.style.display = "none"; // Hide the countdown
+                    button.disabled = false;
+                    button.style.backgroundColor = ""; // Reset to default
+                    button.style.cursor = "pointer";
+                }
+            }, 1000); // Update every second
+        } else {
+            userLoginShowModal(result.message, false);
+        }
+    } catch (error) {
+        console.error("Error sending OTP:", error);
+        userLoginShowModal("An error occurred while sending OTP.", false);
+    }
+}
+
+
+function verifyOTP() {
+    let email = document.getElementById("signup-email-input").value;
+    let otp = document.getElementById("signup-email-otp-input").value;
+
+    fetch("/verify-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp }),
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        userLoginShowModal(data.message, data.success); // Show popup with success/failure indication
+    })
+    .catch((error) => {
+        console.error("Error verifying OTP:", error);
+        userLoginShowModal("An error occurred while verifying OTP", false);
+    });
+}
+
+    const toggleButtons = document.querySelectorAll('.authentication-toggle-button');
+    const forms = document.querySelectorAll('.authentication-form');
+
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all buttons and forms
+            toggleButtons.forEach(btn => btn.classList.remove('active'));
+            forms.forEach(form => form.classList.remove('active'));
+
+            // Add active class to clicked button and corresponding form
+            button.classList.add('active');
+            document.querySelector(`.authentication-${button.dataset.form}-form`).classList.add('active');
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const signupForm = document.getElementById("signup-authentication-form");
+
+    signupForm.addEventListener("submit", async function (event) {
+    event.preventDefault(); // Prevent default form submission
+
+    // Get form values
+    const formData = {
+        username: capitalizeFirstLetter(document.getElementById("signup-username-input").value),
+        email: document.getElementById("signup-email-input").value,
+        phone: document.getElementById("signup-phone-input").value,
+        password: document.getElementById("signup-password-input").value,
+        otp: document.getElementById("signup-email-otp-input").value, // If required
+    };
+
+    try {
+        const response = await fetch("/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json", // Send data as JSON
+            },
+            body: JSON.stringify(formData), // Convert to JSON string
+        });
+
+        const result = await response.json();
+        console.log("Server Response:", result);
+
+        if (result.success) {
+            userLoginShowModal(" SignUp successful! Redirecting...", true);
+            setTimeout(() => {
+                window.location.href = "/login"; // Redirect after showing modal
+            }, 2000);
+        } else {
+            userLoginShowModal(`SignUp failed: ${result.message}`, false);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        userLoginShowModal(" An error occurred while signing up.", false);
+    }
+});
+
+});
+// login 
+
+document.addEventListener("DOMContentLoaded", function () {
+    const loginForm = document.getElementById("login-authentication-form");
+
+    loginForm.addEventListener("submit", async function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Get form values
+        const formData = {
+            email: document.getElementById("user-email-input").value,
+            password: document.getElementById("user-password-input").value,
+        };
+
+        try {
+            const response = await fetch("/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json", // Ensure JSON data is sent
+                },
+                body: JSON.stringify(formData), // Convert data to JSON string
+            });
+
+            const result = await response.json();
+            console.log("Server Response:", result);
+
+            if (result.success) {
+                userLoginShowModal("Login successful!", true); // Show success popup
+                setTimeout(() => {
+                    window.location.href = "/"; // Redirect to homepage or dashboard
+                }, 2000);
+            } else {
+                userLoginShowModal(`Login failed: ${result.message}`, false); // Show error popup
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            userLoginShowModal(" An error occurred while logging in. Please try again.", false);
+        }
+    });
+});
+
+
+
+
+   
+</script>

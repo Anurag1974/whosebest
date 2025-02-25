@@ -1,33 +1,78 @@
-// import multer from 'multer';
+// import fs from 'fs';
 // import path from 'path';
+// import multer from 'multer';
 
+// // Multer storage configuration
 // const storage = multer.diskStorage({
 //     destination: (req, file, cb) => {
-//         cb(null, 'uploads/'); // Directory for file uploads
+//         const { businessId, ownerId,userId ,driverUserId} = req.body;
+//         console.log("Received:", { businessId, ownerId });
+
+//         if (businessId && ownerId) {
+//             // Define paths
+//             const ownerFolderPath = path.join('uploads', `${ownerId}`);
+//             const businessFolderPath = path.join(ownerFolderPath, `${businessId}`);
+//             const thumbnailFolderPath = path.join(businessFolderPath, 'thumbnail');
+
+//             // Check if folders exist, create if not
+//             if (!fs.existsSync(ownerFolderPath)) {
+//                 fs.mkdirSync(ownerFolderPath, { recursive: true });
+//             }
+//             if (!fs.existsSync(businessFolderPath)) {
+//                 fs.mkdirSync(businessFolderPath, { recursive: true });
+//             }
+//             if (!fs.existsSync(thumbnailFolderPath)) {
+//                 fs.mkdirSync(thumbnailFolderPath, { recursive: true });
+//             }
+
+//             // Store thumbnails separately
+//             if (file.fieldname === 'thumbnail') {
+//                 cb(null, thumbnailFolderPath);
+//             } else {
+//                 cb(null, businessFolderPath);
+//             }
+//         } else if (userId) { // Check for profile images
+//             const ownerFolderPath = path.join('uploads', `${userId}`);
+//             const profileFolderPath = path.join(ownerFolderPath, 'profile');
+
+//             // Check and create profile folders
+//             if (!fs.existsSync(ownerFolderPath)) {
+//                 fs.mkdirSync(ownerFolderPath, { recursive: true });
+//             }
+//             if (!fs.existsSync(profileFolderPath)) {
+//                 fs.mkdirSync(profileFolderPath, { recursive: true });
+//             }
+
+//             cb(null, profileFolderPath);
+//         } else {
+//             cb(new Error("ownerId is required for profile images"), null);
+//         }
 //     },
 //     filename: (req, file, cb) => {
-//         // Generate a new file name
+//         const fileExtension = path.extname(file.originalname);
 //         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-//         const newFileName = `${uniqueSuffix}${path.extname(file.originalname)}`; // Keep the file extension
-//         cb(null, newFileName); // Save the file with the new name
+//         const newFileName = `${uniqueSuffix}${fileExtension}`;
+
+//         cb(null, newFileName);
 //     }
 // });
 
-// const fileFilter = (req, file, cb) => {
-//     if (file.mimetype.startsWith('image/')) {
-//         cb(null, true);
-//     } else {
-//         cb(new Error('Only image files are allowed'), false);
-//     }
-// };
-
+// // Set up multer with size and file type restrictions
 // const upload = multer({
 //     storage,
-//     limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max file size
-//     fileFilter
+//     limits: { fileSize: 3 * 1024 * 1024 }, // 3MB max file size
+//     fileFilter: (req, file, cb) => {
+//         if (file.mimetype.startsWith('image/')) {
+//             cb(null, true);
+//         } else {
+//             cb(new Error('Only image files are allowed'), false);
+//         }
+//     }
 // });
 
-// export default upload;
+// export default { upload };
+
+
 import fs from 'fs';
 import path from 'path';
 import multer from 'multer';
@@ -35,46 +80,77 @@ import multer from 'multer';
 // Multer storage configuration
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const { businessId, ownerId } = req.body;
+        const { businessId, ownerId, userId, driverUserId } = req.body;
+        console.log("Received:", { businessId, ownerId, userId, driverUserId });
 
-        // Check if it's a business image upload or a user image upload
         if (businessId && ownerId) {
-            // For business image upload
-            const ownerFolderPath = path.join('uploads', `${ownerId}`); // Example: uploads/18
-            const businessFolderPath = path.join(ownerFolderPath, `${businessId}`); // Example: uploads/18/2255
+            // Define paths
+            const ownerFolderPath = path.join('uploads', `${ownerId}`);
+            const businessFolderPath = path.join(ownerFolderPath, `${businessId}`);
+            const thumbnailFolderPath = path.join(businessFolderPath, 'thumbnail');
 
-            // Create directories if they don't exist
-            fs.mkdirSync(ownerFolderPath, { recursive: true });
-            fs.mkdirSync(businessFolderPath, { recursive: true });
+            // Check if folders exist, create if not
+            if (!fs.existsSync(ownerFolderPath)) {
+                fs.mkdirSync(ownerFolderPath, { recursive: true });
+            }
+            if (!fs.existsSync(businessFolderPath)) {
+                fs.mkdirSync(businessFolderPath, { recursive: true });
+            }
+            if (!fs.existsSync(thumbnailFolderPath)) {
+                fs.mkdirSync(thumbnailFolderPath, { recursive: true });
+            }
 
-            // Provide the final folder path for saving the file
-            cb(null, businessFolderPath);
+            // Store thumbnails separately
+            if (file.fieldname === 'thumbnail') {
+                cb(null, thumbnailFolderPath);
+            } else {
+                cb(null, businessFolderPath);
+            }
+        } else if (userId) { 
+            // Handling Profile Images
+            const userFolderPath = path.join('uploads', `${userId}`);
+            const profileFolderPath = path.join(userFolderPath, 'profile');
+
+            // Check and create profile folder
+            if (!fs.existsSync(userFolderPath)) {
+                fs.mkdirSync(userFolderPath, { recursive: true });
+            }
+            if (!fs.existsSync(profileFolderPath)) {
+                fs.mkdirSync(profileFolderPath, { recursive: true });
+            }
+
+            cb(null, profileFolderPath);
+        } else if (driverUserId) { 
+            // Handling Driver Images
+            const driverFolderPath = path.join('uploads', `${driverUserId}`);
+            const driverImagesFolder = path.join(driverFolderPath, 'driver');
+
+            // Check if driverUserId folder exists, create if not
+            if (!fs.existsSync(driverFolderPath)) {
+                fs.mkdirSync(driverFolderPath, { recursive: true });
+            }
+            if (!fs.existsSync(driverImagesFolder)) {
+                fs.mkdirSync(driverImagesFolder, { recursive: true });
+            }
+
+            cb(null, driverImagesFolder);
         } else {
-            // For user image upload (No businessId and ownerId)
-            const userFolderPath = path.join('uploads'); // Example: uploads/users
-
-            // Create directory if it doesn't exist
-            fs.mkdirSync(userFolderPath, { recursive: true });
-
-            // Provide the folder path for saving the user image
-            cb(null, userFolderPath);
+            cb(new Error("ownerId, userId, or driverUserId is required"), null);
         }
     },
     filename: (req, file, cb) => {
-        // Sanitize file name to avoid conflicts
         const fileExtension = path.extname(file.originalname);
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
         const newFileName = `${uniqueSuffix}${fileExtension}`;
 
-        // Save the file with the new unique name
         cb(null, newFileName);
     }
 });
 
-// Set up multer to handle image uploads with size and file type restrictions
+// Set up multer with size and file type restrictions
 const upload = multer({
     storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max file size
+    limits: { fileSize: 3 * 1024 * 1024 }, // 3MB max file size
     fileFilter: (req, file, cb) => {
         if (file.mimetype.startsWith('image/')) {
             cb(null, true);
@@ -84,5 +160,4 @@ const upload = multer({
     }
 });
 
-export default upload;
-
+export default { upload };

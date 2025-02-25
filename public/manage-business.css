@@ -1,0 +1,703 @@
+/* Modern Elegant Design */
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --background-color: #f4f6f7;
+    --text-color: #2c3e50;
+    --accent-color: #e74c3c;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* General Reset and Base Styles */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+  }
+  
+  /* body { */
+    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+  } */
+  
+  /* Responsive Container */
+  .main-container-business-management-interface {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background-color: white;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+  }
+  
+  /* Heading */
+  .heading-primary-business-management-page {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    position: relative;
+  }
+  
+  .card-header-business-navigation-tab-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+  
+  .list-business-navigation-tab-buttons {
+    display: flex;
+    list-style: none;
+    gap: 15px;
+  }
+  
+  .list-item-business-tab-navigation-button {
+    position: relative;
+  }
+  
+  .button-tab-navigation {
+    text-decoration: none;
+    padding: 12px 20px;
+    color: var(--text-color);
+    font-weight: 500;
+    border-radius: 40px;
+    position: relative;
+    overflow: hidden;
+    background-color: transparent;
+    border: 2px solid transparent;
+  }
+  
+  .button-tab-navigation:hover {
+    color: var(--secondary-color);
+  }
+  
+  .tab-button {
+      cursor: pointer;
+  }
+  
+  .tab-button.active {
+    background: linear-gradient(135deg, #2575fc, #6a11cb);
+    color: white;
+    box-shadow: var(--box-shadow);
+  }
+  
+  .card-body-container-business-tab-content {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 30px;
+  }
+  
+  .tab-content {
+    display: none;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  
+  .tab-content.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Form Styles */
+  .form-group-container-business-name-input-section,
+  .form-group-container-business-address-input-section,
+  .form-group-container-business-city-input-section,
+  .form-group-container-business-state-input-section,
+  .form-group-container-business-category-input-section,
+  .form-group-container-business-phone-input-section,
+  .form-group-container-business-website-input-section,
+  .form-group-container-business-image-upload-section {
+    margin-bottom: 25px;
+  }
+  
+  .label-input-field-business-name,
+  .label-input-field-business-address,
+  .label-input-field-business-city-name,
+  .label-input-field-business-state-name,
+  .label-input-field-business-category-type,
+  .label-input-field-business-phone-number,
+  .label-input-field-business-website-url,
+  .label-input-field-business-upload-images {
+    display: block;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    color: var(--primary-color);
+    font-weight: 500;
+  }
+  
+  .input-text-field-business-name-details,
+  .input-text-field-business-address-details,
+  .input-text-field-business-city-details,
+  .input-text-field-business-state-details,
+  .input-text-field-business-category-details,
+  .input-text-field-business-phone-details,
+  .input-text-field-business-website-details {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid rgba(44, 62, 80, 0.2);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  
+  .input-text-field-business-name-details:focus,
+  .input-text-field-business-address-details:focus,
+  .input-text-field-business-city-details:focus,
+  .input-text-field-business-state-details:focus,
+  .input-text-field-business-category-details:focus,
+  .input-text-field-business-phone-details:focus,
+  .input-text-field-business-website-details:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+  }
+  
+  .input-file-field-business-image-upload {
+    display: block;
+    margin-top: 10px;
+  }
+  
+  .button-submit-form-save-business-details,
+  .button-submit-form-save-business-hours {
+    padding: 12px 25px;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: var(--box-shadow);
+  }
+  
+  .button-submit-form-save-business-details:hover,
+  .button-submit-form-save-business-hours:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-3px);
+  }
+  
+  /* Business Details Tab Enhancements */
+  .business-details-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(44, 62, 80, 0.1);
+  }
+  
+  .business-details-description {
+    color: var(--text-color);
+    opacity: 0.7;
+    max-width: 700px;
+    margin: 10px auto;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  
+  .image-upload-wrapper {
+    border: 2px dashed rgba(44, 62, 80, 0.2);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    text-align: center;
+    transition: border-color 0.3s ease;
+  }
+  
+  .image-upload-wrapper:hover {
+    border-color: var(--secondary-color);
+  }
+  
+  .image-upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: rgba(44, 62, 80, 0.6);
+  }
+  
+  .image-upload-placeholder span {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+  
+  .image-upload-placeholder small {
+    font-size: 0.8rem;
+    color: rgba(44, 62, 80, 0.5);
+  }
+  
+  .container-preview-business-uploaded-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .form-actions-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+  }
+  
+  .button-submit-form-save-business-details {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .button-submit-form-save-business-details .button-icon {
+    font-size: 1.2rem;
+  }
+  
+  .button-cancel-form-edit {
+    background-color: transparent;
+    color: var(--text-color);
+    border: 2px solid var(--text-color);
+    padding: 12px 25px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .button-cancel-form-edit:hover {
+    background-color: var(--text-color);
+    color: white;
+  }
+  
+  @media (max-width: 768px) {
+    .main-container-business-management-interface {
+      padding: 20px 10px;
+    }
+  
+    .heading-primary-business-management-page {
+      font-size: 2rem;
+    }
+  
+    .list-business-navigation-tab-buttons {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+    }
+  
+    .button-tab-navigation {
+      width: 100%;
+      text-align: center;
+    }
+  }
+  
+  /* Feedback Tab Styles */
+  .feedback-tab-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .feedback-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .feedback-header-title {
+      font-size: 1.8rem;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+    
+    .feedback-header-description {
+      color: rgba(44, 62, 80, 0.7);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .list-container-customer-feedback-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    
+    .feedback-item-container-customer-review {
+      background-color: white;
+      border-radius: var(--border-radius);
+      padding: 20px;
+      border: 1px solid #e0e0e0;
+      /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      display: block;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .feedback-item-container-customer-review:hover {
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    
+    .feedback-heading-customer-name {
+      font-size: 1.1rem;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    
+    .feedback-text-review-content {
+      color: rgba(44, 62, 80, 0.8);
+      line-height: 1.6;
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .feedback-text-rating-stars {
+      display: block;
+      color: #ffc107;
+      font-size: 1rem;
+      text-align: right;
+    }
+    
+    .feedback-text-rating-stars::before {
+      content: '★ ';
+      color: #ffc107;
+    }
+    
+    .feedback-date {
+      color: rgba(44, 62, 80, 0.6);
+      font-size: 0.8rem;
+      margin-top: 10px;
+      text-align: right;
+    }
+    
+    .no-feedback-message {
+      text-align: center;
+      color: rgba(44, 62, 80, 0.7);
+      padding: 40px;
+      background-color: rgba(44, 62, 80, 0.05);
+      border-radius: var(--border-radius);
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .list-container-customer-feedback-items {
+        grid-template-columns: 1fr;
+      }
+    
+      .feedback-header-title {
+        font-size: 1.5rem;
+      }
+    
+      .feedback-header-description {
+        font-size: 0.9rem;
+      }
+    }
+    
+    /* Feedback Interaction Styles */
+    .feedback-interaction-section {
+      margin-top: 30px;
+      text-align: center;
+    }
+    
+    .button-add-new-review {
+      background: linear-gradient(135deg, #2575fc, #6a11cb);
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .button-add-new-review:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+  
+  /* Business Hours Tab Styles */
+  .business-hours-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .business-hours-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .heading-secondary-business-days-selection {
+      font-size: 1.8rem;
+      color: var(--primary-color);
+      margin-bottom: 15px;
+    }
+    
+    .business-hours-description {
+      color: rgba(44, 62, 80, 0.7);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+      font-size: 0.9rem;
+    }
+    
+    .form-business-hours-schedule-details {
+      background-color: white;
+      border-radius: var(--border-radius);
+      padding: 30px;
+      border: 2px solid #e0e0e0;
+    }
+    
+    .business-days-selection-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    
+    .checkbox-label-business-operating-day {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.3s ease;
+      padding: 10px;
+  
+      border: 2px solid transparent;
+    }
+    
+    .checkbox-label-business-operating-day input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--secondary-color);
+      border-radius: 4px;
+      outline: none;
+      margin-right: 10px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .checkbox-label-business-operating-day input[type="checkbox"]:checked {
+      background-color: var(--secondary-color);
+    }
+    
+    .checkbox-label-business-operating-day input[type="checkbox"]:checked::after {
+      content: '✔';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 12px;
+    }
+    
+    .checkbox-label-business-operating-day input[type="checkbox"]:checked + span {
+      color: var(--secondary-color);
+    }
+    
+    .checkbox-label-business-operating-day:hover {
+      background-color: rgba(52, 152, 219, 0.1);
+      border-color: var(--secondary-color);
+    }
+    
+    .time-picker-container-business-hours {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 30px;
+      background-color: rgba(44, 62, 80, 0.05);
+      padding: 20px;
+      border-radius: var(--border-radius);
+    }
+    
+    .heading-tertiary-business-operating-hours {
+      font-size: 1.2rem;
+      color: var(--primary-color);
+      margin-bottom: 15px;
+    }
+    
+    .time-input-opening-hours-business,
+    .time-input-closing-hours-business {
+      padding: 10px;
+      border: 2px solid rgba(44, 62, 80, 0.2);
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      width: 150px;
+      transition: border-color 0.3s ease;
+    }
+    
+    .time-input-opening-hours-business:focus,
+    .time-input-closing-hours-business:focus {
+      outline: none;
+      border-color: var(--secondary-color);
+    }
+    
+    .button-submit-form-save-business-hours {
+      display: block;
+      width: 100%;
+      margin-top: 30px;
+      padding: 12px 25px;
+      background: linear-gradient(135deg, #2575fc, #6a11cb);
+      color: white;
+      border: none;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .button-submit-form-save-business-hours:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .business-days-selection-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    
+      .time-picker-container-business-hours {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    
+      .time-input-opening-hours-business,
+      .time-input-closing-hours-business {
+        width: 100%;
+        margin-bottom: 15px;
+      }
+    
+      .heading-secondary-business-days-selection {
+        font-size: 1.5rem;
+      }
+    }
+
+
+    
+.cab-taxi-driver-forms-suggestions-container {
+  position: relative;
+  width: 100%;
+}
+
+.cab-taxi-driver-forms-suggestions-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  margin-top: -1px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: none;
+}
+
+.cab-taxi-driver-forms-suggestions-list.active {
+  display: block;
+}
+
+.cab-taxi-driver-forms-suggestion-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #333;
+  transition: background-color 0.2s;
+}
+
+.cab-taxi-driver-forms-suggestion-item:hover,
+.cab-taxi-driver-forms-suggestion-item.selected {
+  background-color: #f5f5f5;
+}
+
+.cab-taxi-driver-forms-suggestion-item strong {
+  color: #2196F3;
+  font-weight: 600;
+}
+
+/* Scrollbar styles for suggestions list */
+.cab-taxi-driver-forms-suggestions-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.cab-taxi-driver-forms-suggestions-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 0 0 4px 0;
+}
+
+.cab-taxi-driver-forms-suggestions-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.cab-taxi-driver-forms-suggestions-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+  
+    /* popper */
+    .manage-business-details-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      animation: manage-business-details-fadeIn 0.3s ease-in-out;
+  }
+  
+  .manage-business-details-modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 12px;
+      width: 350px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      animation: manage-business-details-slideIn 0.3s ease-in-out;
+      position: relative;
+  }
+  
+  .manage-business-details-modal-icon {
+      font-size: 40px;
+      color: #4CAF50;
+      margin-bottom: 10px;
+  }
+  
+  .manage-business-details-close {
+      color: #888;
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.2s ease-in-out;
+  }
+  
+  .manage-business-details-close:hover {
+      color: #555;
+  }
+  
+  /* Animations */
+  @keyframes manage-business-details-fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+  }
+  
+  @keyframes manage-business-details-slideIn {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+  }
+  

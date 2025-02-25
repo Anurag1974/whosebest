@@ -10,10 +10,22 @@ import { initializeToggle } from "./src/middleware/toggleMiddleware.js";
 import multer from 'multer';
 import { name } from "ejs";
 import { fileURLToPath } from "url";  
+import cors from 'cors'
 
 
 const server = express();
 const PORT = process.env.PORT || "3100";
+
+server.use(cors({
+    origin: '*',  // Change to specific domain if needed
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    preflightContinue: false,
+    optionsSuccessStatus: 204
+}));
+server.options('*', cors()); // Handle preflight requests
+
 
 // middleware
 const upload = multer({dest: 'uploads/'});
@@ -28,9 +40,6 @@ server.use(express.static('public'));
 
 
 server.use(express.urlencoded({ extended: true }));
-
-
-
 server.use(session({
     secret: process.env.SESSION_SECRET,       // Replace with a secure key
     resave: false,
@@ -40,8 +49,12 @@ server.use(session({
 
 server.set('view engine', 'ejs');
 server.set('views', path.join(path.resolve(), 'src', 'views'))
+
+
+
 server.use(ejsLayouts);
 server.use(express.json());
+// server.use(express.urlencoded({ extended: true }));
 server.use(initializeToggle);
 
 server.use((req, res, next) => {

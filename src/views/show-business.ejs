@@ -1,63 +1,140 @@
-<div class="container my-5">
-    
-    <h1 class="text-center mb-4">List of Businesses :<%=category%></h1>
-    <div class="row">
-        <% if (businesses && businesses.length > 0) { %>
-            <% businesses.forEach(business => { %>
-                <div class="col-12 mb-4">
-                    <div class="card p-3 shadow-lg rounded-3">
-                        <div class="row align-items-center">
+<link rel="stylesheet" href="/list-of-business.css">
+
+<div class="business-listing-main-container">
+    <!-- Header Section -->
+    <!-- <div class="business-header-container">
+        <h1 class="business-header-title">Businesses</h1>
+    </div> -->
+
+    <!-- Business List -->
+    <h1 class="business-listing-title">List of Businesses</h1>
+    <div class="business-listing-grid">
+        <div class="business-list-container">
+            <% if (businesses && businesses.length> 0) { %>
+                <% businesses.forEach(business=> { %>
+                    <div class="business-item-container">
+                        <div class="business-card">
+
                             <!-- Image Section -->
-                            <div class="col-md-3">
-                                <img src="<%= business.image_source %>" class="img-fluid rounded" alt="Business Image"
-                                     style="width: 100%; object-fit: cover; height: 200px;">
+                            <div class="business-image-wrapper">
+                                <img src="<%= business.image_source || '/images/dummy/dummy business.jpeg' %>"
+                                    alt="Business Image" class="business-image">
                             </div>
-    
+
                             <!-- Business Info Section -->
-                            <div class="col-md-6 d-flex flex-column">
-                                <h4 class="mb-2"><%= business.business_name %></h4>
-                                <p class="mb-1">
+                            <div class="business-info-wrapper">
+                                <h4 class="business-name">
+                                    <%= business.business_name %>
+                                </h4>
+
+                                <p class="business-rating-and-details">
                                     <% if (business.rating) { %>
-                                        <span class="badge bg-success"><%= business.rating %>⭐</span>
-                                    <% } %>
-                                    <% if (business.total_ratings) { %>
-                                        <strong><%= business.total_ratings %> Ratings</strong>
-                                    <% } %>
-                                    <% if (business.years_in_business) { %>
-                                        • <%= business.years_in_business %> Year(s) in Business
-                                    <% } %>
+                                        <span class="business-rating-badge">
+                                            <%= business.rating %>⭐
+                                        </span>
+                                        <% } %>
+                                            <% if (business.total_ratings) { %>
+                                                <strong class="business-total-ratings-text">
+                                                    <%= business.total_ratings %> Ratings
+                                                </strong>
+                                                <% } %>
+                                                    <% if (business.years_in_business) { %>
+                                                        <span class="business-years-in-operation">• <%=
+                                                                business.years_in_business %> Year(s) in Business</span>
+                                                        <% } %>
                                 </p>
+
                                 <% if (business.address) { %>
-                                    <p class="mb-1 text-muted small">
-                                        <strong>Address:</strong> <%= business.address %>
+                                    <p class="business-address-text"><strong>Address:</strong>
+                                        <%= business.address %>
                                     </p>
-                                <% } %>
-                                <% if (business.city && business.timings) { %>
-                                    <p class="text-muted"><%= business.city %> • <%= business.timings %></p>
-                                <% } %>
-    
-                               <!-- Button Section -->
-                                <div class="col-md-12 d-flex justify-content-start align-items-center flex-wrap mt-4">
-                                    <a href="business-details/<%= business.id %>" class="btn btn-primary btn-sm  ">View Details</a>
-                                    <button class="btn btn-primary btn-sm mb-2 ">Enquire Now</button>
-                                    <% if (business.phone) { %>
-                                        <a href="tel:<%= business.phone %>" class="btn btn-primary btn-sm  ">Call</a>
                                     <% } %>
-                                    <% if (business.whatsapp) { %>
-                                        <a href="https://wa.me/<%= business.whatsapp %>" target="_blank" class="btn btn-outline-dark btn-sm mb-2">WhatsApp</a>
-                                    <% } %>
-                                </div>
+
+                                        <% if (business.city && business.timings) { %>
+                                            <p class="business-city-and-timings">
+                                                <%= business.city %> •
+                                                    <%= business.timings %>
+                                            </p>
+                                            <% } %>
+
+                                                <!-- Action Buttons -->
+                                                <div class="business-actions-wrapper">
+                                                    <a href="business-details/<%= business.id %>"
+                                                        class="business-details-button">
+                                                        <i class="fas fa-info-circle"></i> View Details
+                                                    </a>
+                                                    <button class="business-enquiry-button">
+                                                        <i class="fas fa-envelope"></i> Enquire Now
+                                                    </button>
+                                                    <% if (business.phone) { %>
+                                                        <a href="tel:<%= business.phone %>"
+                                                            class="business-call-button">
+                                                            <i class="fas fa-phone"></i> Call
+                                                        </a>
+                                                        <% } %>
+                                                            <% if (business.whatsapp) { %>
+                                                                <a href="https://wa.me/<%= business.whatsapp %>"
+                                                                    target="_blank" class="business-whatsapp-button">
+                                                                    <i class="fab fa-whatsapp"></i> WhatsApp
+                                                                </a>
+                                                                <% } %>
+                                                </div>
+
                             </div>
+                            <!-- End Business Info -->
                         </div>
+                        <!-- End Business Card -->
                     </div>
-                </div>
-            <% }) %>
-        <% } else { %>
-            <div class="col-12">
-                <p class="text-center">No businesses found.</p>
-            </div>
-        <% } %>
+                    <!-- End Business Item -->
+                    <% }) %>
+                        <% } else { %>
+                            <div class="no-business-message">
+                                <p>No businesses found.</p>
+                            </div>
+                            <% } %>
+        </div>
     </div>
 
-    
+    <!-- Pagination Section -->
+    <div class="business-pagination-controls">
+        <% if (currentPage> 1) { %>
+            <a href="/show-business?<%= category ? 'category=' + category + '&' : '' %>city=<%= query %>&page=<%= currentPage - 1 %>"
+                class="pagination-button previous-page-button">Back</a>
+            <% } %>
+
+                <% let startPage=Math.max(1, currentPage - 1); let endPage=Math.min(totalPages, currentPage + 1); if
+                    (startPage> 1) {
+                    %>
+                    <a href="/show-business?<%= category ? 'category=' + category + '&' : '' %>city=<%= query %>&page=1"
+                        class="pagination-button inactive-page-button">1</a>
+                    <% if (startPage> 2) { %>
+                        <span class="pagination-dots">...</span>
+                        <% } %>
+                            <% } %>
+
+                                <% for (let i=startPage; i <=endPage; i++) { %>
+                                    <a href="/show-business?<%= category ? 'category=' + category + '&' : '' %>city=<%= query %>&page=<%= i %>"
+                                        class="pagination-button <%= i === currentPage ? 'active-page-button' : 'inactive-page-button' %>">
+                                        <%= i %>
+                                    </a>
+                                    <% } %>
+
+                                        <% if (endPage < totalPages) { %>
+                                            <% if (endPage < totalPages - 1) { %>
+                                                <span class="pagination-dots">...</span>
+                                                <% } %>
+                                                    <a href="/show-business?<%= category ? 'category=' + category + '&' : '' %>city=<%= query %>&page=<%= totalPages %>"
+                                                        class="pagination-button inactive-page-button">
+                                                        <%= totalPages %>
+                                                    </a>
+                                                    <% } %>
+
+                                                        <% if (currentPage < totalPages) { %>
+                                                            <a href="/show-business?<%= category ? 'category=' + category + '&' : '' %>city=<%= query %>&page=<%= currentPage + 1 %>"
+                                                                class="pagination-button next-page-button">Next</a>
+                                                         <% } %>
+    </div>
+
+
+
 </div>

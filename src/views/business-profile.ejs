@@ -1,0 +1,175 @@
+
+<link rel="stylesheet" href="/business-profile.css">
+<div class="business-profile-main-container">
+    <div class="hero-banner-section">
+        <div class="hero-banner-content-wrapper">
+            <div class="hero-banner-text-block">
+                <h1>Grow your business with a <span class="hero-banner-highlight-text">powerful online presence</span></h1>
+                <p class="hero-banner-description-text">
+                    Create a stunning business profile that helps you connect with customers, showcase your products, and grow your business online.
+                </p>
+                <% if (typeof user !== 'undefined' && user) { %>
+                <a href="/your-business/<%=user.id%>" class="universal-btn" style=" padding: 10px 17px;">Get started</a>
+                <% } 
+                else { %>
+                     <div><a href="/login" class="universal-btn ">Create your profile</a></div> 
+                     <% } %>
+            </div>
+            <div class="hero-banner-image-wrapper">
+                <img src="https://illustrations.popsy.co/white/graphic-design.svg" 
+                     alt="Business Growth Illustration" class="hero-banner-main-image">
+            </div>
+        </div>
+    </div>
+
+    <div class="feature-highlights-section">
+        <div class="feature-highlights-grid">
+            <div class="feature-highlight-card">
+                <div class="feature-highlight-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <h5 class="feature-highlight-title">Quick Setup</h5>
+                <p class="feature-highlight-description">Create your business profile in minutes with our easy-to-use platform</p>
+            </div>
+
+            <div class="feature-highlight-card">
+                <div class="feature-highlight-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                </div>
+                <h5 class="feature-highlight-title">Increased Visibility</h5>
+                <p class="feature-highlight-description">Get discovered by customers searching for businesses like yours</p>
+            </div>
+
+            <div class="feature-highlight-card">
+                <div class="feature-highlight-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                </div>
+                <h5 class="feature-highlight-title">Track Performance</h5>
+                <p class="feature-highlight-description">Monitor your profile's performance with detailed analytics</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="business-showcase-section">
+        <h1 class="section-main-heading" style="text-align: center;">Build your online presence in three easy steps</h1>
+        <p class="section-main-description" style="text-align: center;">Get started with your free business profile today and reach more customers</p>
+        <div class="business-steps-grid">
+            <div class="business-step-card">
+                <h1 class="step-number-heading">1</h1>
+                <h2 class="step-title-heading">Create Profile</h2>
+                <p class="step-description-text">Sign up and create your business profile with essential information</p>
+            </div>
+            <div class="business-step-card">
+                <h1 class="step-number-heading">2</h1>
+                <h2 class="step-title-heading">Add Details</h2>
+                <p class="step-description-text">Customize your profile with photos, services, and business hours</p>
+            </div>
+            <div class="business-step-card">
+                <h1 class="step-number-heading">3</h1>
+                <h2 class="step-title-heading">Connect</h2>
+                <p class="step-description-text">Start engaging with customers and grow your business</p>
+            </div>
+        </div>
+        <div class="two-column-content-grid">
+            <div class="section-image-container">
+                <img src="https://illustrations.popsy.co/white/success.svg" 
+                     alt="Business Success" class="section-feature-image">
+            </div>
+            <div class="offerings-text-content">
+                <h2 class="section-main-heading" >Everything you need to succeed online</h2>
+                <p class="section-main-description " >
+                    Our platform provides all the tools and features you need to establish a strong online presence and connect with customers effectively.
+                </p>
+                <% if (typeof user !== 'undefined' && user) { %>
+                    <a href="/your-business/<%=user.id%>" class="universal-btn " style="margin-top:-20px">Get started</a>
+                    <% } 
+                    else { %>
+                         <div><a href="/login" class="universal-btn " style="margin-top:-20px">Create your profile</a></div> 
+                         <% } %>
+            </div>
+        </div>
+    </div>
+
+    <div class="business-faq-section">
+        <h1 class="section-main-heading">Frequently Asked Questions</h1>
+        <div class="business-faq-container">
+            <div class="business-faq-item">
+                <h3 class="business-faq-question">Is it really free to create a business profile?</h3>
+                <div class="business-faq-answer">
+                    <p>Yes, creating and maintaining a business profile is completely free. We believe in helping businesses grow without any upfront costs.</p>
+                </div>
+            </div>
+            <div class="business-faq-item">
+                <h3 class="business-faq-question">How long does it take to set up a profile?</h3>
+                <div class="business-faq-answer">
+                    <p>You can create your basic profile in less than 5 minutes. Adding more details and customizing your profile might take 15-20 minutes.</p>
+                </div>
+            </div>
+            <div class="business-faq-item">
+                <h3 class="business-faq-question">Can I update my profile information later?</h3>
+                <div class="business-faq-answer">
+                    <p>Yes, you can update your profile information, photos, and other details anytime through your dashboard.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+
+let endDate = localStorage.getItem("countdownEndDate");
+
+if (!endDate) {
+    endDate = new Date();
+    endDate.setDate(endDate.getDate() + 180);
+    localStorage.setItem("countdownEndDate", endDate);
+} else {
+    endDate = new Date(endDate);
+}
+
+function updateCountdown() {
+    const now = new Date();
+    const timeDiff = endDate - now;
+
+    if (timeDiff <= 0) {
+        document.getElementById("days").innerText = "00";
+        document.getElementById("hours").innerText = "00";
+        document.getElementById("minutes").innerText = "00";
+        document.getElementById("seconds").innerText = "00";
+        return;
+    }
+
+    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((timeDiff / (1000 * 60)) % 60);
+    const seconds = Math.floor((timeDiff / 1000) % 60);
+
+    document.getElementById("days").innerText = days.toString().padStart(2, '0');
+    document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+    document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+    document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+
+    updateProgress(days, 180, "days-progress");
+    updateProgress(hours, 24, "hours-progress");
+    updateProgress(minutes, 60, "minutes-progress");
+    updateProgress(seconds, 60, "seconds-progress");
+}
+
+function updateProgress(value, max, id) {
+    const circle = document.getElementById(id);
+    const dashOffset = 283 - (283 * value) / max;
+    circle.style.strokeDashoffset = dashOffset;
+}
+
+setInterval(updateCountdown, 1000);
+updateCountdown();
+        // bussiness profile  hover
+
+</script>

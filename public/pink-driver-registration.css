@@ -1,0 +1,465 @@
+/* body {
+    background: #f8f9fa;
+    color: #333;
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 1rem 0;
+} */
+
+/* Container Styles */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px;
+    text-align: center;
+    border-radius: 10px;
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* popup end */
+.cab-taxi-driver-forms-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Form Styles */
+.cab-taxi-driver-forms-registration-form {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Styles */
+.cab-taxi-driver-forms-form-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.cab-taxi-driver-forms-form-header i {
+    font-size: 2.5rem;
+    color: #2196F3;
+    margin-bottom: 0.5rem;
+}
+
+.cab-taxi-driver-forms-form-header h1 {
+    color: #333;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+/* Section Styles */
+.cab-taxi-driver-forms-form-section {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.cab-taxi-driver-forms-section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.cab-taxi-driver-forms-section-header i {
+    font-size: 1.3rem;
+    color: #2196F3;
+    margin-right: 0.5rem;
+}
+
+.cab-taxi-driver-forms-section-header h2 {
+    color: #333;
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* Form Group Styles */
+.cab-taxi-driver-forms-form-group {
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.cab-taxi-driver-forms-form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.cab-taxi-driver-forms-form-row .cab-taxi-driver-forms-form-group {
+    flex: 1;
+    width: calc(50% - 0.5rem);
+    min-width: 0;
+}
+
+/* Label Styles */
+.cab-taxi-driver-forms-form-group label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.4rem;
+    color: #333;
+    font-weight: 500;
+}
+
+.cab-taxi-driver-forms-form-group label i {
+    margin-right: 0.5rem;
+    color: #2196F3;
+}
+
+/* Input Styles */
+.cab-taxi-driver-forms-form-group input[type="text"],
+.cab-taxi-driver-forms-form-group input[type="tel"],
+.cab-taxi-driver-forms-form-group input[type="email"],
+.cab-taxi-driver-forms-form-group input[type="number"],
+.cab-taxi-driver-forms-form-group select,
+.cab-taxi-driver-forms-form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: border-color 0.3s;
+}
+
+/* File Input Styles */
+.cab-taxi-driver-forms-file-input-group {
+    margin-bottom: 1.5rem;
+}
+
+.cab-taxi-driver-forms-file-input-wrapper {
+    position: relative;
+    padding: 1rem;
+    border: 2px dashed #2196F3;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+.cab-taxi-driver-forms-file-input-wrapper input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.cab-taxi-driver-forms-file-input-wrapper i {
+    font-size: 1.5rem;
+    color: #2196F3;
+    margin-bottom: 0.5rem;
+}
+
+.cab-taxi-driver-forms-file-input-wrapper span {
+    display: block;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Button Styles */
+.cab-taxi-driver-forms-form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+}
+
+/* .cab-taxi-driver-forms-submit-btn,
+.cab-taxi-driver-forms-reset-btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s;
+} */
+
+.cab-taxi-driver-forms-submit-btn,
+.cab-taxi-driver-forms-reset-btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s;
+}
+
+/* Default state for submit button */
+.cab-taxi-driver-forms-submit-btn {
+    background: grey;
+    color: white;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Enabled state for submit button */
+.cab-taxi-driver-forms-submit-btn.enabled {
+    background: #2196F3;
+    cursor: pointer;
+    opacity: 1;
+}
+
+/* Hover effect when enabled */
+.cab-taxi-driver-forms-submit-btn.enabled:hover {
+    background: #1976D2;
+}
+
+/* Reset button styles */
+.cab-taxi-driver-forms-reset-btn {
+    background: #f44336;
+    color: white;
+    cursor: pointer;
+}
+
+.cab-taxi-driver-forms-reset-btn:hover {
+    background: #d32f2f;
+}
+
+/* .cab-taxi-driver-forms-submit-btn {
+    background: #2196F3;
+    color: #fff;
+} */
+
+.cab-taxi-driver-forms-reset-btn {
+    background: #f5f5f5;
+    color: #666;
+}
+
+/* .cab-taxi-driver-forms-submit-btn:hover {
+    background: #1976D2;
+} */
+
+.cab-taxi-driver-forms-reset-btn:hover {
+    background: #e0e0e0;
+}
+
+/* Focus States */
+.cab-taxi-driver-forms-form-group input:focus,
+.cab-taxi-driver-forms-form-group select:focus,
+.cab-taxi-driver-forms-form-group textarea:focus {
+    outline: none;
+    border-color: #2196F3;
+}
+
+/* ID Selectors */
+#cab-taxi-driver-forms-name,
+#cab-taxi-driver-forms-phone,
+#cab-taxi-driver-forms-email,
+#cab-taxi-driver-forms-age,
+#cab-taxi-driver-forms-gender,
+#cab-taxi-driver-forms-experience,
+#cab-taxi-driver-forms-city,
+#cab-taxi-driver-forms-state,
+#cab-taxi-driver-forms-vehicle-type,
+#cab-taxi-driver-forms-vehicle-name,
+#cab-taxi-driver-forms-license-plate,
+#cab-taxi-driver-forms-vehicle-image,
+#cab-taxi-driver-forms-current-address,
+#cab-taxi-driver-forms-license-address,
+#cab-taxi-driver-forms-license-front,
+#cab-taxi-driver-forms-license-back,
+#cab-taxi-driver-forms-driver-photo {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: border-color 0.3s;
+}
+
+/* Suggestions Dropdown Styles */
+.cab-taxi-driver-forms-suggestions-container {
+    position: relative;
+    width: 100%;
+}
+
+.cab-taxi-driver-forms-suggestions-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    margin-top: -1px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+.cab-taxi-driver-forms-suggestions-list.active {
+    display: block;
+}
+
+.cab-taxi-driver-forms-suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #333;
+    transition: background-color 0.2s;
+}
+
+.cab-taxi-driver-forms-suggestion-item:hover,
+.cab-taxi-driver-forms-suggestion-item.selected {
+    background-color: #f5f5f5;
+}
+
+.cab-taxi-driver-forms-suggestion-item strong {
+    color: #2196F3;
+    font-weight: 600;
+}
+
+/* Scrollbar styles for suggestions list */
+.cab-taxi-driver-forms-suggestions-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.cab-taxi-driver-forms-suggestions-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 0 0 4px 0;
+}
+
+.cab-taxi-driver-forms-suggestions-list::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.cab-taxi-driver-forms-suggestions-list::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .cab-taxi-driver-forms-form-row {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .cab-taxi-driver-forms-form-row .cab-taxi-driver-forms-form-group {
+        width: 100%;
+    }
+
+    .cab-taxi-driver-forms-form-actions {
+        flex-direction: column;
+    }
+
+    .cab-taxi-driver-forms-submit-btn,
+    .cab-taxi-driver-forms-reset-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Validation States */
+.cab-taxi-driver-forms-form-group input:invalid,
+.cab-taxi-driver-forms-form-group select:invalid,
+.cab-taxi-driver-forms-form-group textarea:invalid {
+    border-color: #ff5252;
+}
+
+.cab-taxi-driver-forms-form-group input:valid,
+.cab-taxi-driver-forms-form-group select:valid,
+.cab-taxi-driver-forms-form-group textarea:valid {
+    border-color: #4caf50;
+}
+
+/* Remove dark mode support */
+@media (prefers-color-scheme: dark) {
+    .cab-taxi-driver-forms-select,
+    .cab-taxi-driver-forms-select option {
+        background-color: #fff;
+        color: #333;
+    }
+}
+/* popper */
+
+.pink-driver-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    animation: pink-driver-fadeIn 0.3s ease-in-out;
+}
+
+.pink-driver-modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 12px;
+    width: 350px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: pink-driver-slideIn 0.3s ease-in-out;
+    position: relative;
+}
+
+.pink-driver-modal-icon {
+    font-size: 40px;
+    color: #4CAF50;
+    margin-bottom: 10px;
+}
+
+.pink-driver-close {
+    color: #888;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+}
+
+.pink-driver-close:hover {
+    color: #555;
+}
+
+@keyframes pink-driver-fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes pink-driver-slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}

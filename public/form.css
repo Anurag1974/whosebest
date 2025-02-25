@@ -1,0 +1,41 @@
+/* ------- */
+
+ /* Star rating styles */
+ .rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: left;
+    /* border:solid 2px #ddd;
+    border-radius: 5px; */
+}
+.rating input {
+    display: none;
+}
+.rating label {
+    font-size: 1.5rem;
+    color: #a59f9f;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+.rating input:checked ~ label,
+.rating label:hover,
+.rating label:hover ~ label {
+    color: gold;
+}
+
+
+
+/* Submit Button Styling */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    transform: scale(1.05);
+}

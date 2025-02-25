@@ -1,9 +1,6 @@
-// middleware.js
 export function initializeToggle(req, res, next) {
-    if (req.session.toggle === undefined) {
-        req.session.toggle = false; // Default value
+    if (!req.session.toggle) {
+        req.session.toggle = { ev: false, women: false }; // Initialize both toggles separately
     }
-    next(); // Proceed to the next middleware or route handler
+    next();
 }
-
-

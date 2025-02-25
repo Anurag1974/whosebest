@@ -1,4 +1,5 @@
 
+
 $(document).ready(function () {
     $(".testimonial-slider").slick({
         infinite: true,
@@ -148,270 +149,6 @@ async function fetchLocationDetails(pincode) {
     }
 }
 
-// pincodeInput.addEventListener('input', async () => {
-//     console.log('keuy is pressed')
-//     const pincode = pincodeInput.value.trim();
-//     if (pincode) {
-//         const { city, state, latitude, longitude } = await fetchLocationDetails(pincode);
-//         cityInput.value = city;
-//         stateInput.value = state;
-//         latitudeInput.value = latitude;
-//         longitudeInput.value = longitude;
-//         additionalFields.classList.remove('d-none');
-//     } else {
-//         additionalFields.classList.add('d-none');
-//     }
-// });
-
-// send otp
-async function sendOtp() {
-    console.log('send otp');
-    const verifyOtpBox = document.getElementById('verify-otp-box');
-
-    const otpEmail = document.getElementById('otp-email');
-    const email = document.getElementById('email').value;
-
-
-
-    if (!email) {
-        alert('Email is required');
-        return;
-    }
-
-    const button = document.getElementById('sendOtpButton');
-    button.disabled = true;
-    button.textContent = 'Sending...';
-
-    const url = '/send-otp';
-
-    try {
-        // Use await to wait for the fetch request to complete
-        const res = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email })
-        });
-
-        if (res.ok) {
-            const data = await res.json();
-
-            alert('OTP sent successfully');
-            otpEmail.textContent = email;
-            verifyOtpBox.classList.remove('d-none');
-            button.textContent = 'OTP Sent';
-
-            if (data.emailIsPresent) {
-                alert('Email is already present');
-                // Do nothing as the email already exists
-            } else {
-                alert('Email is not present');
-
-                // Create input fields for name and phone
-                const nameInput = document.createElement('input');
-                nameInput.type = 'text';
-                nameInput.id = 'user-name';
-                nameInput.classList.add('form-control', 'mt-3');
-                nameInput.placeholder = 'Enter your name';
-                nameInput.required = true;
-
-                const phoneInput = document.createElement('input');
-                phoneInput.type = 'tel';
-                phoneInput.id = 'user-phone';
-                phoneInput.classList.add('form-control', 'mt-3');
-                phoneInput.placeholder = 'Enter your phone number';
-                phoneInput.pattern = '[0-9]{10}';
-                phoneInput.title = 'Phone number should be 10 digits';
-                phoneInput.required = true;
-
-                verifyOtpBox.appendChild(nameInput);
-                verifyOtpBox.appendChild(phoneInput);
-            }
-        } else {
-            alert('Failed to send OTP. Please try again.');
-            button.disabled = false;
-            button.textContent = 'Send OTP';
-        }
-
-    } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred. Please try again later.');
-        button.disabled = false;
-        button.textContent = 'Send OTP';
-    }
-}
-async function sendOtpPopup() {
-    console.log('send otp');
-    const verifyOtpBox = document.getElementById('verify-otp-box');
-
-    const otpEmail = document.getElementById('otp-email');
-    const email = document.getElementById('email').value;
-
-
-
-    if (!email) {
-        alert('Email is required');
-        return;
-    }
-
-    const button = document.getElementById('sendOtpButton');
-    button.disabled = true;
-    button.textContent = 'Sending...';
-
-    const url = '/send-otp';
-
-    try {
-        // Use await to wait for the fetch request to complete
-        const res = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email })
-        });
-
-        if (res.ok) {
-            const data = await res.json();
-
-            alert('OTP sent successfully');
-            otpEmail.textContent = email;
-            verifyOtpBox.classList.remove('d-none');
-            button.textContent = 'OTP Sent';
-
-            if (data.emailIsPresent) {
-                alert('Email is already present');
-                // Do nothing as the email already exists
-            } else {
-                alert('Email is not present');
-
-                // Create input fields for name and phone
-                const nameInput = document.createElement('input');
-                nameInput.type = 'text';
-                nameInput.id = 'user-name-pop';
-                nameInput.classList.add('form-control', 'mt-3');
-                nameInput.placeholder = 'Enter your name';
-                nameInput.required = true;
-
-                const phoneInput = document.createElement('input');
-                phoneInput.type = 'tel';
-                phoneInput.id = 'user-phone-pop';
-                phoneInput.classList.add('form-control', 'mt-3');
-                phoneInput.placeholder = 'Enter your phone number';
-                phoneInput.pattern = '[0-9]{10}';
-                phoneInput.title = 'Phone number should be 10 digits';
-                phoneInput.required = true;
-
-                verifyOtpBox.appendChild(nameInput);
-                verifyOtpBox.appendChild(phoneInput);
-            }
-        } else {
-            alert('Failed to send OTP. Please try again.');
-            button.disabled = false;
-            button.textContent = 'Send OTP';
-        }
-
-    } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred. Please try again later.');
-        button.disabled = false;
-        button.textContent = 'Send OTP';
-    }
-}
-
-
-async function verifyOtp() {
-    const otp = document.getElementById('otp').value;
-    const nameInput = document.getElementById('user-name');
-    const phoneInput = document.getElementById('user-phone');
-
-    const userName = nameInput ? nameInput.value : null;
-    const userPhone = phoneInput ? phoneInput.value : null;
-
-    if (!otp) {
-        alert('Please enter the OTP');
-        return;
-    }
-
-    const url = '/verify-otp';
-    try {
-        const res = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ otp, userName, userPhone })
-
-        })
-        if (res.ok) {
-            const data = await res.json();
-            alert('OTP verified successfully');
-            // Redirect to the appropriate page based on the response
-            if (data.redirectUrl) {
-                window.location.href = data.redirectUrl;
-
-
-            } else {
-                const errorData = await res.json();
-                alert(`Failed to verify OTP: ${errorData.message}`);
-            }
-
-        }
-    }
-
-    catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while verifying OTP');
-    }
-
-
-
-}
-async function verifyOtpPopup() {
-    const otp = document.getElementById('otp-pop').value;
-    const nameInput = document.getElementById('user-name-pop');
-    const phoneInput = document.getElementById('user-phone-pop');
-
-    const userName = nameInput ? nameInput.value : null;
-    const userPhone = phoneInput ? phoneInput.value : null;
-
-
-    if (!otp) {
-        alert('Please enter the OTP');
-        return;
-    }
-
-    const url = '/verify-otp-pop';
-    try {
-        const res = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ otp, userName, userPhone })
-
-        })
-        if (res.ok) {
-            const data = await res.json();
-            alert('OTP verified successfully');
-            // Redirect to the appropriate page based on the response
-            if (data.redirectUrl) {
-                window.location.href = data.redirectUrl;
-
-
-            } else {
-                const errorData = await res.json();
-                alert(`Failed to verify OTP: ${errorData.message}`);
-            }
-        }
-    }
-
-    catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while verifying OTP');
-    }
-
-}
 async function addName() {
     const name = document.getElementById('user-name').value;
     const phone = document.getElementById('user-phone').value;
@@ -446,198 +183,13 @@ async function addName() {
     }
 
 }
-async function addBusinessDetails() {
-    const businessName = document.getElementById('business-name').value;
 
 
-    const address = document.getElementById('address').value;
-
-    const category = document.getElementById('business-category').value;
-
-    const phone = document.getElementById('phone').value;
-    // const email = document.getElementById('email').value;
-
-
-
-    const latitudeInput = document.getElementById('latitude').value;
-    const longitudeInput = document.getElementById('longitude').value;
-    const state = document.getElementById('add-state').value;
-    const city = document.getElementById('add-city').value;
-    const website = document.getElementById('website').value;
-    const evCharging = document.getElementById('ev-charging').value;
-    // const images = document.getElementById('images').files;
-
-    
-
-
-    console.log('latitude================')
-
-    if (!businessName || !latitudeInput || !longitudeInput|| !city || !state || !address || !phone || !category || !evCharging ) {
-        alert('All fields are required except website');
-        return;
-    }
-    const formData = new FormData();
-    formData.append('businessName', businessName);
-
-    formData.append('address', address);
-    formData.append('category', category);
-    formData.append('phone', phone);
-    formData.append('latitudeInput', latitudeInput);
-    formData.append('longitudeInput', longitudeInput);
-    formData.append('evCharging', evCharging)
-    formData.append('city', city)
-    formData.append('state', state)
-
-    if (website) {
-        formData.append('website', website);
-    }
-
-    // for (let i = 0; i < images.length; i++) {
-    //     formData.append('images', images[i]);
-    // }
-
-
-    const url = '/list-business';
-    try {
-        const res = await fetch(url, {
-            method: 'POST',
-
-            body: formData,
-        });
-
-        if (res.ok) {
-            const data = await res.json();
-            alert('Business details added successfully');
-            window.location.href = data.redirectUrl;
-        } else {
-            const errorData = await res.json();
-            alert(`Failed to add business: ${errorData.message}`);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while adding business details');
-
-    }
-
-
+// Function to capitalize the first letter of each word
+function capitalizeFirstLetter(str) {
+    if (typeof str !== 'string') return '';
+    return str.replace(/\b\w/g, (char) => char.toUpperCase());
 }
-
-function updateBusinessDetails(event) {
-    if (event) event.preventDefault(); // Prevent form submission if inside <form>
-
-    const formData = new FormData();
-
-    // Get business ID
-    const businessId = document.getElementById('businessId').value;
-    if (!businessId) {
-        alert('Business ID is missing!');
-        return;
-    }
-    // const ownerName=document.getElementById('ownerName').value;
-    const ownerId=document.getElementById('ownerId').value;
-
-    // Append text fields to FormData
-    formData.append('businessId', businessId);
-    // formData.append('ownerName',ownerName);
-    formData.append('ownerId',ownerId);
-    
-    formData.append('businessName', document.getElementById('businessName').value);
-    formData.append('address', document.getElementById('businessAddress').value);
-    formData.append('category', document.getElementById('businessCategory').value);
-    formData.append('phone', document.getElementById('businessPhone').value);
-    formData.append('website', document.getElementById('businessWebsite').value);
-    formData.append('city', document.getElementById('businessCity').value);
-    formData.append('state', document.getElementById('businessState').value);
-
-    // Append images to FormData
-    const images = document.getElementById('images').files;
-    for (let i = 0; i < images.length; i++) {
-        formData.append('images', images[i]);
-    }
-
-    // Send the PUT request to update business details
-    fetch('/update-business', {
-        method: 'PUT',  // Use PUT for updating
-        body: formData  // FormData for files
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Business details updated successfully');
-            window.location.reload(); // Refresh page to show updated details
-        } else {
-            alert(`Failed to update business: ${data.message}`);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while updating business details.');
-    });
-}
-
-
-
-
-
-    // document.getElementById('updateBusinessForm').addEventListener('submit', async function (event) {
-    //     event.preventDefault(); // Prevent default form submission
-
-    //     // Get business ID (Ensure it's being retrieved correctly)
-    //     const businessId = document.getElementById('businessId').value;
-    //     if (!businessId) {
-    //         alert('Business ID is missing!');
-    //         return;
-    //     }
-
-    //     // Get form data
-    //     const businessName = document.getElementById('businessName').value;
-    //     const address = document.getElementById('businessAddress').value;
-    //     const category = document.getElementById('businessCategory').value;
-    //     const phone = document.getElementById('businessPhone').value;
-    //     const website = document.getElementById('businessWebsite').value;
-    //     const city = document.getElementById('businessCity').value;
-    //     const state = document.getElementById('businessState').value;
-
-    //     // Validate required fields
-    //     if (!businessName || !address || !category || !phone || !city || !state) {
-    //         alert('All fields are required except website.');
-    //         return;
-    //     }
-
-    //     const requestBody = {
-    //         businessId, // Ensure businessId is passed
-    //         businessName,
-    //         address,
-    //         category,
-    //         phone,
-    //         city,
-    //         state,
-    //         website
-    //     };
-
-    //     console.log('Sending Update Request:', requestBody);
-
-    //     try {
-    //         const response = await fetch('/update-business', {
-    //             method: 'PUT',  // Use PUT method for updating
-    //             headers: { 'Content-Type': 'application/json' },
-    //             body: JSON.stringify(requestBody)
-    //         });
-
-    //         const data = await response.json();
-
-    //         if (response.ok) {
-    //             alert('Business details updated successfully');
-    //             window.location.reload(); // Refresh page to show updated details
-    //         } else {
-    //             alert(`Failed to update business: ${data.message}`);
-    //         }
-    //     } catch (error) {
-    //         console.error('Error:', error);
-    //         alert('An error occurred while updating business details.');
-    //     }
-    // });
-
 
 
 
@@ -654,7 +206,7 @@ function setModalImage(imageSrc) {
     document.getElementById('modalImage').src = imageSrc;
 }
 
-//set current location 
+
 
 // Function to set current location
 function setCurrentLocation() {
@@ -725,44 +277,9 @@ function getAddressFromLatLng(latitude, longitude) {
 }
 
 
-
-// Update fetch api
-
-async function updateUserInformation() {
-    const formData = new FormData();
-    formData.append('name', document.getElementById('user-name').value);
-    formData.append('phoneNumber', document.getElementById('phone-number').value);
-
-    const fileInput = document.getElementById('profileImage');
-    if (fileInput.files.length > 0) {
-        formData.append('profileImage', fileInput.files[0]); // Append image file
-    }
-
-    try {
-        const response = await fetch('/update-user', {
-            method: 'PUT',
-            body: formData // Send as multipart/form-data (no need for Content-Type)
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        console.log('Success:', data);
-        alert('User information updated successfully');
-        window.location.reload();
-
-    } catch (error) {
-        console.error('Error updating user:', error);
-        alert('Failed to update user information');
-    }
-}
-
-
 // business details , review delete code ==============================================================
 function deleteReview() {
-    const deleteButton = document.getElementById("delete-review-btn");
+    const deleteButton = document.getElementById("delete-review-button");
     const reviewId = deleteButton.getAttribute("data-id");
 
     console.log('Delete review button clicked ==========================');
@@ -781,5 +298,421 @@ function deleteReview() {
       .catch(error => {
         console.error("Error:", error);
       });
-  }
+}
+
+// vaibhav typing container js 
+
+const words = ['Categories', 'Services', 'Places'];
+const typingText = document.querySelector('.typing-text');
+
+let wordIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+
+function type() {
+    const currentWord = words[wordIndex];
+    
+    if (isDeleting) {
+        typingText.textContent = currentWord.substring(0, charIndex - 1);
+        charIndex--;
+    } else {
+        typingText.textContent = currentWord.substring(0, charIndex + 1);
+        charIndex++;
+    }
+
+    if (!isDeleting && charIndex === currentWord.length) {
+        setTimeout(() => {
+            isDeleting = true;
+        }, 2000);
+    } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+    }
+
+    const typingSpeed = isDeleting ? 50 : 100;
+    setTimeout(type, typingSpeed);
+}
+
+document.addEventListener('DOMContentLoaded', type);
+
+document.addEventListener('DOMContentLoaded', () => {
+    const slider = document.querySelector('.all-user-reviews-cards');
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    slider.addEventListener('mousedown', (e) => {
+        isDown = true;
+        slider.classList.add('active');
+        startX = e.pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
+    });
+
+    slider.addEventListener('mouseleave', () => {
+        isDown = false;
+        slider.classList.remove('active');
+    });
+
+    slider.addEventListener('mouseup', () => {
+        isDown = false;
+        slider.classList.remove('active');
+    });
+
+    slider.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - slider.offsetLeft;
+        const walk = (x - startX) * 2; // Adjust scroll speed
+        slider.scrollLeft = scrollLeft - walk;
+    });
+
+    // Touch support for mobile devices
+    slider.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
+    });
+
+    slider.addEventListener('touchmove', (e) => {
+        const x = e.touches[0].pageX - slider.offsetLeft;
+        const walk = (x - startX) * 2;
+        slider.scrollLeft = scrollLeft - walk;
+    });
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const topRatedBusinessSlider = document.querySelector('.top-rated-business-all-cards');
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    topRatedBusinessSlider.addEventListener('mousedown', (e) => {
+        isDown = true;
+        topRatedBusinessSlider.classList.add('active');
+        startX = e.pageX - topRatedBusinessSlider.offsetLeft;
+        scrollLeft = topRatedBusinessSlider.scrollLeft;
+    });
+
+    topRatedBusinessSlider.addEventListener('mouseleave', () => {
+        isDown = false;
+        topRatedBusinessSlider.classList.remove('active');
+    });
+
+    topRatedBusinessSlider.addEventListener('mouseup', () => {
+        isDown = false;
+        topRatedBusinessSlider.classList.remove('active');
+    });
+
+    topRatedBusinessSlider.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - topRatedBusinessSlider.offsetLeft;
+        const walk = (x - startX) * 2; // Adjust scroll speed
+        topRatedBusinessSlider.scrollLeft = scrollLeft - walk;
+    });
+
+    // Touch support for mobile devices
+    topRatedBusinessSlider.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].pageX - topRatedBusinessSlider.offsetLeft;
+        scrollLeft = topRatedBusinessSlider.scrollLeft;
+    });
+
+    topRatedBusinessSlider.addEventListener('touchmove', (e) => {
+        const x = e.touches[0].pageX - topRatedBusinessSlider.offsetLeft;
+        const walk = (x - startX) * 2;
+        topRatedBusinessSlider.scrollLeft = scrollLeft - walk;
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const businessCards = document.querySelectorAll('.top-rated-business-card');
+
+    businessCards.forEach(card => {
+        const cardImg = card.querySelector('.top-rated-business-card-all-imgs');
+        const navLeft = card.querySelector('.business-image-nav-left');
+        const navRight = card.querySelector('.business-image-nav-right');
+
+        // Predefined list of images
+        const images = [
+            'pexels-elevate-1267320.jpg',
+            'pexels-rebrand-cities-581004-1367276.jpg',
+            'pexels-italo-melo-881954-2379004.jpg'
+        ];
+
+        let currentImageIndex = 0;
+
+        // Function to update image with advanced transition
+        function updateImage(direction) {
+            // Determine new index
+            if (direction === 'next') {
+                currentImageIndex = (currentImageIndex + 1) % images.length;
+            } else {
+                currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+            }
+
+            // Apply fade out and slide
+            cardImg.style.opacity = '0';
+            cardImg.style.transform = direction === 'next' 
+                ? 'translateX(20%)' 
+                : 'translateX(-20%)';
+            
+            // After a short delay, change image and slide back
+            setTimeout(() => {
+                cardImg.src = images[currentImageIndex];
+                
+                // Trigger reflow to ensure opacity and transform are reset
+                void cardImg.offsetWidth;
+                
+                cardImg.style.opacity = '1';
+                cardImg.style.transform = 'translateX(0)';
+            }, 300);
+        }
+
+        // Add event listeners for navigation
+        navLeft.addEventListener('click', () => updateImage('prev'));
+        navRight.addEventListener('click', () => updateImage('next'));
+    });
+});
+
+
+
+
+// vaibhav header js file here 
+
+
+let lastScrollTop = 0;
+const header = document.querySelector('.web-header-bottom-main-content');
+
+window.addEventListener('scroll', () => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    if (scrollTop > lastScrollTop) {
+        // Scrolling down
+        header.style.transform = 'translateY(-280%)';
+    } else {
+        // Scrolling up
+        header.style.transform = 'translateY(0)';
+    }
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const categorySearch = document.querySelector('.web-category-search');
+    const categoryInput = document.getElementById('categoryInput');
+    const categoryValue = document.getElementById('categoryValue');
+    const selectWrapper = document.querySelector('.select-wrapper');
+    const selectOptions = selectWrapper.querySelectorAll('li');
+
+    categoryInput.addEventListener('click', (e) => {
+        e.stopPropagation();
+        selectWrapper.classList.toggle('active');
+        categorySearch.classList.toggle('active');
+    });
+
+    selectOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            const selectedValue = option.getAttribute('data-value');
+            const selectedText = option.textContent;
+
+            categoryInput.value = selectedText;
+            categoryValue.value = selectedValue;
+
+            selectOptions.forEach(opt => opt.classList.remove('selected'));
+            option.classList.add('selected');
+
+            selectWrapper.classList.remove('active');
+            categorySearch.classList.remove('active');
+        });
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!selectWrapper.contains(e.target) && !categoryInput.contains(e.target)) {
+            selectWrapper.classList.remove('active');
+            categorySearch.classList.remove('active');
+        }
+    });
+});
+
+
+// menu icon function 
+document.addEventListener("DOMContentLoaded", function () {
+    const menubarIcon = document.querySelector(".web-header-menubar i");
+    const menuSlider = document.querySelector(".web-menu-header-slider-multi-option-when-clicked");
+    if (menubarIcon) {
+        menubarIcon.addEventListener("click", () => {
+            menuSlider.classList.toggle("menu-open");
+        });
+    }
+        // Close menu when clicking outside
+        document.addEventListener("click", (event) => {
+            if (
+                !menubarIcon?.contains(event.target) &&
+                !menuSlider?.contains(event.target)
+                // !threeDots?.contains(event.target)
+            ) {
+                menuSlider?.classList.remove("menu-open");
+            }
+        });
+})
+
+document.addEventListener('DOMContentLoaded', () => {
+    const phoneMenuBar = document.querySelector('.phone-header-menubar i');
+    const phoneMenuSlider = document.querySelector('.phone-menu-header-slider-multi-option-when-clicked');
+    const phoneCloseMenuBtn = document.createElement('button');
+
+    phoneCloseMenuBtn.innerHTML = '&times;';
+    phoneCloseMenuBtn.classList.add('phone-close-menu-btn');
+    phoneMenuSlider.insertBefore(phoneCloseMenuBtn, phoneMenuSlider.firstChild);
+
+    phoneMenuBar.addEventListener('click', () => {
+        phoneMenuSlider.classList.add('active');
+    });
+
+    phoneCloseMenuBtn.addEventListener('click', () => {
+        phoneMenuSlider.classList.remove('active');
+    });
+
+    phoneMenuSlider.addEventListener('click', (e) => {
+        if (e.target === phoneMenuSlider) {
+            phoneMenuSlider.classList.remove('active');
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const phoneCategorySearch = document.querySelector('.phone-category-search');
+    const phoneCategoryInput = document.getElementById('phoneCategoryInput');
+    const phoneCategoryValue = document.getElementById('phoneCategoryValue');
+    const phoneSelectWrapper = document.querySelector('.phone-select-wrapper');
+    const phoneSelectOptions = phoneSelectWrapper.querySelectorAll('li');
+
+    phoneCategoryInput.addEventListener('click', (e) => {
+        e.stopPropagation();
+        phoneSelectWrapper.classList.toggle('active');
+        phoneCategorySearch.classList.toggle('active');
+    });
+
+    phoneSelectOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            const selectedValue = option.getAttribute('data-value');
+            const selectedText = option.textContent;
+
+            phoneCategoryInput.value = selectedText;
+            phoneCategoryValue.value = selectedValue;
+
+            phoneSelectOptions.forEach(opt => opt.classList.remove('selected'));
+
+            option.classList.add('selected');
+
+            phoneSelectWrapper.classList.remove('active');
+            phoneCategorySearch.classList.remove('active');
+        });
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!phoneSelectWrapper.contains(e.target) && !phoneCategoryInput.contains(e.target)) {
+            phoneSelectWrapper.classList.remove('active');
+            phoneCategorySearch.classList.remove('active');
+        }
+    });
+});
+
+
+
+// based on search function when search button is get clicked (search funcationality)
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector(".web-search-icon").addEventListener("click", function () {
+        let category = document.getElementById("categoryValue").value.trim();
+        let city = document.querySelector(".web-city-search input").value.trim();
+
+        console.log("Category:", category);
+        console.log("City:", city);
+
+        if (!category && !city) {
+            alert("Please select a category and enter a city.");
+            return;
+        }
+
+        // Construct the URL
+        let searchUrl = `/show-business?category=${encodeURIComponent(category)}&city=${encodeURIComponent(city)}`;
+        console.log("Redirecting to:", searchUrl);
+
+        // Redirect
+        window.location.href = searchUrl;
+    });
+});
+
+//// phone ====based on search function when search button is get clicked (search funcationality) 
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector(".phone-city-search-input-icon").addEventListener("click", function () {
+        let category = document.getElementById("phoneCategoryValue").value.trim();
+        let city = document.querySelector(".phone-city-search input").value.trim();
+
+        console.log("Category:", category);
+        console.log("City:", city);
+
+        if (!category && !city) {
+            alert("Please select a category and enter a city.");
+            return;
+        }
+
+        // Construct the URL
+        let searchUrl = `/show-business?category=${encodeURIComponent(category)}&city=${encodeURIComponent(city)}`;
+        console.log("Redirecting to:", searchUrl);
+
+        // Redirect
+        window.location.href = searchUrl;
+    });
+});
+
+document.querySelector('.web-header-logo').addEventListener('click', () => {
+    window.location.href = '/'; // Redirects to the home page route
+});
+
+document.querySelector('.phone-who-best-title').addEventListener('click', () => {
+    window.location.href = '/'; // Redirects to the home page route
+});
+
+
+// all categories popper section 
+const openPopper = document.getElementById('open-popper');
+const closePopper = document.getElementById('close-popper');
+const popperOverlay = document.getElementById('popper-overlay');
+
+openPopper.addEventListener('click', (e) => {
+    e.preventDefault();
+    popperOverlay.classList.add('show');
+});
+
+closePopper.addEventListener('click', () => {
+    popperOverlay.classList.remove('show');
+    popperOverlay.classList.add('hide');
+    
+    // Remove hide class after animation completes
+    setTimeout(() => {
+        popperOverlay.classList.remove('hide');
+    }, 300);
+});
+
+popperOverlay.addEventListener('click', (e) => {
+    if (e.target === popperOverlay) {
+        popperOverlay.classList.remove('show');
+        popperOverlay.classList.add('hide');
+        
+        // Remove hide class after animation completes
+        setTimeout(() => {
+            popperOverlay.classList.remove('hide');
+        }, 300);
+    }
+});
+
+
+
+
+
+
+
+
+
+
 
