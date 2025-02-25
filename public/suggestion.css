@@ -1,0 +1,109 @@
+.web-city-search {
+    position: relative;
+    width: 250px;
+}
+
+
+#suggestionBox {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 1000;
+    margin-top: 5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: none;
+    transition: all 0.3s ease-in-out;
+    padding: 5px 0;
+}
+
+.suggestion-item {
+    padding: 12px 15px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #333;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+    border-radius: 4px;
+}
+
+.suggestion-item:hover {
+    /* background: linear-gradient(135deg, #ff7e5f, #feb47b); */
+    color: #000000;
+    transform: translateX(5px);
+}
+
+/* Add a smooth fade-in effect */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#suggestionBox {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.phone-city-search {
+    position: relative;
+   
+}
+
+.mobile-suggestion-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 1000;
+    margin-top: 5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: none;
+    transition: all 0.3s ease-in-out;
+    padding: 5px 0;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.mobile-suggestion-dropdown li {
+    padding: 12px 15px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #333;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+    border-radius: 4px;
+}
+
+.mobile-suggestion-dropdown li:hover {
+    /* background: linear-gradient(135deg, #ff7e5f, #feb47b); */
+    color: #000000;
+    transform: translateX(5px);
+}
+
+/* Add a smooth fade-in effect */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

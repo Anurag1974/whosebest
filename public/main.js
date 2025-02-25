@@ -114,40 +114,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ***************
 // list business js
-const pincodeInput = document.getElementById('pincode');
-const additionalFields = document.getElementById('additionalFields');
-const cityInput = document.getElementById('city');
-const stateInput = document.getElementById('state');
-const latitudeInput = document.getElementById('latitude');
-const longitudeInput = document.getElementById('longitude');
+// const pincodeInput = document.getElementById('pincode');
+// const additionalFields = document.getElementById('additionalFields');
+// const cityInput = document.getElementById('city');
+// const stateInput = document.getElementById('state');
+// const latitudeInput = document.getElementById('latitude');
+// const longitudeInput = document.getElementById('longitude');
 
-const GOOGLE_API_KEY = 'YOUR_GOOGLE_API_KEY';
+// const GOOGLE_API_KEY = 'YOUR_GOOGLE_API_KEY';
 
-async function fetchLocationDetails(pincode) {
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${pincode}&key=${GOOGLE_API_KEY}`;
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        if (data.status === 'OK') {
-            const result = data.results[0];
-            const addressComponents = result.address_components;
-            const location = result.geometry.location;
+// async function fetchLocationDetails(pincode) {
+//     const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${pincode}&key=${GOOGLE_API_KEY}`;
+//     try {
+//         const response = await fetch(url);
+//         const data = await response.json();
+//         if (data.status === 'OK') {
+//             const result = data.results[0];
+//             const addressComponents = result.address_components;
+//             const location = result.geometry.location;
 
-            const city = addressComponents.find(component => component.types.includes('locality'))?.long_name || '';
-            const state = addressComponents.find(component => component.types.includes('administrative_area_level_1'))?.long_name || '';
-            const latitude = location.lat;
-            const longitude = location.lng;
+//             const city = addressComponents.find(component => component.types.includes('locality'))?.long_name || '';
+//             const state = addressComponents.find(component => component.types.includes('administrative_area_level_1'))?.long_name || '';
+//             const latitude = location.lat;
+//             const longitude = location.lng;
 
-            return { city, state, latitude, longitude };
-        } else {
-            console.error('Error:', data.status);
-            return { city: 'Unknown', state: 'Unknown', latitude: '', longitude: '' };
-        }
-    } catch (error) {
-        console.error('Error fetching location:', error);
-        return { city: 'Unknown', state: 'Unknown', latitude: '', longitude: '' };
-    }
-}
+//             return { city, state, latitude, longitude };
+//         } else {
+//             console.error('Error:', data.status);
+//             return { city: 'Unknown', state: 'Unknown', latitude: '', longitude: '' };
+//         }
+//     } catch (error) {
+//         console.error('Error fetching location:', error);
+//         return { city: 'Unknown', state: 'Unknown', latitude: '', longitude: '' };
+//     }
+// }
 
 async function addName() {
     const name = document.getElementById('user-name').value;
@@ -705,14 +705,5 @@ popperOverlay.addEventListener('click', (e) => {
         }, 300);
     }
 });
-
-
-
-
-
-
-
-
-
 
 

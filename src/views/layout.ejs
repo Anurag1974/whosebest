@@ -20,6 +20,7 @@
   <!-- Optional custom styles -->
  
   <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/suggestion.css">
   
 
 
@@ -53,18 +54,56 @@
                                 <li data-value="Hotels">Hotels</li>
                                 <li data-value="Colleges">Colleges</li>
                                 <li data-value="Hospitals">Hospitals</li>
-                                <li data-value="PGHotels">PG/Hostels</li>
-                                <li data-value="Dentists">Dentist</li>
+                                <li data-value="PG_Hostels">PG/Hostels</li>
+                                <li data-value="Dentists">Dentists</li>
                                 <li data-value="Gym">Gym</li>
-                                <li data-value="ACService">AC Services</li>
-                                <li data-value="HomeStays">Homestay</li>
-                                <li data-value="cafe">Cafe</li>
-                                <li data-value="destination_wedding">Destination Wedding</li>
+                                <li data-value="AC_Services">AC Services</li>
+                                <li data-value="HomeStays">Homestays</li>
+                                <li data-value="Cafe">Cafe</li>
+                                <li data-value="Banquet_Hall">Banquet Hall</li>
+                                <li data-value="Astrologers">Astrologers</li>
+                                <li data-value="Body_Massage_Center">Body Massage Center</li>
+                                <li data-value="Beauty_Spa">Beauty Spa</li>
+                                <li data-value="Car_Hire">Car Hire</li>
+                                <li data-value="Caterers">Caterers</li>
+                                <li data-value="Chartered_Accountant">Chartered Accountant</li>
+                                <li data-value="Computer_Training_Institutes">Computer Training Institutes</li>
+                                <li data-value="Courier_Services">Courier Services</li>
+                                <li data-value="Computer_Laptop_Repair">Computer & Laptop Repair & Services</li>
+                                <li data-value="Car_Repair_Services">Car Repair & Services</li>
+                                <li data-value="Dermatologists">Dermatologists</li>
+                                <li data-value="Electricians">Electricians</li>
+                                <li data-value="Event_Organizer">Event Organizer</li>
+                                <li data-value="Real_Estate">Real Estate</li>
+                                <li data-value="Fabricators">Fabricators</li>
+                                <li data-value="Furniture_Repair_Services">Furniture Repair Services</li>
+                                <li data-value="Housekeeping_Services">Housekeeping Services</li>
+                                <li data-value="Hobbies">Hobbies</li>
+                                <li data-value="Interior_Designers">Interior Designers</li>
+                                <li data-value="Internet_Website_Designers">Internet Website Designers</li>
+                                <li data-value="Jewellery_Showrooms">Jewellery Showrooms</li>
+                                <li data-value="Lawyers">Lawyers</li>
+                                <li data-value="Transporters">Transporters</li>
+                                <li data-value="Photographers">Photographers</li>
+                                <li data-value="Nursing_Services">Nursing Services</li>
+                                <li data-value="Printing_Publishing_Services">Printing & Publishing Services</li>
+                                <li data-value="Placement_Services">Placement Services</li>
+                                <li data-value="Pest_Control_Services">Pest Control Services</li>
+                                <li data-value="Painting_Contractors">Painting Contractors</li>
+                                <li data-value="Packers_Movers">Packers & Movers</li>
+                                <li data-value="Destination_Wedding">Destination Wedding</li>
+                                <li data-value="Solar_Panels">Solar Panels</li>
+                                <li data-value="Advocates">Advocates</li>
+                                <li data-value="Farmers">Farmers</li>
+                                <li data-value="Fruit_Vendors">Fruit Vendors</li>
+                                <li data-value="Vegetable_Vendors">Vegetable Vendors</li>
                             </ul>
+                            
                         </div>
                     </div>
                     <div class="web-city-search">
-                        <input type="text" placeholder="Search by city">
+                        <input type="text" id="cityInput" placeholder="Search by city">
+                        <div id="suggestionBox" class="suggestions"></div>
                     </div>
                     <div class="web-search-icon">
                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -200,27 +239,66 @@
                                       <input type="text" id="phoneCategoryInput" placeholder="Category..." readonly>
                                       <input type="hidden" id="phoneCategoryValue" name="phone-category">
                                       <div class="phone-select-wrapper">
-                                          <ul>
-                                              <li data-value="Restaurants">Restaurants</li>
-                                              <li data-value="Hotels">Hotels</li>
-                                              <li data-value="Colleges">Colleges</li>
-                                              <li data-value="Hospitals">Hospitals</li>
-                                              <li data-value="PGHotels">PG/Hostels</li>
-                                              <li data-value="Dentists">Dentist</li>
-                                              <li data-value="Gym">Gym</li>
-                                              <li data-value="ACService">AC Services</li>
-                                              <li data-value="HomeStays">Homestay</li>
-                                              <li data-value="cafe">Cafe</li>
-                                              <li data-value="destination_wedding">Destination Wedding</li>
-                                          </ul>
+                                        <ul>
+                                            <li data-value="Restaurants">Restaurants</li>
+                                            <li data-value="Hotels">Hotels</li>
+                                            <li data-value="Colleges">Colleges</li>
+                                            <li data-value="Hospitals">Hospitals</li>
+                                            <li data-value="PG_Hostels">PG/Hostels</li>
+                                            <li data-value="Dentists">Dentists</li>
+                                            <li data-value="Gym">Gym</li>
+                                            <li data-value="AC_Services">AC Services</li>
+                                            <li data-value="HomeStays">Homestays</li>
+                                            <li data-value="Cafe">Cafe</li>
+                                            <li data-value="Banquet_Hall">Banquet Hall</li>
+                                            <li data-value="Astrologers">Astrologers</li>
+                                            <li data-value="Body_Massage_Center">Body Massage Center</li>
+                                            <li data-value="Beauty_Spa">Beauty Spa</li>
+                                            <li data-value="Car_Hire">Car Hire</li>
+                                            <li data-value="Caterers">Caterers</li>
+                                            <li data-value="Chartered_Accountant">Chartered Accountant</li>
+                                            <li data-value="Computer_Training_Institutes">Computer Training Institutes</li>
+                                            <li data-value="Courier_Services">Courier Services</li>
+                                            <li data-value="Computer_Laptop_Repair">Computer & Laptop Repair & Services</li>
+                                            <li data-value="Car_Repair_Services">Car Repair & Services</li>
+                                            <li data-value="Dermatologists">Dermatologists</li>
+                                            <li data-value="Electricians">Electricians</li>
+                                            <li data-value="Event_Organizer">Event Organizer</li>
+                                            <li data-value="Real_Estate">Real Estate</li>
+                                            <li data-value="Fabricators">Fabricators</li>
+                                            <li data-value="Furniture_Repair_Services">Furniture Repair Services</li>
+                                            <li data-value="Housekeeping_Services">Housekeeping Services</li>
+                                            <li data-value="Hobbies">Hobbies</li>
+                                            <li data-value="Interior_Designers">Interior Designers</li>
+                                            <li data-value="Internet_Website_Designers">Internet Website Designers</li>
+                                            <li data-value="Jewellery_Showrooms">Jewellery Showrooms</li>
+                                            <li data-value="Lawyers">Lawyers</li>
+                                            <li data-value="Transporters">Transporters</li>
+                                            <li data-value="Photographers">Photographers</li>
+                                            <li data-value="Nursing_Services">Nursing Services</li>
+                                            <li data-value="Printing_Publishing_Services">Printing & Publishing Services</li>
+                                            <li data-value="Placement_Services">Placement Services</li>
+                                            <li data-value="Pest_Control_Services">Pest Control Services</li>
+                                            <li data-value="Painting_Contractors">Painting Contractors</li>
+                                            <li data-value="Packers_Movers">Packers & Movers</li>
+                                            <li data-value="Destination_Wedding">Destination Wedding</li>
+                                            <li data-value="Solar_Panels">Solar Panels</li>
+                                            <li data-value="Advocates">Advocates</li>
+                                            <li data-value="Farmers">Farmers</li>
+                                            <li data-value="Fruit_Vendors">Fruit Vendors</li>
+                                            <li data-value="Vegetable_Vendors">Vegetable Vendors</li>
+                                        </ul>
+                                        
                                       </div>
                                   </div>
                                   <div class="phone-city-search">
-                                      <input type="text" placeholder="Search by city">
-                                      <div class="phone-city-search-input-icon">
-                                          <i class="fa-solid fa-magnifying-glass"></i>
-                                      </div>
-                                  </div>
+                                    <input type="text" id="mobile-suggestion-input" placeholder="Search by city" onkeyup="showMobileSuggestions()">
+                                    <div class="phone-city-search-input-icon">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </div>
+                                    <ul id="mobile-suggestion-list" class="mobile-suggestion-dropdown"></ul>
+                                </div>
+                                
                               </div>
                           </div>
                   
@@ -403,7 +481,7 @@
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-
+    <script src="/suggestion.js"></script>
     <script src="/main.js"></script>
     <script src="/toggle.js"></script>
     
