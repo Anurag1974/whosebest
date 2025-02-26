@@ -39,3 +39,66 @@
     border-color: #0056b3;
     transform: scale(1.05);
 }
+
+.cab-taxi-driver-forms-suggestions-container {
+    position: relative;
+    width: 100%;
+}
+
+.cab-taxi-driver-forms-suggestions-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    margin-top: -1px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+.cab-taxi-driver-forms-suggestions-list.active {
+    display: block;
+}
+
+.cab-taxi-driver-forms-suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #333;
+    transition: background-color 0.2s;
+}
+
+.cab-taxi-driver-forms-suggestion-item:hover,
+.cab-taxi-driver-forms-suggestion-item.selected {
+    background-color: #f5f5f5;
+}
+
+.cab-taxi-driver-forms-suggestion-item strong {
+    color: #2196F3;
+    font-weight: 600;
+}
+
+/* Scrollbar styles for suggestions list */
+.cab-taxi-driver-forms-suggestions-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.cab-taxi-driver-forms-suggestions-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 0 0 4px 0;
+}
+
+.cab-taxi-driver-forms-suggestions-list::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.cab-taxi-driver-forms-suggestions-list::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
