@@ -503,3 +503,62 @@ body {
         padding: 0.75rem 1rem;
     }
 }
+
+
+
+/* Modal backdrop custom styling */
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Customizing the modal */
+.modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+    background: #fff;
+}
+
+/* Modal Header */
+.modal-header {
+    background: #4578e4;
+    color: #fff;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.modal-title {
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.btn-close {
+   
+    filter: invert(1); /* Makes the close button visible on dark backgrounds */
+}
+
+/* Modal Body - Centering Image */
+.modal-body {
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f8f9fa;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+/* Image Styling */
+#modalImage {
+    max-width: 100%;
+    max-height: 80vh; /* Prevents overflow */
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Zoom effect on hover */
+#modalImage:hover {
+    transform: scale(1.03);
+}

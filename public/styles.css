@@ -985,274 +985,149 @@ li{
 
 /* footer css */
 
-a{
+/* footer css */
+a {
     text-decoration: none;
+    color: inherit; /* Inherits color from parent for simplicity */
 }
 
+/* Footer Styles */
 .footer {
-    background: #2c2c2c;
-    color: #ffffff;
-    padding: 50px 0;
-    font-family: 'Poppins', sans-serif;
+    margin-top: 100px;
+    background-color: #2c2c2c; /* Light gray for subtle contrast */
+    padding: 2rem 1rem; /* Minimal padding */
+    border-top: 1px solid #e0e0e0; /* Thin top border */
 }
 
 .footer-content-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+    max-width: 1200px; /* Limits width on large screens */
+    margin: 0 auto; /* Centers content */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; /* Minimal spacing between sections */
 }
 
 .whose-best-footer-main-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 30px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    flex-wrap: wrap; /* Allows wrapping on small screens */
+    gap: 1rem; /* Minimal gap */
 }
-/* .whose-best-footer-logo{
-    padding: 0;
-} */
 
-.whose-best-footer-logo a h1 {
-    font-size: 2.3rem;
-    font-weight: 900;
-    color: #ffffff;
+.whose-best-footer-logo h1 {
+    font-size: 1.5rem; /* Clean, modest size */
+    font-weight: 600;
     margin-left: -20px;
+    color: #e4dbdb; /* Dark gray for simplicity */
 }
 
 .whose-best-footer-social-links {
     display: flex;
-    gap: 15px;
+    gap: 1rem; /* Tight spacing between icons */
 }
 
 .whose-best-footer-social-links a {
-    color: #ffffff;
-    font-size: 1.5rem;
-    text-decoration: none;
+    font-size: 1.2rem; /* Slightly larger icons */
+    color: #e4dbdb; /* Muted gray */
+    transition: all 0.2s ease;
 }
 
 .whose-best-footer-social-links a:hover {
-    color: #000000;
+    transform: translateY(-10px);
 }
 
 .whose-best-footer-navigation-links {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    padding: 30px 0;
+    display: flex;
+    flex-wrap: wrap; /* Allows wrapping */
+    gap: 2rem; /* Minimal spacing between columns */
+    justify-content: space-between;
+}
+
+.whose-best-footer-quick-links,
+.whose-best-footer-policy-links {
+    min-width: 150px; /* Prevents collapse on small screens */
 }
 
 .whose-best-footer-quick-links h3,
-.whose-best-footer-policy-links h3,
-.whose-best-footer-news-letter h3 {
-    font-size: 1.8rem;
+.whose-best-footer-policy-links h3 {
+    font-size: 1rem; /* Small headings */
     font-weight: 600;
-    color: #ffffff;
-    margin-bottom: 15px;
+    color: #e4dbdb;
+    margin-bottom: 0.5rem; /* Tight spacing */
 }
 
 .whose-best-footer-links {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0.4rem; /* Very minimal spacing */
 }
 
 .whose-best-footer-links a {
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
-    font-size: 1rem;
-    font-weight: 400;
-    transition: all 0.3s ease;
+    font-size: 0.9rem; /* Compact text */
+    color: #e4dbdb;
+    transition: all 0.2s ease;
 }
 
 .whose-best-footer-links a:hover {
-    color: #ffffff;
-    transform: translateX(10px);
-}
-
-.whose-best-footer-news-letter-input {
-    position: relative;
-    max-width: 370px; /* Increased from 250px */
-    margin-top: 15px;
-}
-
-.whose-best-footer-news-letter-input input {
-    width: 100%;
-    padding: 10px 110px 10px 15px; /* Adjusted padding to accommodate wider width */
-    border: 1px solid #ffffff;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-family: 'Poppins', sans-serif;
-    background: #ffffff;
-    color: #000000;
-}
-
-.whose-best-footer-news-letter-input input::placeholder {
-    color: #666666;
-}
-
-.whose-best-footer-news-letter-input a {
-    position: absolute;
-    right: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: #000000;
-    color: #ffffff;
-    padding: 6px 15px;
-    border-radius: 3px;
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-.whose-best-footer-news-letter-input a:hover {
-    background: #333333;
-}
-
-.whose-best-footer-copyright {
-    text-align: center;
-    padding-top: 20px;
-    color: rgb(255, 255, 255);
-    font-size: 0.9rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.whose-best-footer-copyright a{
-    color: rgb(255, 255, 255);
-    font-weight: 600;
-}
-
-.whose-best-footer-copyright a:hover{
+    margin-left: 4px;
     text-decoration: underline;
 }
 
-.whose-best-footer-review{
-    margin-top: 30px;
-}
-
-.whose-best-footer-review p a{
-    color: #2c2c2c;
-    text-decoration: none;
+.whose-best-footer-news-letter-review p {
     font-size: 0.9rem;
-    background-color: #ffffff;
-    padding: 5px 10px;
-    border-radius: 3px;
-    transition: all 0.3s ease;
+    color: #e4dbdb;
 }
 
-.whose-best-footer-review p a:hover{
-    background-color: #666769;
-    border: 1px solid #ffffff88;
-    color: #ffffff;
+.whose-best-footer-news-letter-review a {
+    color: #e4dbdb;
+    font-weight: 500;
+    transition: all 0.2s ease;
 }
 
-/* Responsive Design */
-@media (max-width: 1024px) {
-    .footer {
-        padding: 40px 0;
-    }
-
-    .whose-best-footer-logo h1 {
-        font-size: 1.8rem;
-    }
-
-    .whose-best-footer-social-links a {
-        font-size: 1.4rem;
-    }
-
-    .whose-best-footer-navigation-links {
-        gap: 25px;
-    }
-
-    .whose-best-footer-quick-links h3,
-    .whose-best-footer-policy-links h3 {
-        font-size: 1.1rem;
-    }
-
-    .whose-best-footer-news-letter-input {
-        max-width: 280px; /* Slightly reduced for medium screens */
-    }
+.whose-best-footer-news-letter-review a:hover {
+    /* margin-left: 4px; */
+    text-decoration: underline;
 }
 
+.whose-best-footer-copyright {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Wraps on small screens */
+    gap: 1rem;
+    font-size: 0.85rem; /* Tiny text */
+    color: #999; /* Light gray */
+    border-top: 1px solid #e0e0e0;
+    padding-top: 1rem;
+}
+
+.whose-best-footer-copyright a {
+    color: #8b8989;
+    transition: color 0.2s ease;
+}
+
+.whose-best-footer-copyright a:hover {
+    color: #726e6e;
+}
+
+/* Responsive Adjustments */
 @media (max-width: 768px) {
     .whose-best-footer-main-content {
         flex-direction: column;
-        text-align: center;
-        gap: 20px;
-    }
-
-    .whose-best-footer-social-links {
-        justify-content: center;
-    }
-
-    .whose-best-footer-navigation-links {
-        grid-template-columns: 1fr;
-        text-align: center;
-        gap: 20px;
-    }
-
-    .whose-best-footer-links {
         align-items: center;
     }
 
-    .whose-best-footer-news-letter-input {
-        margin: 0 auto;
-        max-width: 260px; /* Adjusted for tablet */
-    }
+    .whose-best-footer-navigation-links {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.5rem;
 
-    .whose-best-footer-copyright{
-        flex-direction: column-reverse;
-        gap: 30px;
-    }
-}
-
-@media (max-width: 480px) {
-    .footer {
-        padding: 30px 0;
-    }
-
-    .footer-content-container {
-        padding: 0 15px;
-    }
-
-    .whose-best-footer-logo h1 {
-        font-size: 1.5rem;
-    }
-
-    .whose-best-footer-social-links a {
-        font-size: 1.2rem;
-        margin: 0 8px;
-    }
-
-    .whose-best-footer-quick-links h3,
-    .whose-best-footer-policy-links h3 {
-        font-size: 1rem;
-    }
-
-    .whose-best-footer-links a {
-        font-size: 0.9rem;
-    }
-
-    .whose-best-footer-news-letter-input {
-        max-width: 220px; /* Adjusted for mobile */
-    }
-
-    .whose-best-footer-news-letter-input input {
-        padding: 8px 90px 8px 12px;
-        font-size: 0.9rem;
-    }
-
-    .whose-best-footer-news-letter-input a {
-        padding: 5px 12px;
-        font-size: 0.8rem;
     }
 
     .whose-best-footer-copyright {
-        font-size: 0.8rem;
+        flex-direction: column;
+        align-items: center;
     }
 }
-
-

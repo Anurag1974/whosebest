@@ -1,39 +1,44 @@
 <link rel="stylesheet" href="/your-business.css">
 
-
-<div class="countdownpage-time-countdown-container">
-    <h2>FREE LISTING 180 DAY</h2>
-    <div class="countdownpage-time-timer">
-        <div class="countdownpage-time-circle">
-            <svg>
-                <circle cx="50" cy="50" r="45"></circle>
-                <circle id="days-progress" class="progress" cx="50" cy="50" r="45"></circle>
+<div class="business-profile-free-listing"> 
+    <h1>Free Listing</h1>
+    <section class="dial-section">
+    
+    <div class="dial-container">
+        <div class="dial">
+            <svg viewBox="0 0 100 100">
+                <circle class="dial-bg" cx="50" cy="50" r="45" />
+                <circle class="dial-progress" cx="50" cy="50" r="45" id="days-dial" />
             </svg>
-            <div class="countdownpage-time-label"><span id="days">180</span><br>DAYS</div>
+            <span class="dial-value" id="days-value">180</span>
+            <span class="dial-label">Days</span>
         </div>
-        <div class="countdownpage-time-circle">
-            <svg>
-                <circle cx="50" cy="50" r="45"></circle>
-                <circle id="hours-progress" class="progress" cx="50" cy="50" r="45"></circle>
+        <div class="dial">
+            <svg viewBox="0 0 100 100">
+                <circle class="dial-bg" cx="50" cy="50" r="45" />
+                <circle class="dial-progress" cx="50" cy="50" r="45" id="hours-dial" />
             </svg>
-            <div class="countdownpage-time-label"><span id="hours">00</span><br>HOURS</div>
+            <span class="dial-value" id="hours-value">23</span>
+            <span class="dial-label">Hours</span>
         </div>
-        <div class="countdownpage-time-circle">
-            <svg>
-                <circle cx="50" cy="50" r="45"></circle>
-                <circle id="minutes-progress" class="progress" cx="50" cy="50" r="45"></circle>
+        <div class="dial">
+            <svg viewBox="0 0 100 100">
+                <circle class="dial-bg" cx="50" cy="50" r="45" />
+                <circle class="dial-progress" cx="50" cy="50" r="45" id="minutes-dial" />
             </svg>
-            <div class="countdownpage-time-label"><span id="minutes">00</span><br>MINUTES</div>
+            <span class="dial-value" id="minutes-value">59</span>
+            <span class="dial-label">Minutes</span>
         </div>
-        <div class="countdownpage-time-circle">
-            <svg>
-                <circle cx="50" cy="50" r="45"></circle>
-                <circle id="seconds-progress" class="progress" cx="50" cy="50" r="45"></circle>
+        <div class="dial">
+            <svg viewBox="0 0 100 100">
+                <circle class="dial-bg" cx="50" cy="50" r="45" />
+                <circle class="dial-progress" cx="50" cy="50" r="45" id="seconds-dial" />
             </svg>
-            <div class="countdownpage-time-label"><span id="seconds">00</span><br>SECONDS</div>
+            <span class="dial-value" id="seconds-value">59</span>
+            <span class="dial-label">Seconds</span>
         </div>
     </div>
-</div>
+</section></div>
 
 <section class="business-listing-section">
     <div class="business-listing-container">
@@ -96,51 +101,68 @@
     </div>
 </section>
 <script>
-    let endDate = localStorage.getItem("countdownEndDate");
 
-if (!endDate) {
-    endDate = new Date();
-    endDate.setDate(endDate.getDate() + 180);
-    localStorage.setItem("countdownEndDate", endDate);
-} else {
-    endDate = new Date(endDate);
-}
-
-function updateCountdown() {
-    const now = new Date();
-    const timeDiff = endDate - now;
-
-    if (timeDiff <= 0) {
-        document.getElementById("days").innerText = "00";
-        document.getElementById("hours").innerText = "00";
-        document.getElementById("minutes").innerText = "00";
-        document.getElementById("seconds").innerText = "00";
-        return;
-    }
-
-    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((timeDiff / (1000 * 60)) % 60);
-    const seconds = Math.floor((timeDiff / 1000) % 60);
-
-    document.getElementById("days").innerText = days.toString().padStart(2, '0');
-    document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
-    document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
-    document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
-
-    updateProgress(days, 180, "days-progress");
-    updateProgress(hours, 24, "hours-progress");
-    updateProgress(minutes, 60, "minutes-progress");
-    updateProgress(seconds, 60, "seconds-progress");
-}
-
-function updateProgress(value, max, id) {
-    const circle = document.getElementById(id);
-    const dashOffset = 283 - (283 * value) / max;
-    circle.style.strokeDashoffset = dashOffset;
-}
-
-setInterval(updateCountdown, 1000);
-updateCountdown();
-</script>
-
+    document.addEventListener('DOMContentLoaded', () => {
+        const daysValue = document.getElementById('days-value');
+        const hoursValue = document.getElementById('hours-value');
+        const minutesValue = document.getElementById('minutes-value');
+        const secondsValue = document.getElementById('seconds-value');
+        const daysDial = document.getElementById('days-dial');
+        const hoursDial = document.getElementById('hours-dial');
+        const minutesDial = document.getElementById('minutes-dial');
+        const secondsDial = document.getElementById('seconds-dial');
+        const startKey = 'counterStartDate';
+        const totalDays = 180;
+        const totalMs = totalDays * 24 * 60 * 60 * 1000; // 180 days in milliseconds
+        const circumference = 282.74; // 2 * π * 45 (radius of circle)
+    
+        // Get or set the start date
+        let startDate = localStorage.getItem(startKey);
+        if (!startDate) {
+            startDate = new Date().toISOString();
+            localStorage.setItem(startKey, startDate);
+        }
+    
+        const start = new Date(startDate);
+        const end = new Date(start.getTime() + totalMs);
+    
+        function updateDials() {
+            const now = new Date();
+            const timeLeft = end - now;
+    
+            if (timeLeft <= 0) {
+                daysValue.textContent = '0';
+                hoursValue.textContent = '0';
+                minutesValue.textContent = '0';
+                secondsValue.textContent = '0';
+                daysDial.style.strokeDashoffset = circumference;
+                hoursDial.style.strokeDashoffset = circumference;
+                minutesDial.style.strokeDashoffset = circumference;
+                secondsDial.style.strokeDashoffset = circumference;
+                return;
+            }
+    
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+    
+            // Update values
+            daysValue.textContent = days;
+            hoursValue.textContent = hours;
+            minutesValue.textContent = minutes;
+            secondsValue.textContent = seconds;
+    
+            // Update dials with smooth progress
+            daysDial.style.strokeDashoffset = circumference * (1 - days / totalDays);
+            hoursDial.style.strokeDashoffset = circumference * (1 - hours / 24);
+            minutesDial.style.strokeDashoffset = circumference * (1 - minutes / 60);
+            secondsDial.style.strokeDashoffset = circumference * (1 - seconds / 60);
+        }
+    
+        // Initial update and smooth animation loop
+        updateDials();
+        setInterval(updateDials, 1000);
+    });
+    
+    </script>

@@ -4,12 +4,12 @@
         <h2 class="section-title" style="text-transform: capitalize;">
             <i class="fas fa-store"></i> <%= businessDetails.business_name %>
         </h2>
-        
         <div class="image-gallery">
             <div class="gallery-container">
                 <% if (images.length > 0) { %>
                     <% images.forEach(image => { %>
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="setModalImage('modalImage')">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" 
+                           onclick="setModalImage('<%= image.image_source %>')">
                             <img src="<%= image.image_source %>" 
                                  alt="<%= businessDetails.business_name %> Business Image" 
                                  class="gallery-image">
@@ -221,7 +221,19 @@
     </div>
   </main>
   
-
+  <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- <h5 class="modal-title" id="imageModalLabel"><%= businessDetails.business_name %></h5> -->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="Selected Image" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Share Modal -->
 <div class="modal" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
   <div class="modal-content">
@@ -250,6 +262,10 @@
           });
       });
   });
+
+  function setModalImage(imageSrc) {
+        document.getElementById('modalImage').src = imageSrc;
+    }
 
 
 </script>
