@@ -754,6 +754,7 @@ GROUP BY bd.id;
         bd.phone,
         bd.image_source, 
         bd.category, 
+        bd.website,
         u.profile_image,  -- Fetch profile image from users table
         AVG(r.rating) AS average_rating,
         ROW_NUMBER() OVER (PARTITION BY bd.category ORDER BY AVG(r.rating) DESC) AS rank
@@ -771,6 +772,7 @@ SELECT
     phone,
     image_source, 
     category, 
+    website,
     profile_image,  -- Include profile image in the final output
     average_rating
 FROM 
@@ -919,7 +921,7 @@ WHERE
             const query = `
                 SELECT r.*, 
                 u.name , u.profile_image,
-                b.business_name, b.city, b.category,b.image_source
+                b.business_name, b.city, b.category,b.image_source,b.phone
                 FROM reviews r
                 JOIN users u ON r.user_id = u.user_id
                 JOIN business_detail b ON r.business_id = b.id

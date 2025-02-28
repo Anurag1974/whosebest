@@ -89,7 +89,7 @@
   .card-body-container-business-tab-content {
     background-color: white;
     border-radius: var(--border-radius);
-    padding: 30px;
+    padding: 10px;
   }
   
   .tab-content {

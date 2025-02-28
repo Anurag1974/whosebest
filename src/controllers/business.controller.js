@@ -1344,8 +1344,14 @@ async updatePinkDriverStatus(req, res) {
 }
 
 showTaxiPage(req, res) {
-    res.render('book-your-taxi', { user: req.user || null, toggle:  req.session.toggle  });
+    try {
+        res.render('book-your-taxi', { user: req.user || null, toggle: req.session.toggle });
+    } catch (error) {
+        console.error('Error rendering book-your-taxi page:', error);
+        res.status(500).send('Internal Server Error');
+    }
 }
+
 
 async  showAvailableTaxi(req, res) {
     try {

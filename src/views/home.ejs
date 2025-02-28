@@ -729,6 +729,17 @@
                         <%= businessCounts.Vegetable_Vendors || 0 %> listings
                     </p>
                 </a>
+                <a href="/search-category?category=Ev_Station" class="category">
+                    <div class="category-icon">
+                        <i class="fa-solid fa-bolt fa-2xl"></i>
+                        
+                    </div>
+                    <h2>EV Station</h2>
+                    <p>
+                        <%= businessCounts. Ev_Station || 0 %> listings
+                    </p>
+                </a>
+               
 
                 
                 <!-- Vocational training -->
@@ -781,13 +792,14 @@
                                     <a href="/business-details/<%=business.id%>">View Details</a>
                                 </div>
                                 <div class="top-business-website-map-whatsapp-button">
-                                    <a href="https://wa.me/<%= business.phone %>" target="_blank">
+                                    <a href="https://wa.me/<%= business.phone %>" target="_blank" title="Whatsapp">
                                         <i class="fa-brands fa-whatsapp"></i>
                                     </a>
-                                    <a href="#"><i class="fa-solid fa-globe"></i></a>
-                                    <a href="https://www.google.com/maps/search/<%=business.address%>" target="_blank">
+                                    <a href="<%=business.website%>" target="_blank" title="website"><i class="fa-solid fa-globe"></i></a>
+                                    <a href="https://www.google.com/maps/search/<%=business.address%>" target="_blank" title="View on Map">
                                         <i class="fa-solid fa-map-location-dot"></i>
                                     </a>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -903,7 +915,7 @@
                         </div>
                     </a><a href="/search-category?category=Dermatologists">
                         <div class="popular-card-inner-1 popular-category-inner-card-8 ">
-                            <p>Dermatologists</p>
+                            <p>Skin Care</p>
                             
                         </div>
                     </a><a href="/search-category?category=Nursing_Services">

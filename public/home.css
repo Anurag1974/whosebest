@@ -315,7 +315,7 @@ h1 {
 .card-image-container-1{
     background: url("/images/card_images/Food.png");
     position: absolute;
-    bottom: -110px;
+    bottom: -140px;
     left: 2%;
     width: 100%;
     height: 150%;
@@ -330,7 +330,7 @@ h1 {
 .card-image-container-2{
     background: url("/images/card_images/hotel.png");
     position: absolute;
-    bottom: -40px;
+    bottom: -60px;
     left: 10%;
     width: 100%;
     height: 100%;
@@ -343,7 +343,7 @@ h1 {
 }.card-image-container-3{
     background: url("/images/card_images/card1.png");
     position: absolute;
-    bottom: -40px;
+    bottom: -60px;
     left: 20%;
     width: 100%;
     height: 100%;
