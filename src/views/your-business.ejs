@@ -102,67 +102,62 @@
 </section>
 <script>
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const daysValue = document.getElementById('days-value');
-        const hoursValue = document.getElementById('hours-value');
-        const minutesValue = document.getElementById('minutes-value');
-        const secondsValue = document.getElementById('seconds-value');
-        const daysDial = document.getElementById('days-dial');
-        const hoursDial = document.getElementById('hours-dial');
-        const minutesDial = document.getElementById('minutes-dial');
-        const secondsDial = document.getElementById('seconds-dial');
-        const startKey = 'counterStartDate';
-        const totalDays = 180;
-        const totalMs = totalDays * 24 * 60 * 60 * 1000; // 180 days in milliseconds
-        const circumference = 282.74; // 2 * π * 45 (radius of circle)
+document.addEventListener('DOMContentLoaded', () => {
+    const daysValue = document.getElementById('days-value');
+    const hoursValue = document.getElementById('hours-value');
+    const minutesValue = document.getElementById('minutes-value');
+    const secondsValue = document.getElementById('seconds-value');
+    const daysDial = document.getElementById('days-dial');
+    const hoursDial = document.getElementById('hours-dial');
+    const minutesDial = document.getElementById('minutes-dial');
+    const secondsDial = document.getElementById('seconds-dial');
     
-        // Get or set the start date
-        let startDate = localStorage.getItem(startKey);
-        if (!startDate) {
-            startDate = new Date().toISOString();
-            localStorage.setItem(startKey, startDate);
+    const totalDays = 180;
+    const totalMs = totalDays * 24 * 60 * 60 * 1000; // 180 days in milliseconds
+    const circumference = 282.74; // 2 * π * 45 (radius of circle)
+
+    // Set a fixed start date
+    const startDate = new Date("2025-03-01T00:00:00Z"); // Fixed start date (YYYY-MM-DD)
+    const start = startDate;
+    const end = new Date(start.getTime() + totalMs);
+
+    function updateDials() {
+        const now = new Date();
+        const timeLeft = end - now;
+
+        if (timeLeft <= 0) {
+            daysValue.textContent = '0';
+            hoursValue.textContent = '0';
+            minutesValue.textContent = '0';
+            secondsValue.textContent = '0';
+            daysDial.style.strokeDashoffset = circumference;
+            hoursDial.style.strokeDashoffset = circumference;
+            minutesDial.style.strokeDashoffset = circumference;
+            secondsDial.style.strokeDashoffset = circumference;
+            return;
         }
-    
-        const start = new Date(startDate);
-        const end = new Date(start.getTime() + totalMs);
-    
-        function updateDials() {
-            const now = new Date();
-            const timeLeft = end - now;
-    
-            if (timeLeft <= 0) {
-                daysValue.textContent = '0';
-                hoursValue.textContent = '0';
-                minutesValue.textContent = '0';
-                secondsValue.textContent = '0';
-                daysDial.style.strokeDashoffset = circumference;
-                hoursDial.style.strokeDashoffset = circumference;
-                minutesDial.style.strokeDashoffset = circumference;
-                secondsDial.style.strokeDashoffset = circumference;
-                return;
-            }
-    
-            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-    
-            // Update values
-            daysValue.textContent = days;
-            hoursValue.textContent = hours;
-            minutesValue.textContent = minutes;
-            secondsValue.textContent = seconds;
-    
-            // Update dials with smooth progress
-            daysDial.style.strokeDashoffset = circumference * (1 - days / totalDays);
-            hoursDial.style.strokeDashoffset = circumference * (1 - hours / 24);
-            minutesDial.style.strokeDashoffset = circumference * (1 - minutes / 60);
-            secondsDial.style.strokeDashoffset = circumference * (1 - seconds / 60);
-        }
-    
-        // Initial update and smooth animation loop
-        updateDials();
-        setInterval(updateDials, 1000);
-    });
+
+        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+        // Update values
+        daysValue.textContent = days;
+        hoursValue.textContent = hours;
+        minutesValue.textContent = minutes;
+        secondsValue.textContent = seconds;
+
+        // Update dials with smooth progress
+        daysDial.style.strokeDashoffset = circumference * (1 - days / totalDays);
+        hoursDial.style.strokeDashoffset = circumference * (1 - hours / 24);
+        minutesDial.style.strokeDashoffset = circumference * (1 - minutes / 60);
+        secondsDial.style.strokeDashoffset = circumference * (1 - seconds / 60);
+    }
+
+    // Initial update and smooth animation loop
+    updateDials();
+    setInterval(updateDials, 1000);
+});
     
     </script>

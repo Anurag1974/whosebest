@@ -173,19 +173,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const hoursDial = document.getElementById('hours-dial');
     const minutesDial = document.getElementById('minutes-dial');
     const secondsDial = document.getElementById('seconds-dial');
-    const startKey = 'counterStartDate';
+    
     const totalDays = 180;
     const totalMs = totalDays * 24 * 60 * 60 * 1000; // 180 days in milliseconds
     const circumference = 282.74; // 2 * π * 45 (radius of circle)
 
-    // Get or set the start date
-    let startDate = localStorage.getItem(startKey);
-    if (!startDate) {
-        startDate = new Date().toISOString();
-        localStorage.setItem(startKey, startDate);
-    }
-
-    const start = new Date(startDate);
+    // Set a fixed start date
+    const startDate = new Date("2025-03-01T00:00:00Z"); // Fixed start date (YYYY-MM-DD)
+    const start = startDate;
     const end = new Date(start.getTime() + totalMs);
 
     function updateDials() {
