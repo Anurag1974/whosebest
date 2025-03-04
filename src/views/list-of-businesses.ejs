@@ -1,4 +1,3 @@
-
 <link rel="stylesheet" href="/list-of-business.css">
 <div class="business-listing-main-container">
     <!-- Header Section -->
@@ -18,114 +17,134 @@
     <div class="business-listing-grid">
         <!-- Sample Business Item -->
         <div class="business-list-container">
-            <% if (businesses && businesses.length > 0) { %>
-                <% businesses.forEach(business => { %>
+            <% if (businesses && businesses.length> 0) { %>
+                <% businesses.forEach(business=> { %>
                     <div class="business-item-container">
                         <div class="business-card">
-                            
+
                             <!-- Image Section -->
                             <div class="business-image-wrapper">
-                                <img src="<%= business.image_source || '/images/dummy/dummy business.jpeg' %>" 
-                                     alt="Business Image" 
-                                     class="business-image">
+                                <img src="<%= business.image_source || '/images/dummy/dummy business.jpeg' %>"
+                                    alt="Business Image" class="business-image">
                             </div>
-        
+
                             <!-- Business Info Section -->
                             <div class="business-info-wrapper">
-                                <h4 class="business-name"><%= business.business_name %></h4>
-        
+                                <h4 class="business-name">
+                                    <%= business.business_name %>
+                                </h4>
+
                                 <p class="business-rating-and-details">
-                                    <% if (business.rating) { %>
-                                        <span class="business-rating-badge"><%= business.rating %>⭐</span>
-                                    <% } %>
-                                    <% if (business.total_ratings) { %>
-                                        <strong class="business-total-ratings-text"><%= business.total_ratings %> Ratings</strong>
-                                    <% } %>
-                                    <% if (business.years_in_business) { %>
-                                        <span class="business-years-in-operation">• <%= business.years_in_business %> Year(s) in Business</span>
-                                    <% } %>
+                                    <% if (business.avg_rating) { %>
+                                        <span class="business-rating-badge">
+                                            <%= (parseFloat(business.avg_rating) || 0).toFixed(1) %>⭐
+                                        </span>
+                                        
+                                        
+                                        <% } %>
+                                            <% if (business.total_ratings) { %>
+                                                <strong class="business-total-ratings-text">
+                                                    <%= business.total_ratings %> Ratings
+                                                </strong>
+                                                <% } %>
+                                                    <% if (business.years_in_business) { %>
+                                                        <span class="business-years-in-operation">• <%=
+                                                                business.years_in_business %> Year(s) in Business</span>
+                                                        <% } %>
                                 </p>
-        
+
                                 <% if (business.address) { %>
-                                    <p class="business-address-text"><strong>Address:</strong> <%= business.address %></p>
-                                <% } %>
-        
-                                <% if (business.city && business.timings) { %>
-                                    <p class="business-city-and-timings"><%= business.city %> • <%= business.timings %></p>
-                                <% } %>
-        
-                                <!-- Action Buttons -->
-                                <div class="business-actions-wrapper">
-                                    <a href="business-details/<%= business.id %>" class="business-details-button">
-                                        <i class="fas fa-info-circle"></i> View Details
-                                    </a>
-                                    <button class="business-enquiry-button">
-                                        <i class="fas fa-envelope"></i> Enquire Now
-                                    </button>
-                                    <% if (business.phone) { %>
-                                        <a href="tel:<%= business.phone %>" class="business-call-button">
-                                            <i class="fas fa-phone"></i> Call
-                                        </a>
+                                    <p class="business-address-text"><strong>Address:</strong>
+                                        <%= business.address %>
+                                    </p>
                                     <% } %>
-                                    <% if (business.whatsapp) { %>
-                                        <a href="https://wa.me/<%= business.whatsapp %>" target="_blank" class="business-whatsapp-button">
-                                            <i class="fab fa-whatsapp"></i> WhatsApp
-                                        </a>
-                                    <% } %>
-                                </div>
-        
+
+                                        <% if (business.city && business.timings) { %>
+                                            <p class="business-city-and-timings">
+                                                <%= business.city %> • <%= business.timings %>
+                                            </p>
+                                            <% } %>
+
+                                                <!-- Action Buttons -->
+                                                <div class="business-actions-wrapper">
+                                                    <a href="business-details/<%= business.id %>"
+                                                        class="business-details-button">
+                                                        <i class="fas fa-info-circle"></i> View Details
+                                                    </a>
+                                                    <button class="business-enquiry-button" onclick="
+                                                    let phoneNumber = '<%= business.phone %>'; 
+                                                     let message = encodeURIComponent('Hello, I\'m interested in your services!'); 
+                                                     let url = `https://wa.me/${phoneNumber}?text=${message}`; 
+                                                     window.open(url, '_blank');
+                                                        ">
+                                                        <i class="fas fa-envelope"></i> Enquire Now
+                                                    </button>
+
+                                                    <% if (business.phone) { %>
+                                                        <a href="tel:<%= business.phone %>"
+                                                            class="business-call-button">
+                                                            <i class="fas fa-phone"></i> Call
+                                                        </a>
+                                                        <% } %>
+                                                            <% if (business.whatsapp) { %>
+                                                                <a href="https://wa.me/<%= business.whatsapp %>"
+                                                                    target="_blank" class="business-whatsapp-button">
+                                                                    <i class="fab fa-whatsapp"></i> WhatsApp
+                                                                </a>
+                                                                <% } %>
+                                                </div>
+
                             </div> <!-- End Business Info -->
                         </div> <!-- End Business Card -->
                     </div> <!-- End Business Item -->
-                <% }) %>
-            <% } else { %>
-                <div class="no-business-message">
-                    <p style="text-align: center;">No businesses found.</p>
-                </div>
-            <% } %>
+                    <% }) %>
+                        <% } else { %>
+                            <div class="no-business-message">
+                                <p style="text-align: center;">No businesses found.</p>
+                            </div>
+                            <% } %>
         </div>
-        
+
         <!-- Repeat business-item-container for other businesses -->
     </div>
 
     <div class="business-pagination-controls">
-        <% if (currentPage > 1) { %>
-            <a href="/search-category?category=<%= category %>&sortBy=<%= sortBy %>&page=<%= currentPage - 1 %>" 
-               class="pagination-button previous-page-button">Back</a>
-        <% } %>
-    
-        <% 
-            let startPage = Math.max(1, currentPage - 1);
-            let endPage = Math.min(totalPages, currentPage + 1);
-    
-            if (startPage > 1) { 
-        %>
-            <a href="/search-category?category=<%= category %>&sortBy=<%= sortBy %>&page=1" 
-               class="pagination-button inactive-page-button">1</a>
-            <% if (startPage > 2) { %>
-                <span class="pagination-dots">...</span>
+        <% if (currentPage> 1) { %>
+            <a href="/search-category?category=<%= category %>&sortBy=<%= sortBy %>&page=<%= currentPage - 1 %>"
+                class="pagination-button previous-page-button">Back</a>
             <% } %>
-        <% } %>
-    
-        <% for (let i = startPage; i <= endPage; i++) { %>
-            <a href="/search-category?category=<%= category %>&sortBy=<%= sortBy %>&page=<%= i %>" 
-               class="pagination-button <%= i === currentPage ? 'active-page-button' : 'inactive-page-button' %>">
-                <%= i %>
-            </a>
-        <% } %>
-    
-        <% if (endPage < totalPages) { %>
-            <% if (endPage < totalPages - 1) { %>
-                <span class="pagination-dots">...</span>
-            <% } %>
-            <a href="/search-category?category=<%= category %>&sortBy=<%= sortBy %>&page=<%= totalPages %>" 
-               class="pagination-button inactive-page-button"><%= totalPages %></a>
-        <% } %>
-    
-        <% if (currentPage < totalPages) { %>
-            <a href="/search-category?category=<%= category %>&sortBy=<%= sortBy %>&page=<%= currentPage + 1 %>" 
-               class="pagination-button next-page-button">Next</a>
-        <% } %>
+
+                <% let startPage=Math.max(1, currentPage - 1); let endPage=Math.min(totalPages, currentPage + 1); if
+                    (startPage> 1) {
+                    %>
+                    <a href="/search-category?category=<%= category %>&sortBy=<%= sortBy %>&page=1"
+                        class="pagination-button inactive-page-button">1</a>
+                    <% if (startPage> 2) { %>
+                        <span class="pagination-dots">...</span>
+                        <% } %>
+                            <% } %>
+
+                                <% for (let i=startPage; i <=endPage; i++) { %>
+                                    <a href="/search-category?category=<%= category %>&sortBy=<%= sortBy %>&page=<%= i %>"
+                                        class="pagination-button <%= i === currentPage ? 'active-page-button' : 'inactive-page-button' %>">
+                                        <%= i %>
+                                    </a>
+                                    <% } %>
+
+                                        <% if (endPage < totalPages) { %>
+                                            <% if (endPage < totalPages - 1) { %>
+                                                <span class="pagination-dots">...</span>
+                                                <% } %>
+                                                    <a href="/search-category?category=<%= category %>&sortBy=<%= sortBy %>&page=<%= totalPages %>"
+                                                        class="pagination-button inactive-page-button">
+                                                        <%= totalPages %>
+                                                    </a>
+                                                    <% } %>
+
+                                                        <% if (currentPage < totalPages) { %>
+                                                            <a href="/search-category?category=<%= category %>&sortBy=<%= sortBy %>&page=<%= currentPage + 1 %>"
+                                                                class="pagination-button next-page-button">Next</a>
+                                                            <% } %>
     </div>
-    
+
 </div>

@@ -100,11 +100,15 @@
 
             <div class="cab-taxi-driver-forms-form-group cab-taxi-driver-forms-file-input-group">
                 <label for="cab-taxi-driver-forms-vehicle-image"><i class="fas fa-camera"></i> Vehicle Image*</label>
-                <div class="cab-taxi-driver-forms-file-input-wrapper">
-                    <input type="file" id="cab-taxi-driver-forms-vehicle-image" name="vehicle-image" accept="image/*" required>
+                <div class="cab-taxi-driver-forms-file-input-wrapper" onclick="document.getElementById('cab-taxi-driver-forms-vehicle-image').click();">
+                    <input type="file" id="cab-taxi-driver-forms-vehicle-image" name="vehicle-image" accept="image/*" required >
                     <i class="fas fa-cloud-upload-alt"></i>
-                    <span>Choose File</span>
+                    <span id="file-name">Choose File</span>
                 </div>
+                <div id="toast1" style="display: none; background-color: red; color: white; padding: 10px; margin-top: 10px; margin-bottom: 10px; border-radius: 5px;">
+                    Image size must be less than 3MB.
+                </div>
+                
             </div>
         </div>
 
@@ -136,29 +140,40 @@
             </div>
             <div class="cab-taxi-driver-forms-form-group cab-taxi-driver-forms-file-input-group">
                 <label for="cab-taxi-driver-forms-license-front"><i class="fas fa-id-card"></i> Driving License - Front Side*</label>
-                <div class="cab-taxi-driver-forms-file-input-wrapper">
-                    <input type="file" id="cab-taxi-driver-forms-license-front" name="license-front" accept="image/*" required>
+                <div class="cab-taxi-driver-forms-file-input-wrapper" onclick="document.getElementById('cab-taxi-driver-forms-license-front').click();">
+                    <input type="file" id="cab-taxi-driver-forms-license-front" name="license-front" accept="image/*" required hidden>
                     <i class="fas fa-cloud-upload-alt"></i>
-                    <span>Choose File</span>
+                    <span id="file-name-license">Choose File</span>
+                </div>
+                <div id="toast2" style="display: none; background-color: red; color: white; padding: 10px; margin-top: 10px; margin-bottom: 10px; border-radius: 5px;">
+                    Image size must be less than 3MB.
                 </div>
             </div>
 
             <div class="cab-taxi-driver-forms-form-group cab-taxi-driver-forms-file-input-group">
                 <label for="cab-taxi-driver-forms-license-back"><i class="fas fa-id-card"></i> Driving License - Back Side*</label>
-                <div class="cab-taxi-driver-forms-file-input-wrapper">
-                    <input type="file" id="cab-taxi-driver-forms-license-back" name="license-back" accept="image/*" required>
+                <div class="cab-taxi-driver-forms-file-input-wrapper" onclick="document.getElementById('cab-taxi-driver-forms-license-back').click();">
+                    <input type="file" id="cab-taxi-driver-forms-license-back" name="license-back" accept="image/*" required hidden>
                     <i class="fas fa-cloud-upload-alt"></i>
-                    <span>Choose File</span>
+                    <span id="file-name-license-back">Choose File</span>
                 </div>
+                <div id="toast3" style="display: none; background-color: red; color: white; padding: 10px; margin-top: 10px; margin-bottom: 10px; border-radius: 5px;">
+                    Image size must be less than 3MB.
+                </div>
+                
             </div>
 
             <div class="cab-taxi-driver-forms-form-group cab-taxi-driver-forms-file-input-group">
                 <label for="cab-taxi-driver-forms-driver-photo"><i class="fas fa-user-circle"></i> Current Photo*</label>
-                <div class="cab-taxi-driver-forms-file-input-wrapper">
-                    <input type="file" id="cab-taxi-driver-forms-driver-photo" name="driver-photo" accept="image/*" required>
+                <div class="cab-taxi-driver-forms-file-input-wrapper" onclick="document.getElementById('cab-taxi-driver-forms-driver-photo').click();">
+                    <input type="file" id="cab-taxi-driver-forms-driver-photo" name="driver-photo" accept="image/*" required hidden>
                     <i class="fas fa-cloud-upload-alt"></i>
-                    <span>Choose File</span>
+                    <span id="file-name-driver-photo">Choose File</span>
                 </div>
+                <div id="toast4" style="display: none; background-color: red; color: white; padding: 10px; margin-top: 10px; margin-bottom: 10px; border-radius: 5px;">
+                    Image size must be less than 3MB.
+                </div>
+                
             </div>
         </div>
 

@@ -63,9 +63,13 @@
                                 <label for="phone_number" class="form-label phone-number-label">Phone Number</label>
                                 <input type="number" id="phone-number" placeholder="Enter your phone number" value="<%= userDetails.phone_number %>" class="form-input phone-number-input">
                             </div>
+                            
                             <div class="form-group-wrapper profile-picture-upload-group">
                                 <label for="profileImage" class="form-label profile-picture-upload-label">Upload Profile Picture</label>
                                 <input type="file" name="profileImage" id="profileImage" class="form-file-input profile-picture-upload-input">
+                            </div>
+                            <div id="toast" style="display: none; background-color: red; color: white; padding: 10px; margin-top: 10px; margin-bottom: 10px; border-radius: 5px;">
+                                Image size must be less than 3MB.
                             </div>
                         </form>
                     </div>

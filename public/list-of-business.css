@@ -147,7 +147,7 @@ body {
 .business-whatsapp-button {
     padding: 8px 15px;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 55px;
     transition: all 0.3s ease;
     display: inline-flex;
     align-items: center;
@@ -163,7 +163,7 @@ body {
 }
 
 .business-enquiry-button {
-    background-color: #28a745;
+    background-color: #30b34f;
     color: white;
     border: none;
 }
@@ -182,7 +182,8 @@ body {
 .business-enquiry-button:hover, 
 .business-call-button:hover,
 .business-whatsapp-button:hover {
-    transform: translateY(-3px);
+    scale: 0.92;
+    /* transform: translateY(-3px); */
     box-shadow: 0 7px 14px rgba(0, 0, 0, 0.15);
 }
 

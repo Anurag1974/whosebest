@@ -1,4 +1,30 @@
 
+// document.getElementById('thumbnail').addEventListener('change', checkFileSize);
+document.getElementById('profileImage').addEventListener('change', checkFileSize);
+
+function checkFileSize(event) {
+    const file = event.target.files[0];
+    if (file && file.size > 3 * 1024 * 1024) { // 3MB in bytes
+        // Prevent form submission if file is too large
+        event.preventDefault();
+
+        // Show toast message
+        const toast = document.getElementById('toast');
+        toast.style.display = 'block';
+
+        // Hide the toast message after 3 seconds
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 3000);
+
+        // Manually reload the page after 3 seconds to allow the toast to show
+        setTimeout(() => {
+            window.location.reload();
+        }, 3000);
+    }
+}
+
+
 async function updateUserInformation() {
     const formData = new FormData();
 

@@ -28,9 +28,9 @@
                                 </h4>
 
                                 <p class="business-rating-and-details">
-                                    <% if (business.rating) { %>
+                                    <% if (business.avg_rating) { %>
                                         <span class="business-rating-badge">
-                                            <%= business.rating %>⭐
+                                            <%= (parseFloat(business.avg_rating) || 0).toFixed(1) %>⭐
                                         </span>
                                         <% } %>
                                             <% if (business.total_ratings) { %>

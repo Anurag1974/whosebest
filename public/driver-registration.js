@@ -423,4 +423,209 @@ function registerDriverShowModal(message, isSuccess = true) {
     }, 3000);
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+    const input = document.getElementById('cab-taxi-driver-forms-vehicle-image');
+    
+    const wrapper = document.querySelector('.cab-taxi-driver-forms-file-input-wrapper');
+    const fileNameSpan = document.getElementById('file-name');
 
+    // Open file picker only when clicking the wrapper (not the input itself)
+    wrapper.addEventListener("click", function (event) {
+        if (event.target !== input) {
+            input.value = ''; // Reset input to allow re-selecting the same file
+            input.click(); // Open file picker
+        }
+    });
+
+    // Display selected file name
+    input.addEventListener("change", function () {
+        if (input.files.length > 0) {
+            fileNameSpan.textContent = input.files[0].name; // Show selected file name
+        } else {
+            fileNameSpan.textContent = "Choose File"; // Reset text if no file selected
+        }
+    });
+
+    // Prevent double-click issue by stopping event propagation
+    input.addEventListener("click", function (event) {
+        event.stopPropagation(); // Stop the click from bubbling up to the wrapper
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const input = document.getElementById('cab-taxi-driver-forms-license-front');
+    
+    const wrapper = document.querySelector('.cab-taxi-driver-forms-file-input-wrapper');
+    const fileNameSpan = document.getElementById('file-name-license');
+
+    // Open file picker only when clicking the wrapper (not the input itself)
+    wrapper.addEventListener("click", function (event) {
+        if (event.target !== input) {
+            input.value = ''; // Reset input to allow re-selecting the same file
+            input.click(); // Open file picker
+        }
+    });
+
+    // Display selected file name
+    input.addEventListener("change", function () {
+        if (input.files.length > 0) {
+            fileNameSpan.textContent = input.files[0].name; // Show selected file name
+        } else {
+            fileNameSpan.textContent = "Choose File"; // Reset text if no file selected
+        }
+    });
+
+    // Prevent double-click issue by stopping event propagation
+    input.addEventListener("click", function (event) {
+        event.stopPropagation(); // Stop the click from bubbling up to the wrapper
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const input = document.getElementById('cab-taxi-driver-forms-license-back');
+    
+    const wrapper = document.querySelector('.cab-taxi-driver-forms-file-input-wrapper');
+    const fileNameSpan = document.getElementById('file-name-license-back');
+
+    // Open file picker only when clicking the wrapper (not the input itself)
+    wrapper.addEventListener("click", function (event) {
+        if (event.target !== input) {
+            input.value = ''; // Reset input to allow re-selecting the same file
+            input.click(); // Open file picker
+        }
+    });
+
+    // Display selected file name
+    input.addEventListener("change", function () {
+        if (input.files.length > 0) {
+            fileNameSpan.textContent = input.files[0].name; // Show selected file name
+        } else {
+            fileNameSpan.textContent = "Choose File"; // Reset text if no file selected
+        }
+    });
+
+    // Prevent double-click issue by stopping event propagation
+    input.addEventListener("click", function (event) {
+        event.stopPropagation(); // Stop the click from bubbling up to the wrapper
+    });
+});
+document.addEventListener("DOMContentLoaded", function () {
+    const input = document.getElementById('cab-taxi-driver-forms-driver-photo');
+    
+    const wrapper = document.querySelector('.cab-taxi-driver-forms-file-input-wrapper');
+    const fileNameSpan = document.getElementById('file-name-driver-photo');
+
+    // Open file picker only when clicking the wrapper (not the input itself)
+    wrapper.addEventListener("click", function (event) {
+        if (event.target !== input) {
+            input.value = ''; // Reset input to allow re-selecting the same file
+            input.click(); // Open file picker
+        }
+    });
+
+    // Display selected file name
+    input.addEventListener("change", function () {
+        if (input.files.length > 0) {
+            fileNameSpan.textContent = input.files[0].name; // Show selected file name
+        } else {
+            fileNameSpan.textContent = "Choose File"; // Reset text if no file selected
+        }
+    });
+
+    // Prevent double-click issue by stopping event propagation
+    input.addEventListener("click", function (event) {
+        event.stopPropagation(); // Stop the click from bubbling up to the wrapper
+    });
+});
+
+
+
+document.getElementById('cab-taxi-driver-forms-vehicle-image').addEventListener('change', checkFileSize);
+document.getElementById('cab-taxi-driver-forms-license-back').addEventListener('change', checkFileSize3);
+document.getElementById('cab-taxi-driver-forms-license-front').addEventListener('change', checkFileSize2);
+document.getElementById('cab-taxi-driver-forms-driver-photo').addEventListener('change', checkFileSize4);
+
+function checkFileSize(event) {
+    const file = event.target.files[0];
+    if (file && file.size > 3 * 1024 * 1024) { // 3MB in bytes
+        // Prevent form submission if file is too large
+        event.preventDefault();
+
+        // Show toast message
+        const toast = document.getElementById('toast1');
+        toast.style.display = 'block';
+
+        // Hide the toast message after 3 seconds
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 3000);
+
+        // Manually reload the page after 3 seconds to allow the toast to show
+        setTimeout(() => {
+            window.location.reload();
+        }, 3000);
+    }
+}
+function checkFileSize2(event) {
+    const file = event.target.files[0];
+    if (file && file.size > 3 * 1024 * 1024) { // 3MB in bytes
+        // Prevent form submission if file is too large
+        event.preventDefault();
+
+        // Show toast message
+        const toast = document.getElementById('toast2');
+        toast.style.display = 'block';
+
+        // Hide the toast message after 3 seconds
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 3000);
+
+        // Manually reload the page after 3 seconds to allow the toast to show
+        setTimeout(() => {
+            window.location.reload();
+        }, 3000);
+    }
+}
+function checkFileSize3(event) {
+    const file = event.target.files[0];
+    if (file && file.size > 3 * 1024 * 1024) { // 3MB in bytes
+        // Prevent form submission if file is too large
+        event.preventDefault();
+
+        // Show toast message
+        const toast = document.getElementById('toast3');
+        toast.style.display = 'block';
+
+        // Hide the toast message after 3 seconds
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 3000);
+
+        // Manually reload the page after 3 seconds to allow the toast to show
+        setTimeout(() => {
+            window.location.reload();
+        }, 3000);
+    }
+}
+function checkFileSize4(event) {
+    const file = event.target.files[0];
+    if (file && file.size > 3 * 1024 * 1024) { // 3MB in bytes
+        // Prevent form submission if file is too large
+        event.preventDefault();
+
+        // Show toast message
+        const toast = document.getElementById('toast4');
+        toast.style.display = 'block';
+
+        // Hide the toast message after 3 seconds
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 3000);
+
+        // Manually reload the page after 3 seconds to allow the toast to show
+        setTimeout(() => {
+            window.location.reload();
+        }, 3000);
+    }
+}

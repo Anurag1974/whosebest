@@ -316,24 +316,72 @@ export default class BusinessModel {
     }
     
 
+    // static async getBusinessesByCategoryAndSort(category, sortBy, limit, offset, toggles) {
+    //     const validSortOptions = {
+    //         rating: 'rating DESC',
+    //         totalRatings: 'total_ratings DESC',
+    //     };
+    //     const orderBy = validSortOptions[sortBy] || validSortOptions.rating;
+    
+    //     let query = `SELECT SQL_CALC_FOUND_ROWS * FROM business_detail WHERE category = ?`;
+    //     let conditions = [];
+    //     let params = [category];
+    
+    //     // console.log("Received Toggles:", toggles); // Debugging toggle input
+    
+    //     if (toggles?.ev) {
+    //         conditions.push(`ev_station = 1`);
+    //     }
+    //     if (toggles?.women) {
+    //         conditions.push(`women_owned = 1`);
+    //     }
+    
+    //     // Append conditions if exist
+    //     if (conditions.length > 0) {
+    //         query += ` AND ` + conditions.join(" AND ");
+    //     }
+    
+    //     query += ` ORDER BY ${orderBy} LIMIT ? OFFSET ?`;
+    //     params.push(limit, offset);
+    
+    //     // console.log("Executing Query:", query, "Params:", params); // Debugging query formation
+    
+    //     try {
+    //         const [results] = await db.execute(query, params);
+    //         const [[{ total }]] = await db.query('SELECT FOUND_ROWS() AS total');
+    
+    //         // console.log("Query Results:", results.length, "Total:", total); // Debugging result count
+    //         return { businesses: results, total };
+    //     } catch (error) {
+    //         console.error('Error fetching businesses by category and sorting:', error);
+    //         throw error;
+    //     }
+    // }
     static async getBusinessesByCategoryAndSort(category, sortBy, limit, offset, toggles) {
         const validSortOptions = {
-            rating: 'rating DESC',
-            totalRatings: 'total_ratings DESC',
+            rating: 'avg_rating DESC, total_ratings DESC', // Prioritize avg_rating, then total_ratings
+            totalRatings: 'total_ratings DESC'
         };
         const orderBy = validSortOptions[sortBy] || validSortOptions.rating;
     
-        let query = `SELECT SQL_CALC_FOUND_ROWS * FROM business_detail WHERE category = ?`;
+        let query = `
+            SELECT SQL_CALC_FOUND_ROWS bd.*, 
+                   COALESCE(AVG(r.rating), 0) AS avg_rating, 
+                   COUNT(r.review_id) AS total_ratings
+            FROM business_detail bd
+            LEFT JOIN reviews r ON bd.id = r.business_id
+            WHERE bd.category = ?
+        `;
+    
         let conditions = [];
         let params = [category];
     
-        // console.log("Received Toggles:", toggles); // Debugging toggle input
-    
+        // Apply toggle conditions
         if (toggles?.ev) {
-            conditions.push(`ev_station = 1`);
+            conditions.push(`bd.ev_station = 1`);
         }
         if (toggles?.women) {
-            conditions.push(`women_owned = 1`);
+            conditions.push(`bd.women_owned = 1`);
         }
     
         // Append conditions if exist
@@ -341,22 +389,25 @@ export default class BusinessModel {
             query += ` AND ` + conditions.join(" AND ");
         }
     
-        query += ` ORDER BY ${orderBy} LIMIT ? OFFSET ?`;
-        params.push(limit, offset);
+        query += ` 
+            GROUP BY bd.id
+            ORDER BY ${orderBy}
+            LIMIT ? OFFSET ?
+        `;
     
-        // console.log("Executing Query:", query, "Params:", params); // Debugging query formation
+        params.push(limit, offset);
     
         try {
             const [results] = await db.execute(query, params);
             const [[{ total }]] = await db.query('SELECT FOUND_ROWS() AS total');
-    
-            // console.log("Query Results:", results.length, "Total:", total); // Debugging result count
+            console.log(results);
             return { businesses: results, total };
         } catch (error) {
             console.error('Error fetching businesses by category and sorting:', error);
             throw error;
         }
     }
+    
     
     
 
@@ -704,32 +755,44 @@ GROUP BY bd.id;
 
 
     static async filterBusiness(city, category, toggles, limit, offset) {
-        let sqlQuery = "SELECT SQL_CALC_FOUND_ROWS * FROM business_detail WHERE 1=1";
+        let sqlQuery = `
+            SELECT SQL_CALC_FOUND_ROWS bd.*, 
+                   COALESCE(AVG(r.rating), 0) AS avg_rating, 
+                   COUNT(r.review_id) AS total_ratings
+            FROM business_detail bd
+            LEFT JOIN reviews r ON bd.id = r.business_id
+            WHERE 1=1
+        `;
         let queryParams = [];
     
         try {
             // Apply city filter
             if (city) {
-                sqlQuery += " AND city = ?";
+                sqlQuery += " AND bd.city = ?";
                 queryParams.push(city);
             }
     
             // Apply category filter
             if (category) {
-                sqlQuery += " AND category = ?";
+                sqlQuery += " AND bd.category = ?";
                 queryParams.push(category);
             }
     
             // Apply toggle filters for EV and Women-Owned
             if (toggles?.ev) {
-                sqlQuery += " AND ev_station = 1";
+                sqlQuery += " AND bd.ev_station = 1";
             }
             if (toggles?.women) {
-                sqlQuery += " AND women_owned = 1";
+                sqlQuery += " AND bd.women_owned = 1";
             }
     
-            // Apply pagination
-            sqlQuery += " LIMIT ? OFFSET ?";
+            // Group results to calculate avg_rating and total_ratings correctly
+            sqlQuery += ` 
+                GROUP BY bd.id
+                ORDER BY avg_rating DESC
+                LIMIT ? OFFSET ?
+            `;
+    
             queryParams.push(limit, offset);
     
             // console.log("Executing Query:", sqlQuery, "Params:", queryParams);
@@ -743,54 +806,59 @@ GROUP BY bd.id;
         }
     }
     
+    
 
     static async getTopRatedBusinessPerCategory() {
         const query = `
-           WITH ranked_businesses AS (
-    SELECT 
-        bd.id, 
-        bd.business_name, 
-        bd.address, 
-        bd.phone,
-        bd.image_source, 
-        bd.category, 
-        bd.website,
-        u.profile_image,  -- Fetch profile image from users table
-        AVG(r.rating) AS average_rating,
-        ROW_NUMBER() OVER (PARTITION BY bd.category ORDER BY AVG(r.rating) DESC) AS rank
-    FROM 
-        business_detail bd
-    JOIN reviews r ON bd.id = r.business_id
-    LEFT JOIN users u ON bd.user_id = u.user_id  -- Join users table based on user_id
-    GROUP BY 
-        bd.id, bd.category, u.profile_image
-)
-SELECT 
-    id, 
-    business_name, 
-    address, 
-    phone,
-    image_source, 
-    category, 
-    website,
-    profile_image,  -- Include profile image in the final output
-    average_rating
-FROM 
-    ranked_businesses
-WHERE 
-    rank = 1;
-
-
+            WITH ranked_businesses AS (
+                SELECT 
+                    bd.id, 
+                    bd.business_name, 
+                    bd.address, 
+                    bd.phone,
+                    bd.image_source, 
+                    bd.category, 
+                    bd.website,
+                    u.profile_image,  
+                    COUNT(r.review_id) AS total_ratings,  -- Count of total reviews
+                    COALESCE(AVG(r.rating), 0) AS avg_rating,  -- Calculate average rating
+                    (COUNT(r.review_id) * COALESCE(AVG(r.rating), 0)) / (COUNT(r.review_id) + 1) AS weighted_score, -- Weighted formula
+                    ROW_NUMBER() OVER (PARTITION BY bd.category ORDER BY weighted_score DESC) AS rank
+                FROM 
+                    business_detail bd
+                LEFT JOIN reviews r ON bd.id = r.business_id
+                LEFT JOIN users u ON bd.user_id = u.user_id  
+                GROUP BY 
+                    bd.id, bd.category, u.profile_image
+                HAVING total_ratings > 0  -- Exclude businesses with 0 reviews
+            )
+            SELECT 
+                id, 
+                business_name, 
+                address, 
+                phone,
+                image_source, 
+                category, 
+                website,
+                profile_image,  
+                avg_rating,
+                total_ratings
+            FROM 
+                ranked_businesses
+            WHERE 
+                rank = 1;
         `;
-
+    
         try {
-            const [businesses] = await db.execute(query);  // Assuming `db.execute` works similarly to your MySQL connection
+            const [businesses] = await db.execute(query);  
             return businesses;
         } catch (error) {
             console.error('Error fetching top-rated businesses:', error);
             throw new Error("Failed to fetch top-rated businesses per category");
         }
     }
+    
+    
     static async getBusinessHours(businessId) {
         try {
             const sql = "SELECT day_of_week, opening_time, closing_time FROM business_hours WHERE business_id = ?";
