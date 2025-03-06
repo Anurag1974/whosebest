@@ -80,9 +80,6 @@ export default class BusinessController {
             return res.status(500).json({ success: false, message: "Failed to verify OTP. Please try again later." });
         }
     }
-    
-    
-
 
     async signup(req, res) {
     try {
