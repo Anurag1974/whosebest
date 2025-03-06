@@ -37,9 +37,7 @@ export default class BusinessController {
                 from: process.env.EMAIL_USER,
                 to: email,
                 subject: "Welcome to Whose Best - Your OTP Code",
-                text: `Dear ${name},\n\nWelcome to Whose Best! We are thrilled to have you on board.\n\nYour OTP is: ${otp}\n\nPlease use this OTP to complete your registration.This OTP is valid for 5 minutes.
-
-\n\nThank you for being a part of us!\n\nBest regards,\nWhose Best Team`,
+                text: `Dear ${name},\n\nWelcome to Whose Best! We are thrilled to have you on board.\n\nYour OTP is: ${otp}\n\nPlease use this OTP to complete your registration.This OTP is valid for 5 minutes.\n\nThank you for being a part of us!\n\nBest regards,\nWhose Best Team`,
             });
     
             res.json({ success: true, message: "OTP sent successfully!" });
@@ -50,9 +48,6 @@ export default class BusinessController {
         }
     }
     
-
-    
-
     async verifyOTP(req, res) {
         try {
             const { email, otp } = req.body;
@@ -89,7 +84,7 @@ export default class BusinessController {
     
 
 
-async signup(req, res) {
+    async signup(req, res) {
     try {
         const { username, email, phone, password } = req.body;
 
@@ -121,11 +116,9 @@ async signup(req, res) {
         console.error("Error in signup:", error);
         res.status(500).json({ success: false, message: " Internal server error. Please try again later." });
     }
-}
+    }
 
-
-    
-async login(req, res) {
+    async login(req, res) {
     try {
         const { email, password } = req.body;
 
@@ -163,10 +156,8 @@ async login(req, res) {
         console.error("Error in login:", error);
         res.status(500).json({ success: false, message: "An error occurred during login. Please try again later." });
     }
-}
+    }
 
-
- 
     async showOwnListedBusinessList(req, res) {
         if (!req.user) {
             // return res.status(401).json({ message: "Unauthorized" });
@@ -181,9 +172,7 @@ async login(req, res) {
             res.status(500).json({ error: "Failed to fetch business details" });
         }
     }
-    
-    
-    
+  
     showNamePage(req, res) {
         try {
             if (!req.user) {
@@ -195,8 +184,7 @@ async login(req, res) {
             res.status(500).send("An error occurred while loading the page.");
         }
     }
-    
-   
+
     async showRatePage(req, res) {
         const businessId = req.params.id;
         const userId = req.user ? req.user.id : null;
@@ -217,8 +205,6 @@ async login(req, res) {
     async submitReview(req, res) {
         const { rating, review } = req.body;
         const businessId = req.params.businessId;
-
-    
 
         if (!req.user) {
             return res.redirect('/login')
@@ -265,6 +251,7 @@ async login(req, res) {
             res.status(500).json({ message: "Internal Server Error" });
         }
     }
+    // this will render the complete home page
     async showHome(req, res) {
         try {
             // Fetching data for the home page
@@ -301,7 +288,6 @@ async login(req, res) {
         res.clearCookie('token');
         res.redirect('/');
     }
-
 
     showBusiness(req, res) {
         try {
@@ -670,7 +656,7 @@ async updateToggle(req, res) {
         res.status(500).json({ success: false, message: "Failed to update toggle. Please try again." });
     }
 }
-
+// add review of the websites
     async addTestimonial(req, res) {
         try {
             const { name, city, country, rating, reviews } = req.body;
@@ -827,7 +813,6 @@ async updateToggle(req, res) {
     }
     
 
-
     // Method to search for businesses based on location and category
     async searchBusiness(req, res) {
         const city = req.query.city;  // Location query parameter from the request
@@ -979,6 +964,7 @@ async setupYourBusiness(req, res) {
             res.status(500).json({ error: error.message });
         }
     }
+
     async getBusinessHours(req, res) {
         try {
             const { businessId } = req.params; // Get the businessId from request parameters
@@ -993,6 +979,7 @@ async setupYourBusiness(req, res) {
             res.status(500).json({ error: error.message });
         }
     }
+
     async addWhosbestReview(req, res) {
         try {
             const { name, rating, address, message } = req.body;
@@ -1127,8 +1114,6 @@ async showPinkDriverDashboard(req, res) {
     }
 }
 
-
-
 async  showDriverRegistration(req, res) {
     try {
         if (!req.user) {
@@ -1241,8 +1226,6 @@ async registerDriver(req, res) {
     }
 }
 
-
-
 async registerPinkDriver(req, res) {
     try {
         const {
@@ -1309,8 +1292,6 @@ async registerPinkDriver(req, res) {
         });
     }
 }
-
-
 
  async updateDriverStatus(req, res) {
     try {
