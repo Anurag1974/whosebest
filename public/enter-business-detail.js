@@ -154,7 +154,7 @@ async function addBusinessDetails() {
     // Capitalizing fields
     const capitalizedState = state;
     const capitalizedCity = city;
-    const capitalizedCategory = capitalizeFirstLetter(category);
+    const capitalizedCategory = category;
     const capitalizedPhone = phone.trim();
     const capitalizedAddress = capitalizeFirstLetter(address);
     const capitalizedEvCharging = capitalizeFirstLetter(evCharging);
@@ -272,3 +272,5 @@ function enterBusinessDetailsShowModal(message, isSuccess = true) {
         modal.style.display = 'none';
     }, 3000);
 }
+
+

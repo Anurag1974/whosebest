@@ -3,6 +3,8 @@ import express from 'express';
 import authMiddleware from '../middleware/authMiddleware.js';
 import { initializeToggle } from '../middleware/toggleMiddleware.js';
 import multerMiddleware from '../middleware/multerMiddleware.js'; 
+import categoryMiddleware from '../middleware/categoryMiddleware.js';
+
 
 
 const router = express.Router();
@@ -10,49 +12,49 @@ const router = express.Router();
 
 const businessController = new BusinessController();
 
-router.get("/",authMiddleware, businessController.showHome)
-router.get('/add-name', businessController.showNamePage)
-router.get('/register-driver',authMiddleware,businessController.showDriverRegistration)
-router.get('/register-pink-driver',authMiddleware,businessController.showPinkDriverRegistration)
-router.get('/driver-dashboard',authMiddleware,businessController.showDriverDashboard)
- router.get('/pink-driver-dashboard',authMiddleware,businessController.showPinkDriverDashboard)
+router.get("/",authMiddleware, categoryMiddleware,businessController.showHome)
+router.get('/add-name',  categoryMiddleware,businessController.showNamePage)
+router.get('/register-driver',authMiddleware, categoryMiddleware,businessController.showDriverRegistration)
+router.get('/register-pink-driver',authMiddleware,  categoryMiddleware,businessController.showPinkDriverRegistration)
+router.get('/driver-dashboard',authMiddleware, categoryMiddleware,businessController.showDriverDashboard)
+ router.get('/pink-driver-dashboard',authMiddleware,categoryMiddleware,businessController.showPinkDriverDashboard)
 
 
 // router.get('/business-login',authMiddleware, businessController.showbusinessLogin)
-router.get('/login', authMiddleware,businessController.userLogin)
+router.get('/login', authMiddleware,categoryMiddleware,businessController.userLogin)
 
-router.get('/manage-business/:id',authMiddleware, initializeToggle,  businessController.showManageBusiness)
-router.get('/enter-business-details', initializeToggle, authMiddleware, businessController.showEnterBusinessDetails)
+router.get('/manage-business/:id',authMiddleware, categoryMiddleware,initializeToggle,  businessController.showManageBusiness)
+router.get('/enter-business-details', initializeToggle, authMiddleware, categoryMiddleware,businessController.showEnterBusinessDetails)
 router.get('/logout', businessController.logout)
 // >extra
 
-router.get('/coming-soon',authMiddleware,businessController.comingSoon)
-router.get('/enter-your-details',authMiddleware, businessController.showNamePage)
-router.get('/your-business/:id',authMiddleware, initializeToggle,  businessController.showOwnListedBusinessList)
+router.get('/coming-soon',authMiddleware,categoryMiddleware,businessController.comingSoon)
+router.get('/enter-your-details',authMiddleware, categoryMiddleware,businessController.showNamePage)
+router.get('/your-business/:id',authMiddleware, initializeToggle, categoryMiddleware, businessController.showOwnListedBusinessList)
 
-router.get('/business-details/:businessId', authMiddleware,  businessController.showBusinessDetailsById)
-router.get('/search-category', authMiddleware, businessController.searchCategory);
-router.get('/book-your-taxi', authMiddleware,businessController.showTaxiPage)
-router.get('/available-taxis', authMiddleware, businessController.showAvailableTaxi);
-router.get('/available-pink-taxis', authMiddleware, businessController.showAvailablePinkTaxi);
+router.get('/business-details/:businessId', authMiddleware, categoryMiddleware, businessController.showBusinessDetailsById)
+router.get('/search-category', authMiddleware, categoryMiddleware,businessController.searchCategory);
+router.get('/book-your-taxi', authMiddleware,categoryMiddleware,businessController.showTaxiPage)
+router.get('/available-taxis', authMiddleware, categoryMiddleware,businessController.showAvailableTaxi);
+router.get('/available-pink-taxis', authMiddleware, categoryMiddleware,businessController.showAvailablePinkTaxi);
 // Render the Book Your Guide form
 // router.get('/book-your-guide', businessController.bookguide);
 
 // router.get('/tours-and-travels', businessController.showToursAndTravelsPage)
-router.get('/rate/:id',authMiddleware, businessController.showRatePage)
+router.get('/rate/:id',authMiddleware, categoryMiddleware,businessController.showRatePage)
 // Route to get business details by ID
-router.get('/edit',authMiddleware, businessController.showEditUser);
+router.get('/edit',authMiddleware,categoryMiddleware, businessController.showEditUser);
 
-router.get('/show-business', authMiddleware, businessController.searchBusiness)
-router.get('/what-we-do',authMiddleware, businessController.showWhatWeDo);
-router.get('/find-what-you-want',authMiddleware,businessController.findWhatYouWant);
-router.get('/setup-your-business',authMiddleware, businessController.setupYourBusiness);
-router.get('/form',authMiddleware, businessController.formfooter);
+router.get('/show-business', authMiddleware, categoryMiddleware,businessController.searchBusiness)
+router.get('/what-we-do',authMiddleware, categoryMiddleware,businessController.showWhatWeDo);
+router.get('/find-what-you-want',authMiddleware,categoryMiddleware,businessController.findWhatYouWant);
+router.get('/setup-your-business',authMiddleware,categoryMiddleware, businessController.setupYourBusiness);
+router.get('/form',authMiddleware,categoryMiddleware, businessController.formfooter);
 
 // Use PUT instead of POST
 // router.get('/business/:businessId', businessController.getBusinessById);
 
-router.get('/business-profile', authMiddleware,businessController.businessProfile)
+router.get('/business-profile', authMiddleware,categoryMiddleware,businessController.businessProfile)
 
 // router.post('/enter-your-details', businessController.addNameDetails)
 router.post('/manage-business/:businessId/delete', BusinessController.deleteBusiness);
@@ -92,7 +94,7 @@ router.put('/update-user',
 
 router.post("/business-hours", businessController.addBusinessHours);
 router.put("/business-hours", businessController.updateBusinessHours);
-router.get('/business-hours/:businessId', businessController.getBusinessHours)
+router.get('/business-hours/:businessId',categoryMiddleware, businessController.getBusinessHours)
 
 
 router.delete("/delete/:id", businessController.deleteReview);

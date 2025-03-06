@@ -172,587 +172,24 @@
                 <div class="popper">
                     <button class="close-popper" id="close-popper">&times;</button>
                     <div class="categories">
-                        <!--Restaurants  -->
-                        <a href="/search-category?category=Restaurants" class="category">
-                            <div class="category-icon">
-                                <i class="fa-solid fa-utensils fa-2xl"></i>
-                            </div>
-                            <h2>Restaurants</h2>
-                            <p>
-                                <%= businessCounts.Restaurants || 0 %> listings
-                            </p>
-                        </a>
-                        <!--Hospitals  -->
-                        <a href="/search-category?category=Hospitals" class="category">
-                            <div class="category-icon">
-                                <i class="fa-solid fa-hospital fa-2xl"></i>
-                            </div>
-                            <h2>Hospitals</h2>
-                            <p>
-                                <%= businessCounts.Hospitals || 0 %> listings
-                            </p>
-                        </a>
-                        
-                        <!--Colleges -->
-                        <a href="/search-category?category=Colleges" class="category">
-                            <div class="category-icon">
-                                <i class="fa-solid fa-building-columns fa-2xl"></i>
-                            </div>
-                            <h2>Colleges</h2>
-                            <p>
-                                <%= businessCounts.Colleges || 0 %> listings
-                            </p>
-                        </a>
-                        <!-- Hotels -->
-                        <a href="/search-category?category=Hotels" class="category">
-                            <div class="category-icon">
-                                <i class="fa-solid fa-hotel fa-2xl"></i>
-                            </div>
-                            <h2>Hotels</h2>
-                            <p>
-                                <%= businessCounts.Hotels || 0 %> listings
-                            </p>
-                        </a>
-                        <!--Gyms  -->
-                        <a href="/search-category?category=Gym" class="category">
-                            <div class="category-icon">
-                                <i class="fa-solid fa-dumbbell fa-2xl"></i>
-                            </div>
-                            <h2>Gyms</h2>
-                            <p>
-                                <%= businessCounts.Gym || 0 %> listings
-                            </p>
-                        </a>
-                        <!--Destination Wedding  -->
-                        <a href="/search-category?category=Destination_Wedding" class="category">
-                            <div class="category-icon">
-                                <i class="fa-solid fa-champagne-glasses fa-2xl"></i>
-                            </div>
-                            <h2>Destination Wedding</h2>
-                            <p>
-                                <%= businessCounts.Destination_Wedding || 0 %> listings
-                            </p>
-                        </a>
-
-                            <!-- Dentists -->
-                        <a href="/search-category?category=Dentists" class="category">
-                            <div class="category-icon">
-                                <i class="fa-solid fa-tooth fa-2xl"></i>
-                            </div>
-                            <h2>Dentists</h2>
-                            <p>
-                                <%= businessCounts.Dentists || 0 %> listings
-                            </p>
-                        </a>
-                        <!--AC Services  -->
-                        <a href="/search-category?category=AC_Services" class="category">
-                            <div class="category-icon">
-                                <i class="fa-solid fa-snowflake fa-2xl"></i>
-                            </div>
-                            <h2>AC Services</h2>
-                            <p>
-                                <%= businessCounts.AC_Services|| 0 %> listings
-                            </p>
-                        </a>
-                        <!-- Homestays -->
-                <a href="/search-category?category=HomeStays" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-home fa-2xl"></i>
+                        <% if (popperCategories && popperCategories.length > 0) { %>
+                            <% popperCategories.forEach(category => { %>
+                                <a href="/search-category?category=<%= category.category_value %>" class="category">
+                                    <div class="category-icon">
+                                        <%- category.category_icon %>  <!-- Renders <i> properly -->
+                                    </div>
+                                    <h2><%= category.category_name %></h2>
+                                    <p>
+                                        <%= businessCounts[category.category_value] || 0 %> listings
+                                    </p>
+                                </a>
+                            <% }) %>
+                        <% } else { %>
+                            <p>No categories found.</p>
+                        <% } %>
                     </div>
-                    <h2>Homestays</h2>
-                    <p>
-                        <%= businessCounts.HomeStays|| 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- PG Hostels -->
-                <a href="/search-category?category=PG_Hostels" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-bed fa-2xl"></i>
-                    </div>
-                    <h2>PG Hostels</h2>
-                    <p>
-                        <%= businessCounts.PG_Hostels || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Cafe -->
-                <a href="/search-category?category=Cafe" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-mug-saucer fa-2xl"></i>
-                    </div>
-                    <h2>Cafe</h2>
-                    <p>
-                        <%= businessCounts.Cafe || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Banquet Hall -->
-                <a href="/search-category?category=Banquet_Hall" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-gift fa-2xl"></i>
-                    </div>
-                    <h2>Banquet Hall</h2>
-                    <p>
-                        <%= businessCounts.Banquet_Hall || 0 %> listings
-                    </p>
-                </a>
-
-
-                <!-- extra  -->
-                <a href="/search-category?category=Astrologers" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-star-and-crescent fa-2xl"></i>
-                    </div>
-                    <h2>Astrologers</h2>
-                    <p>
-                        <%= businessCounts.Astrologers || 0 %> listings
-                    </p>
-                </a>
-                <!-- Body Massage Center -->
-                <a href="/search-category?category=Body_Massage_Center" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-spa fa-2xl"></i>
-                    </div>
-                    <h2>Body Massage Center</h2>
-                    <p>
-                        <%= businessCounts.Body_Massage_Center || 0 %> listings
-                    </p>
-                </a>
-                <!--Beauty Spa  -->
-                <a href="/search-category?category=Beauty_Spa" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-spa fa-2xl"></i>
-                    </div>
-                    <h2>Beauty Spa</h2>
-                    <p>
-                        <%= businessCounts.Beauty_Spa || 0 %> listings
-                    </p>
-                </a>
-                <a href="/search-category?category=Car_Hire" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-car fa-2xl"></i>
-                    </div>
-                    <h2>Car Hire</h2>
-                    <p>
-                        <%= businessCounts.Car_Hire || 0 %> listings
-                    </p>
-                </a>
-                <!--Caterers  -->
-                <a href="/search-category?category=Caterers" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-utensils fa-2xl"></i>
-                    </div>
-                    <h2>Caterers</h2>
-                    <p>
-                        <%= businessCounts.Caterers || 0 %> listings
-                    </p>
-                </a>
-                <!--Chartered Accountant  -->
-                <a href="/search-category?category=Chartered_Accountant" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-calculator fa-2xl"></i>
-                    </div>
-                    <h2>Chartered Accountant</h2>
-                    <p>
-                        <%= businessCounts.Chartered_Accountant || 0 %> listings
-                    </p>
-                </a>    
-                <!--Computer Training Institutes  -->
-                <a href="/search-category?category=Computer_Training_Institutes" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-laptop fa-2xl"></i>
-                    </div>
-                    <h2>Computer Training Institutes</h2>
-                    <p>
-                        <%= businessCounts.Computer_Training_Institutes || 0 %> listings
-                    </p>
-                </a>
-                <!-- Courier Services -->
-                <a href="/search-category?category=Courier_Services" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-truck fa-2xl"></i>
-                    </div>
-                    <h2>Courier Services</h2>
-                    <p>
-                        <%= businessCounts.Courier_Services || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Computer & Laptop Repair & Services -->
-                <a href="/search-category?category=Computer_Laptop_Repair" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-tools fa-2xl"></i>
-                    </div>
-                    <h2>Computer & Laptop Repair & Services</h2>
-                    <p>
-                        <%= businessCounts.Computer_Laptop_Repair || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Car Repair & Services -->
-                <a href="/search-category?Car_Repair_Services" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-car fa-2xl"></i>
-                    </div>
-                    <h2>Car Repair & Services</h2>
-                    <p>
-                        <%= businessCounts.Car_Repair_Services || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Dermatologists -->
-                <a href="/search-category?category=Dermatologists" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-user-md fa-2xl"></i>
-                    </div>
-                    <h2>Dermatologists</h2>
-                    <p>
-                        <%= businessCounts.Dermatologists || 0 %> listings
-                    </p>
-                </a>
-                
-               
-                <!-- Electricians -->
-                <a href="/search-category?category=Electricians" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-bolt fa-2xl"></i>
-                    </div>
-                    <h2>Electricians</h2>
-                    <p>
-                        <%= businessCounts.Electricians || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Event Organizer -->
-                <a href="/search-category?category=Event_Organizer" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-calendar-day fa-2xl"></i>
-                    </div>
-                    <h2>Event Organizer</h2>
-                    <p>
-                        <%= businessCounts.Event_Organizer || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Real Estate -->
-                <a href="/search-category?category=Real_Estate" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-house fa-2xl"></i>
-                    </div>
-                    <h2>Real Estate</h2>
-                    <p>
-                        <%= businessCounts.Real_Estate || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Fabricators -->
-                <a href="/search-category?category=Fabricators" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-cogs fa-2xl"></i>
-                    </div>
-                    <h2>Fabricators</h2>
-                    <p>
-                        <%= businessCounts.Fabricators || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Furniture Repair Services -->
-                <a href="/search-category?category=Furniture_Repair_Services" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-couch fa-2xl"></i>
-                    </div>
-                    <h2>Furniture Repair Services</h2>
-                    <p>
-                        <%= businessCounts.Furniture_Repair_Services || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Housekeeping Services -->
-                <a href="/search-category?category=Housekeeping_Services" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-broom fa-2xl"></i>
-                    </div>
-                    <h2>Housekeeping Services</h2>
-                    <p>
-                        <%= businessCounts.Housekeeping_Services || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Hobbies -->
-                <!-- <a href="/search-category?category=Hobbies" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-gamepad fa-2xl"></i>
-                    </div>
-                    <h2>Hobbies</h2>
-                    <p>
-                        <%= businessCounts.Hobbies || 0 %> listings
-                    </p>
-                </a> -->
-                
-                <!-- Interior Designers -->
-                <a href="/search-category?category=Interior_Designers" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-ruler-combined fa-2xl"></i>
-                    </div>
-                    <h2>Interior Designers</h2>
-                    <p>
-                        <%= businessCounts.Interior_Designers || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Internet Website Designers -->
-                <a href="/search-category?category=Internet_Website_Designers" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-desktop fa-2xl"></i>
-                    </div>
-                    <h2>Internet Website Designers</h2>
-                    <p>
-                        <%= businessCounts.Internet_Website_Designers || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Jewellery Showrooms -->
-                <a href="/search-category?category=Jewellery_Showrooms" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-gem fa-2xl"></i>
-                    </div>
-                    <h2>Jewellery Showrooms</h2>
-                    <p>
-                        <%= businessCounts.Jewellery_Showrooms || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Lawyers -->
-                <a href="/search-category?category=Lawyers" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-gavel fa-2xl"></i>
-                    </div>
-                    <h2>Lawyers</h2>
-                    <p>
-                        <%= businessCounts.Lawyers || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Transporters -->
-                <a href="/search-category?category=Transporters" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-truck-moving fa-2xl"></i>
-                    </div>
-                    <h2>Transporters</h2>
-                    <p>
-                        <%= businessCounts.Transporters || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Photographers -->
-                <a href="/search-category?category=Photographers" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-camera fa-2xl"></i>
-                    </div>
-                    <h2>Photographers</h2>
-                    <p>
-                        <%= businessCounts.Photographers || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Nursing Services -->
-                <a href="/search-category?category=Nursing_Services" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-heart fa-2xl"></i>
-                    </div>
-                    <h2>Nursing Services</h2>
-                    <p>
-                        <%= businessCounts.Nursing_Services || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Printing & Publishing Services -->
-                <a href="/search-category?category=Printing_Publishing_Services" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-print fa-2xl"></i>
-                    </div>
-                    <h2>Printing & Publishing Services</h2>
-                    <p>
-                        <%= businessCounts.Printing_Publishing_Services || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Placement Services -->
-                <a href="/search-category?category=Placement_Services" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-briefcase fa-2xl"></i>
-                    </div>
-                    <h2>Placement Services</h2>
-                    <p>
-                        <%= businessCounts.Placement_Services || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Pest Control Services -->
-                <a href="/search-category?category=Pest_Control_Services" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-bug fa-2xl"></i>
-                    </div>
-                    <h2>Pest Control Services</h2>
-                    <p>
-                        <%= businessCounts.Pest_Control_Services || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Painting Contractors -->
-                <a href="/search-category?category=Painting_Contractors" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-paint-roller fa-2xl"></i>
-                    </div>
-                    <h2>Painting Contractors</h2>
-                    <p>
-                        <%= businessCounts.Painting_Contractors || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Packers & Movers -->
-                <a href="/search-category?category=Packers_Movers" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-boxes fa-2xl"></i>
-                    </div>
-                    <h2>Packers & Movers</h2>
-                    <p>
-                        <%= businessCounts.Packers_Movers || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- Scrap Dealers -->
-                <!-- <a href="/search-category?category=Scrap Dealers" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-recycle fa-2xl"></i>
-                    </div>
-                    <h2>Scrap Dealers</h2>
-                    <p>
-                        <%= businessCounts["Scrap Dealers"] || 0 %> listings
-                    </p>
-                </a> -->
-                
-                <!-- Scrap Buyers -->
-                <!-- <a href="/search-category?category=Scrap Buyers" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-recycle fa-2xl"></i>
-                    </div>
-                    <h2>Scrap Buyers</h2>
-                    <p>
-                        <%= businessCounts["Scrap Buyers"] || 0 %> listings
-                    </p>
-                </a> -->
-                
-                <!-- Registration Consultants -->
-                <!-- <a href="/search-category?category=Registration Consultants" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-pencil fa-2xl"></i>
-                    </div>
-                    <h2>Registration Consultants</h2>
-                    <p>
-                        <%= businessCounts["Registration Consultants"] || 0 %> listings
-                    </p>
-                </a> -->
-                
-                <!-- Security System -->
-                <!-- <a href="/search-category?category=Security System" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-shield-alt fa-2xl"></i>
-                    </div>
-                    <h2>Security System</h2>
-                    <p>
-                        <%= businessCounts["Security System"] || 0 %> listings
-                    </p>
-                </a> -->
-                
-                <!-- Coaching -->
-                <!-- <a href="/search-category?category=Coaching" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-chalkboard-teacher fa-2xl"></i>
-                    </div>
-                    <h2>Coaching</h2>
-                    <p>
-                        <%= businessCounts.Coaching || 0 %> listings
-                    </p>
-                </a> -->
-                
-                <!-- Solar Panels -->
-                <a href="/search-category?category=Solar_Panels" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-solar-panel"></i>
-                    </div>
-                    <h2>Solar Panels</h2>
-                    <p>
-                        <%= businessCounts.Solar_Panels || 0 %> listings
-                    </p>
-                </a>
-                <!-- Advocates -->
-                <a href="/search-category?category=Advocates" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-graduation-cap"></i>
-                    </div>
-                    <h2>Advocates</h2>
-                    <p>
-                        <%= businessCounts.Advocates || 0 %> listings
-                    </p>
-                </a>
-                
-                <!-- farmers -->
-                <a href="/search-category?category=Farmers" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-seedling fa-2xl"></i>
-                    </div>
-                    <h2>Farmers</h2>
-                    <p>
-                        <%= businessCounts.Farmers || 0 %> listings
-                    </p>
-                </a>
-
-                 <!-- Fruit Vendors -->
-                 <a href="/search-category?category=Fruit_Vendors" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-apple-whole fa-2xl"></i>
-                    </div>
-                    <h2>Fruits Vendor</h2>
-                    <p>
-                        <%= businessCounts.Fruit_Vendors || 0 %> listings
-                    </p>
-                </a>
-                  <!-- Vegitable Vendors -->
-                  <a href="/search-category?category=Vegetable_Vendors" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-carrot fa-2xl"></i>
-                    </div>
-                    <h2>Vegitables Vendor</h2>
-                    <p>
-                        <%= businessCounts.Vegetable_Vendors || 0 %> listings
-                    </p>
-                </a>
-                <a href="/search-category?category=Ev_Station" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-bolt fa-2xl"></i>
-                        
-                    </div>
-                    <h2>EV Station</h2>
-                    <p>
-                        <%= businessCounts. Ev_Station || 0 %> listings
-                    </p>
-                </a>
-               
-
-                
-                <!-- Vocational training -->
-                <!-- <a href="/search-category?category=Vocational training" class="category">
-                    <div class="category-icon">
-                        <i class="fa-solid fa-graduation-cap fa-2xl"></i>
-                    </div>
-                    <h2>Vocational training</h2>
-                    <p>
-                        <%= businessCounts["Vocational training"] || 0 %> listings
-                    </p>
-                </a> -->
-                    </div>
+                    
+                    
                 </div>
             </div>
         </div>
@@ -1042,184 +479,138 @@
     </div>
 
     <!-- SERVICES SECTION -->
-
     <div class="services-section">
         <div class="services-container">
             <div class="services-section-heading">
                 <h5>Some of our services that will prove useful to you on a day-to-day basis</h5>
             </div>
-            <div class="all-services-cards">
-                <div class="services-card">
-                    <div class="services-card-image-name">
-                        <div class="services-card-image">
-                            <i class="fa-solid fa-handshake"></i>
-                        </div>
-                        <div class="services-card-name">
-                            <p>Service Name Here</p>
-                        </div>
+            <div class="services-gallery">
+        
+      
+                <div class="service-panel" data-service="consulting">
+                    <div class="service-icon-box">
+                        <i class="fa-solid fa-handshake"></i>
                     </div>
-                    <div class="services-card-description">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Distinctio nulla sint voluptate
-                            minima vel sit voluptatum veritatis velit in aliquid.</p>
+                    <div class="service-info">
+                        <h3>Strategic Consulting</h3>
+                        <p>Elevate your vision with precision expertise.</p>
                     </div>
+                    <div class="service-accent"></div>
                 </div>
-                <div class="services-card">
-                    <div class="services-card-image-name">
-                        <div class="services-card-image">
-                            <i class="fa-solid fa-handshake"></i>
-                        </div>
-                        <div class="services-card-name">
-                            <p>Service Name Here</p>
-                        </div>
+                <div class="service-panel" data-service="innovation">
+                    <div class="service-icon-box">
+                        <i class="fa-solid fa-handshake"></i>
                     </div>
-                    <div class="services-card-description">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Distinctio nulla sint voluptate
-                            minima vel sit voluptatum veritatis velit in aliquid.</p>
+                    <div class="service-info">
+                        <h3>Digital Innovation</h3>
+                        <p>Redefine possibilities with sleek tech.</p>
                     </div>
+                    <div class="service-accent"></div>
                 </div>
-                <div class="services-card">
-                    <div class="services-card-image-name">
-                        <div class="services-card-image">
-                            <i class="fa-solid fa-handshake"></i>
-                        </div>
-                        <div class="services-card-name">
-                            <p>Service Name Here</p>
-                        </div>
+                <div class="service-panel" data-service="insights">
+                    <div class="service-icon-box">
+                        <i class="fa-solid fa-handshake"></i>
                     </div>
-                    <div class="services-card-description">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Distinctio nulla sint voluptate
-                            minima vel sit voluptatum veritatis velit in aliquid.</p>
+                    <div class="service-info">
+                        <h3>Data Insights</h3>
+                        <p>Unlock clarity with refined analytics.</p>
                     </div>
+                    <div class="service-accent"></div>
                 </div>
-                <div class="services-card">
-                    <div class="services-card-image-name">
-                        <div class="services-card-image">
-                            <i class="fa-solid fa-handshake"></i>
-                        </div>
-                        <div class="services-card-name">
-                            <p>Service Name Here</p>
-                        </div>
+                <div class="service-panel" data-service="consulting">
+                    <div class="service-icon-box">
+                        <i class="fa-solid fa-handshake"></i>
                     </div>
-                    <div class="services-card-description">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Distinctio nulla sint voluptate
-                            minima vel sit voluptatum veritatis velit in aliquid.</p>
+                    <div class="service-info">
+                        <h3>Strategic Consulting</h3>
+                        <p>Elevate your vision with precision expertise.</p>
                     </div>
+                    <div class="service-accent"></div>
                 </div>
-                <div class="services-card">
-                    <div class="services-card-image-name">
-                        <div class="services-card-image">
-                            <i class="fa-solid fa-handshake"></i>
-                        </div>
-                        <div class="services-card-name">
-                            <p>Service Name Here</p>
-                        </div>
+                <div class="service-panel" data-service="innovation">
+                    <div class="service-icon-box">
+                        <i class="fa-solid fa-handshake"></i>
                     </div>
-                    <div class="services-card-description">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Distinctio nulla sint voluptate
-                            minima vel sit voluptatum veritatis velit in aliquid.</p>
+                    <div class="service-info">
+                        <h3>Digital Innovation</h3>
+                        <p>Redefine possibilities with sleek tech.</p>
                     </div>
+                    <div class="service-accent"></div>
                 </div>
-                <div class="services-card">
-                    <div class="services-card-image-name">
-                        <div class="services-card-image">
-                            <i class="fa-solid fa-handshake"></i>
-                        </div>
-                        <div class="services-card-name">
-                            <p>Service Name Here</p>
-                        </div>
+                <div class="service-panel" data-service="insights">
+                    <div class="service-icon-box">
+                        <i class="fa-solid fa-handshake"></i>
                     </div>
-                    <div class="services-card-description">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Distinctio nulla sint voluptate
-                            minima vel sit voluptatum veritatis velit in aliquid.</p>
+                    <div class="service-info">
+                        <h3>Data Insights</h3>
+                        <p>Unlock clarity with refined analytics.</p>
                     </div>
+                    <div class="service-accent"></div>
                 </div>
-                <div class="services-card">
-                    <div class="services-card-image-name">
-                        <div class="services-card-image">
-                            <i class="fa-solid fa-handshake"></i>
-                        </div>
-                        <div class="services-card-name">
-                            <p>Service Name Here</p>
-                        </div>
+                <div class="service-panel" data-service="consulting">
+                    <div class="service-icon-box">
+                        <i class="fa-solid fa-handshake"></i>
                     </div>
-                    <div class="services-card-description">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Distinctio nulla sint voluptate
-                            minima vel sit voluptatum veritatis velit in aliquid.</p>
+                    <div class="service-info">
+                        <h3>Strategic Consulting</h3>
+                        <p>Elevate your vision with precision expertise.</p>
                     </div>
+                    <div class="service-accent"></div>
                 </div>
-                <div class="services-card">
-                    <div class="services-card-image-name">
-                        <div class="services-card-image">
-                            <i class="fa-solid fa-handshake"></i>
-                        </div>
-                        <div class="services-card-name">
-                            <p>Service Name Here</p>
-                        </div>
+                <div class="service-panel" data-service="innovation">
+                    <div class="service-icon-box">
+                        <i class="fa-solid fa-handshake"></i>
                     </div>
-                    <div class="services-card-description">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Distinctio nulla sint voluptate
-                            minima vel sit voluptatum veritatis velit in aliquid.</p>
+                    <div class="service-info">
+                        <h3>Digital Innovation</h3>
+                        <p>Redefine possibilities with sleek tech.</p>
                     </div>
+                    <div class="service-accent"></div>
                 </div>
-                <div class="services-card">
-                    <div class="services-card-image-name">
-                        <div class="services-card-image">
-                            <i class="fa-solid fa-handshake"></i>
-                        </div>
-                        <div class="services-card-name">
-                            <p>Service Name Here</p>
-                        </div>
+                <div class="service-panel" data-service="insights">
+                    <div class="service-icon-box">
+                        <i class="fa-solid fa-handshake"></i>
                     </div>
-                    <div class="services-card-description">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Distinctio nulla sint voluptate
-                            minima vel sit voluptatum veritatis velit in aliquid.</p>
+                    <div class="service-info">
+                        <h3>Data Insights</h3>
+                        <p>Unlock clarity with refined analytics.</p>
                     </div>
+                    <div class="service-accent"></div>
                 </div>
-                <div class="services-card">
-                    <div class="services-card-image-name">
-                        <div class="services-card-image">
-                            <i class="fa-solid fa-handshake"></i>
-                        </div>
-                        <div class="services-card-name">
-                            <p>Service Name Here</p>
-                        </div>
+                <div class="service-panel" data-service="consulting">
+                    <div class="service-icon-box">
+                        <i class="fa-solid fa-handshake"></i>
                     </div>
-                    <div class="services-card-description">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Distinctio nulla sint voluptate
-                            minima vel sit voluptatum veritatis velit in aliquid.</p>
+                    <div class="service-info">
+                        <h3>Strategic Consulting</h3>
+                        <p>Elevate your vision with precision expertise.</p>
                     </div>
+                    <div class="service-accent"></div>
                 </div>
-                <div class="services-card">
-                    <div class="services-card-image-name">
-                        <div class="services-card-image">
-                            <i class="fa-solid fa-handshake"></i>
-                        </div>
-                        <div class="services-card-name">
-                            <p>Service Name Here</p>
-                        </div>
+                <div class="service-panel" data-service="innovation">
+                    <div class="service-icon-box">
+                        <i class="fa-solid fa-handshake"></i>
                     </div>
-                    <div class="services-card-description">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Distinctio nulla sint voluptate
-                            minima vel sit voluptatum veritatis velit in aliquid.</p>
+                    <div class="service-info">
+                        <h3>Digital Innovation</h3>
+                        <p>Redefine possibilities with sleek tech.</p>
                     </div>
+                    <div class="service-accent"></div>
                 </div>
-                <div class="services-card">
-                    <div class="services-card-image-name">
-                        <div class="services-card-image">
-                            <i class="fa-solid fa-handshake"></i>
-                        </div>
-                        <div class="services-card-name">
-                            <p>Service Name Here</p>
-                        </div>
+                <div class="service-panel" data-service="insights">
+                    <div class="service-icon-box">
+                        <i class="fa-solid fa-handshake"></i>
                     </div>
-                    <div class="services-card-description">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Distinctio nulla sint voluptate
-                            minima vel sit voluptatum veritatis velit in aliquid.</p>
+                    <div class="service-info">
+                        <h3>Data Insights</h3>
+                        <p>Unlock clarity with refined analytics.</p>
                     </div>
+                    <div class="service-accent"></div>
                 </div>
             </div>
         </div>
     </div>
+   
 
     <!-- RECCENT ACTIVITY SECTION -->
 

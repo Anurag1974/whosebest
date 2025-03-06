@@ -158,19 +158,20 @@ body {
 }
 
 .business-details-button {
-    background-color: #007bff;
+    background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+
     color: white;
 }
 
 .business-enquiry-button {
-    background-color: #30b34f;
+    background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
     color: white;
     border: none;
 }
 
 .business-call-button {
-    background-color: #ffc107;
-    color: black;
+    background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+    color: rgb(255, 255, 255);
 }
 
 .business-whatsapp-button {
@@ -182,9 +183,16 @@ body {
 .business-enquiry-button:hover, 
 .business-call-button:hover,
 .business-whatsapp-button:hover {
-    scale: 0.92;
+    /* scale: 0.92; */
     /* transform: translateY(-3px); */
     box-shadow: 0 7px 14px rgba(0, 0, 0, 0.15);
+}
+
+.business-details-button:active, 
+.business-enquiry-button:active, 
+.business-call-button:active,
+.business-whatsapp-button:active{
+    transform: scale(0.88);
 }
 
 .business-details-button::before, 

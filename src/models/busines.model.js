@@ -89,7 +89,7 @@ export default class BusinessModel {
                 acc[row.category] = row.total_listings;
                 return acc;
             }, {});
-            console.log(counts)
+            // console.log(counts)
     
             return counts; // Return the object
         } catch (error) {
@@ -165,7 +165,7 @@ export default class BusinessModel {
     //update new business
 
     static async updateBusinessDetails(
-        businessId, businessName, address, category, phone, website, state, city, overview, usp, 
+        businessId, businessName, address,  phone, website, state, city, overview, usp, 
         service1, service2, service3, service4
     ) {
         // console.log('Updating Business Details:', { 
@@ -177,7 +177,7 @@ export default class BusinessModel {
             let query = `UPDATE business_detail SET 
                 business_name = ?, 
                 address = ?, 
-                category = ?, 
+               
                 phone = ?, 
                 website = ?, 
                 state = ?, 
@@ -186,7 +186,7 @@ export default class BusinessModel {
                 usp = ?`;
     
             let values = [
-                businessName, address, category, phone, website, state, city, overview, usp
+                businessName, address, phone, website, state, city, overview, usp
             ];
     
             // Dynamically add service fields and handle empty values
@@ -280,7 +280,7 @@ export default class BusinessModel {
 
     static async updateName(userId, name, phoneNumber, email, profileImage) {
         try {
-            console.log(`Updating user ${userId} with name=${name}, phone=${phoneNumber}`);
+            // console.log(`Updating user ${userId} with name=${name}, phone=${phoneNumber}`);
     
             let sql, values;
     
@@ -296,7 +296,7 @@ export default class BusinessModel {
             }
     
             const [result] = await db.execute(sql, values);
-            console.log(result);
+            // console.log(result);
             return result;
         } catch (error) {
             console.error("Database Error:", error);
@@ -400,7 +400,7 @@ export default class BusinessModel {
         try {
             const [results] = await db.execute(query, params);
             const [[{ total }]] = await db.query('SELECT FOUND_ROWS() AS total');
-            console.log(results);
+            // console.log(results);
             return { businesses: results, total };
         } catch (error) {
             console.error('Error fetching businesses by category and sorting:', error);
@@ -497,7 +497,7 @@ export default class BusinessModel {
     
         try {
             const [result] = await db.query(query, values);
-            console.log("Testimonial Updated:", result);
+            // console.log("Testimonial Updated:", result);
             return result;
         } catch (error) {
             // console.error("Database Error:", error.message);
@@ -601,7 +601,7 @@ GROUP BY bd.id;
                     [id]
                 );
                 // console.log(businessRows)
-                console.log(businessRows)
+                // console.log(businessRows)
                 
                 const [reviewRows] = await db.execute(`SELECT reviews.*, users.name, users.profile_image
                 FROM reviews
@@ -1137,21 +1137,21 @@ GROUP BY bd.id;
     }
     static async updateDriverStatus(driverId, status) {
         try {
-            console.log(`Updating driver ${driverId} with status=${status}`);
+            // console.log(`Updating driver ${driverId} with status=${status}`);
     
             // Fetch current status for debugging
             const [currentStatus] = await db.execute(
                 "SELECT status FROM driver_data WHERE user_id = ?",
                 [driverId]
             );
-            console.log("Current Status:", currentStatus);
+            // console.log("Current Status:", currentStatus);
     
             // Update query
             const sql = "UPDATE driver_data SET status = ? WHERE user_id = ?";
             const values = [status, driverId];
     
             const [result] = await db.execute(sql, values);
-            console.log("Update Result:", result);
+            // console.log("Update Result:", result);
     
             return result;
         } catch (error) {
@@ -1161,21 +1161,21 @@ GROUP BY bd.id;
     }
     static async updatePinkDriverStatus(driverId, status) {
         try {
-            console.log(`Updating driver ${driverId} with status=${status}`);
+            // console.log(`Updating driver ${driverId} with status=${status}`);
     
             // Fetch current status for debugging
             const [currentStatus] = await db.execute(
                 "SELECT status FROM pink_driver_data WHERE user_id = ?",
                 [driverId]
             );
-            console.log("Current Status:", currentStatus);
+            // console.log("Current Status:", currentStatus);
     
             // Update query
             const sql = "UPDATE pink_driver_data SET status = ? WHERE user_id = ?";
             const values = [status, driverId];
     
             const [result] = await db.execute(sql, values);
-            console.log("Update Result:", result);
+            // console.log("Update Result:", result);
     
             return result;
         } catch (error) {
@@ -1187,7 +1187,7 @@ GROUP BY bd.id;
     static async getAvailableTaxis() {
         try {
             const [drivers] = await db.execute("SELECT * FROM driver_data WHERE status = 1 and verified=1");
-            console.log(drivers)
+            // console.log(drivers)
             return drivers; // Returns an array of available drivers
         } catch (error) {
             console.error("Error fetching available taxis:", error);
@@ -1198,13 +1198,51 @@ GROUP BY bd.id;
     static async getAvailablePinkTaxis() {
         try {
             const [drivers] = await db.execute("SELECT * FROM pink_driver_data WHERE status = 1 and verified=1");
-            console.log(drivers)
+            // console.log(drivers)
             return drivers; // Returns an array of available drivers
         } catch (error) {
             console.error("Error fetching available taxis:", error);
             throw error;
         }
     }
+    static async getBusinessesByCategory() {
+        try {
+            const query = "SELECT category_name, category_value FROM categories";
+            const [rows] = await db.execute(query);
+            // console.log(rows)
+            return rows;
+        } catch (error) {
+            console.error("Error fetching categories:", error);
+            throw error;
+        }
+    }
+
+    static async getCategoryByBusiness(businessCategory) {
+        try {
+            const query = "SELECT category_name FROM categories WHERE category_value = ?";
+            const [rows] = await db.execute(query, [businessCategory]);
+            return rows.length > 0 ? rows[0].category_name : null;
+        } catch (error) {
+            console.error("Error fetching category by business:", error);
+            throw error;
+        }
+    }
+
+    
+        static async getPopperCategories() {
+            try {
+                const sql = `SELECT category_name, category_value, category_icon FROM categories`;
+                const [rows] = await db.execute(sql);
+                // console.log(rows)
+                return rows;
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+                throw error;
+            }
+        }    
+    
+    
+    
     
     
     

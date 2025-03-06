@@ -269,10 +269,13 @@ async login(req, res) {
             const paidAdvertisements = await BusinessModel.getPaidAdvertisements();
             const testimonials = await BusinessModel.getTestimonials();
             const businessCounts = await BusinessModel.getBusinessCount(req.session.toggle);
+
+            // console.log(businessCounts)
             const recentActivity = await BusinessModel.getReviewRecentActivity();
     
             // Fetching top rated businesses
             const topRatedBusinesses = await BusinessModel.getTopRatedBusinessPerCategory();
+            const popperCategories=await BusinessModel.getPopperCategories();
     
             // Rendering the home page with the fetched data
             res.render('home', {
@@ -282,6 +285,7 @@ async login(req, res) {
                 businessCounts,
                 topRatedBusinesses: topRatedBusinesses || [],
                 testimonials,
+                popperCategories,
                 recentActivity
             });
         } catch (error) {
@@ -419,7 +423,7 @@ async login(req, res) {
    async updateBusinessDetails(req, res) {
     try {
         const { 
-            businessId, businessName, address, category, phone, 
+            businessId, businessName, address, phone, 
             website = null, state, city, overview, usp, ownerId, 
             businessService1, businessService2, businessService3, businessService4 
         } = req.body;
@@ -429,13 +433,13 @@ async login(req, res) {
         const thumbnail = req.files?.['thumbnail'] ? req.files['thumbnail'][0].filename : null;
 
         // Validate required fields
-        if (!businessId || !businessName || !address || !category || !phone || !state || !city || !overview || !usp || !ownerId) {
+        if (!businessId || !businessName || !address  || !phone || !state || !city || !overview || !usp || !ownerId) {
             return res.status(400).json({ success: false, message: 'All required fields must be provided' });
         }
 
         // Update business details
         const success = await BusinessModel.updateBusinessDetails(
-            businessId, businessName, address, category, phone, website, state, city, overview, usp,
+            businessId, businessName, address, phone, website, state, city, overview, usp,
             businessService1, businessService2, businessService3, businessService4
         );
 
@@ -477,6 +481,8 @@ async login(req, res) {
     
             // Get business details by ID
             const business = await BusinessModel.getBusinessDetailsById(businessId);
+            const businessCategory=business.category;
+            // console.log(businessCategory)
     
             // Ensure the business exists and belongs to the logged-in user
             if (!business || business.user_id !== req.user.id) {
@@ -490,6 +496,8 @@ async login(req, res) {
             // Fetch business hours and reviews
             const businessHours = await BusinessModel.getBusinessHours(businessId);
             const businessReview = await BusinessModel.getBusinessReview(businessId);
+             const categoryByBusiness = await BusinessModel.getCategoryByBusiness(businessCategory);
+            //  console.log(categoryByBusiness)
     
             // Render the manage business page with the data
             res.render('manage-business', { 
@@ -499,6 +507,8 @@ async login(req, res) {
                 toggle: req.session.toggle, 
                 businessHours: businessHours,
                 reviews: businessReview,
+                categoryByBusiness,
+                
                 remainingImages: remainingImages  // Pass the remaining images count to the view
             });
     
@@ -509,12 +519,13 @@ async login(req, res) {
     }
     
    
-    showEnterBusinessDetails(req, res) {
+    async showEnterBusinessDetails(req, res) {
         try {
             if (!req.user) {
                 return res.redirect("/login");
             }
-            res.render('enter-business-details', { user: req.user, toggle: req.session.toggle });
+            const businessCategory = await BusinessModel.getBusinessesByCategory();
+            res.render('enter-business-details', { user: req.user, toggle: req.session.toggle ,businessCategory });
         } catch (error) {
             console.error("Error in showEnterBusinessDetails:", error);
             res.status(500).send("An error occurred while loading the page.");
@@ -743,7 +754,7 @@ async updateToggle(req, res) {
             if (!userId) {
                 return res.status(401).json({ success: false, message: 'Unauthorized: User not logged in' });
             }
-            console.log("Updating User ID:", userId);
+            // console.log("Updating User ID:", userId);
     
             // Input validation
             if (!name || !phoneNumber) {
@@ -752,7 +763,7 @@ async updateToggle(req, res) {
     
             // Perform update
             const result = await BusinessModel.updateName(userId, name, phoneNumber, email, profileImage);
-            console.log("Update Result:", result);
+            // console.log("Update Result:", result);
     
             if (result.affectedRows === 0) {
                 return res.status(200).json({ success: false, message: 'No changes were made' });
@@ -1151,7 +1162,7 @@ async showPinkDriverRegistration(req,res){
         }
         const userId = req.user ? req.user.id : null;
         const driverDetails = userId ? await BusinessModel.getPinkDriverByUserId(userId) : null;
-        console.log(driverDetails)
+        // console.log(driverDetails)
 
         if (driverDetails) {
            res.redirect('/pink-driver-dashboard')
@@ -1361,7 +1372,7 @@ async  showAvailableTaxi(req, res) {
         }
         const availableTaxis = await BusinessModel.getAvailableTaxis();
 
-        console.log("Available Taxis:", availableTaxis); // Debugging log
+        // console.log("Available Taxis:", availableTaxis); // Debugging log
 
         res.render('available-taxis', {  // Render your EJS page
             user: req.user,
@@ -1383,7 +1394,7 @@ async  showAvailablePinkTaxi(req, res) {
         }
         const availableTaxis = await BusinessModel.getAvailablePinkTaxis();
 
-        console.log("Available Taxis:", availableTaxis); // Debugging log
+        // console.log("Available Taxis:", availableTaxis); // Debugging log
 
         res.render('available-pink-taxi', {  // Render your EJS page
             user: req.user,

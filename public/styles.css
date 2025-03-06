@@ -63,13 +63,15 @@ li{
     padding-bottom: 15px;
     border-bottom: 1px solid var(--gray);
 }
-
 .web-header-logo h5 {
     font-size: 1.5rem;
     font-weight: 700;
     cursor: pointer;
-    color: var(--primary-color);
+    background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
+
 
 .web-city-category-search-input {
     display: flex;
