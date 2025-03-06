@@ -37,7 +37,9 @@ export default class BusinessController {
                 from: process.env.EMAIL_USER,
                 to: email,
                 subject: "Welcome to Whose Best - Your OTP Code",
-                text: `Dear ${name},\n\nWelcome to Whose Best! We are thrilled to have you on board.\n\nYour OTP is: ${otp}\n\nPlease use this OTP to complete your registration.\n\nThank you for being a part of us!\n\nBest regards,\nWhose Best Team`,
+                text: `Dear ${name},\n\nWelcome to Whose Best! We are thrilled to have you on board.\n\nYour OTP is: ${otp}\n\nPlease use this OTP to complete your registration.This OTP is valid for 5 minutes.
+
+\n\nThank you for being a part of us!\n\nBest regards,\nWhose Best Team`,
             });
     
             res.json({ success: true, message: "OTP sent successfully!" });
