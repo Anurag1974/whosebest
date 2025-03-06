@@ -280,8 +280,12 @@ async function generateOTP() {
     let button = document.getElementById("email-verify-button");
     let countdownElement = document.getElementById("countdown-timer");
 
-    if (!email && !name) {
-        userLoginShowModal("Please enter your name and email.", false);
+    if (!email ) {
+        userLoginShowModal("Please enter your  email.", false);
+        return;
+    }
+    if ( !name) {
+        userLoginShowModal("Please enter your name ", false);
         return;
     }
 

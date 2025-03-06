@@ -19,25 +19,29 @@ export default class BusinessModel {
     //     }
     // }
     static async getRegisteredBusiness(userId, toggles) {
-        let sqlQuery = "SELECT * FROM business_detail WHERE user_id = ?";
+        let sqlQuery = `
+            SELECT 
+                bd.*, 
+                c.category_name  -- Fetch category name from categories table
+            FROM 
+                business_detail bd
+            LEFT JOIN categories c ON bd.category = c.category_value  -- Join with categories table
+            WHERE 
+                bd.user_id = ?`;
+    
         let queryParams = [userId];
     
         try {
-            // console.log("Received Toggles:", toggles); // Debugging toggle input
-    
             // Apply toggle filters for EV and Women-Owned businesses
             if (toggles?.ev) {
-                sqlQuery += " AND ev_station = 1";
+                sqlQuery += " AND bd.ev_station = 1";
             }
             if (toggles?.women) {
-                sqlQuery += " AND women_owned = 1";
+                sqlQuery += " AND bd.women_owned = 1";
             }
     
-            // console.log("Executing Query:", sqlQuery, "Params:", queryParams); // Debugging query formation
-    
             const [rows] = await db.execute(sqlQuery, queryParams);
-    
-            // console.log("Fetched Businesses:", rows.length); // Debugging results
+            // console.log(rows)
             return rows;
         } 
         catch (error) {
@@ -45,6 +49,7 @@ export default class BusinessModel {
             throw error;
         }
     }
+    
     
     
     static async getPaidAdvertisements() {
@@ -818,6 +823,7 @@ GROUP BY bd.id;
                     bd.phone,
                     bd.image_source, 
                     bd.category, 
+                    c.category_name,  -- Fetch category name from categories table
                     bd.website,
                     u.profile_image,  
                     COUNT(r.review_id) AS total_ratings,  -- Count of total reviews
@@ -828,8 +834,9 @@ GROUP BY bd.id;
                     business_detail bd
                 LEFT JOIN reviews r ON bd.id = r.business_id
                 LEFT JOIN users u ON bd.user_id = u.user_id  
+                LEFT JOIN categories c ON bd.category = c.category_value  -- Join with categories table
                 GROUP BY 
-                    bd.id, bd.category, u.profile_image
+                    bd.id, bd.category, c.category_name, u.profile_image
                 HAVING total_ratings > 0  -- Exclude businesses with 0 reviews
             )
             SELECT 
@@ -839,6 +846,7 @@ GROUP BY bd.id;
                 phone,
                 image_source, 
                 category, 
+                category_name,  -- Include category name in final result
                 website,
                 profile_image,  
                 avg_rating,
@@ -857,6 +865,7 @@ GROUP BY bd.id;
             throw new Error("Failed to fetch top-rated businesses per category");
         }
     }
+    
     
     
     static async getBusinessHours(businessId) {

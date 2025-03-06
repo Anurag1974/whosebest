@@ -26,7 +26,7 @@ export default class BusinessController {
             console.log(req.body);
     
             // Check if email is provided
-            if (!email) {
+            if (!email && !name) {
                 return res.status(400).json({ success: false, message: "Email is required" });
             }
     
@@ -275,6 +275,7 @@ async login(req, res) {
     
             // Fetching top rated businesses
             const topRatedBusinesses = await BusinessModel.getTopRatedBusinessPerCategory();
+            // console.log(topRatedBusinesses)
             const popperCategories=await BusinessModel.getPopperCategories();
     
             // Rendering the home page with the fetched data
