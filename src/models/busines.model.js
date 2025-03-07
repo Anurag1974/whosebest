@@ -965,13 +965,14 @@ GROUP BY bd.id;
         }
     }
 
-    static async createUser(username, email, hashedPassword,phone) {
+    static async createUser(username, email, hashedPassword,phone,termAndCondition) {
         try {
-            await db.execute("INSERT INTO users (name, email, password_hash,phone_number) VALUES (?, ?, ? ,?)", [
+            await db.execute("INSERT INTO users (name, email, password_hash,phone_number,term_conditions) VALUES (?, ?, ? ,?,?)", [
                 username,
                 email,
                 hashedPassword,
-                phone
+                phone,
+                termAndCondition
             ]);
             return { success: true, message: "User created successfully" };
         } catch (error) {

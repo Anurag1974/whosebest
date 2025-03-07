@@ -8,6 +8,7 @@ import BusinessModel from '../models/busines.model.js';
 import { generateToken } from '../utils/jwt.js';
 import GlobalToggleService from '../services/globalToggleService.js';
 import uploadMiddleware from '../middleware/multerMiddleware.js';
+import { render } from 'ejs';
 
 const OTP_EXPIRATION = 5 * 60 * 1000; // 5 minutes
 const otpStore = {}; // Store OTPs in memory (Replace with Redis for production)
@@ -22,22 +23,45 @@ export default class BusinessController {
 
     async sendOTP(req, res) {
         try {
-            const { name, email, otp } = req.body;
+            let { name, email, otp } = req.body;
             console.log(req.body);
+            name = name.replace(/\b\w/g, (char) => char.toUpperCase());
     
-            // Check if email is provided
-            if (!email && !name) {
-                return res.status(400).json({ success: false, message: "Email is required" });
+            // Check if email and name are provided
+            if (!email || !name) {
+                return res.status(400).json({ success: false, message: "Email and Name are required" });
             }
     
             otpStore[email] = { otp, expiresAt: Date.now() + OTP_EXPIRATION };
+    
+            // HTML email content
+            const htmlContent = `
+                <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4; text-align: center;">
+                    <div style="max-width: 500px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+                        <h2 style="color: #007bff;">Welcome to Whose Best, ${name}! 🎉</h2>
+                        <p style="font-size: 16px; color: #333;">We are thrilled to have you on board.</p>
+                        
+                        <div style="background: #007bff; color: white; font-size: 20px; font-weight: bold; padding: 10px; border-radius: 5px; display: inline-block; margin: 10px 0;">
+                            Your OTP: <strong>${otp}</strong>
+                        </div>
+    
+                        <p style="color: grey; font-size: 14px;">This OTP is valid for 5 minutes. Please use it to complete your registration.</p>
+    
+                        
+    
+                        <p style="color: grey; font-size: 12px; margin-top: 20px;">
+                            If you didn't request this, please ignore this email.
+                        </p>
+                    </div>
+                </div>
+            `;
     
             // Send OTP to email
             await transporter.sendMail({
                 from: process.env.EMAIL_USER,
                 to: email,
                 subject: "Welcome to Whose Best - Your OTP Code",
-                text: `Dear ${name},\n\nWelcome to Whose Best! We are thrilled to have you on board.\n\nYour OTP is: ${otp}\n\nPlease use this OTP to complete your registration.This OTP is valid for 5 minutes.\n\nThank you for being a part of us!\n\nBest regards,\nWhose Best Team`,
+                html: htmlContent,
             });
     
             res.json({ success: true, message: "OTP sent successfully!" });
@@ -47,6 +71,7 @@ export default class BusinessController {
             res.status(500).json({ success: false, message: "Failed to send OTP" });
         }
     }
+    
     
     async verifyOTP(req, res) {
         try {
@@ -84,9 +109,10 @@ export default class BusinessController {
     async signup(req, res) {
     try {
         const { username, email, phone, password } = req.body;
+        const termAndCondition=1;
 
         // Check if all required fields are provided
-        if (!username || !email || !phone || !password) {
+        if (!username || !email || !phone || !password  ) {
             return res.status(400).json({ success: false, message: "All fields are required!" });
         }
 
@@ -100,7 +126,7 @@ export default class BusinessController {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Save user to database
-        await BusinessModel.createUser(username, email, hashedPassword, phone);
+        await BusinessModel.createUser(username, email, hashedPassword, phone,termAndCondition);
 
         // Send success response
         res.json({
@@ -1385,6 +1411,29 @@ async  showAvailablePinkTaxi(req, res) {
     } catch (error) {
         console.error("Error fetching available taxis:", error);
         res.status(500).send("Internal Server Error");
+    }
+}
+
+getPrivacyPolicy(req, res) {
+    try {
+        res.render('privacy-policy', { 
+            user: req.user, 
+            toggle: req.session.toggle 
+        });
+    } catch (error) {
+        console.error("Error in comingSoon:", error);
+        res.status(500).send("An error occurred while loading the coming soon page.");
+    }
+}
+getTermConditions(req, res) {
+    try {
+        res.render('term-conditions', { 
+            user: req.user, 
+            toggle: req.session.toggle 
+        });
+    } catch (error) {
+        console.error("Error in comingSoon:", error);
+        res.status(500).send("An error occurred while loading the coming soon page.");
     }
 }
 

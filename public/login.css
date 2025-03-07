@@ -21,6 +21,11 @@ body {
     line-height: 1.6;
     color: var(--color-text-dark);
 } */
+.disabled-button {
+    background-color: grey !important;
+    cursor: not-allowed !important;
+    opacity: 0.6;
+}
 
 .authentication-page-container {
     display: flex;

@@ -92,8 +92,9 @@
                         type="text" 
                         id="signup-username-input" 
                         class="authentication-input-field" 
-                        placeholder="Enter your name" 
+                        placeholder=" Full name as per govt records " 
                         required
+                        
                     >
                 </div>
                 <span class="authentication-input-error" id="username-validation-error">
@@ -195,9 +196,10 @@
                     
                     </button> -->
                 </div>
-                <span class="authentication-input-error" id="signup-password-validation-error">
-                    Password must be at least 8 characters long
-                </span>
+                <label>
+                    <input type="checkbox" name="agree" id="register-user-term-and-condition" required>
+                    I agree to the <a href="#" style="color: #2196F3">terms and cond.</a>
+                </label>
             </div>
 
             <!-- <div class="authentication-input-group">
@@ -218,9 +220,12 @@
             </div> -->
 
             <div class="authentication-form-actions">
+
+              
                 <button 
                     type="submit" 
                     class="authentication-primary-action-button"
+                    id="authentication-primary-action-button-sign-up-button"
                 >
                     Sign Up
                 </button>
@@ -230,6 +235,44 @@
 </div>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const nameInput = document.getElementById("signup-username-input");
+    const emailInput = document.getElementById("signup-email-input");
+    const otpInput = document.getElementById("signup-email-otp-input");
+    const phoneInput = document.getElementById("signup-phone-input");
+    const passwordInput = document.getElementById("signup-password-input");
+    const termsCheckbox = document.getElementById("register-user-term-and-condition");
+    const signUpButton = document.getElementById("authentication-primary-action-button-sign-up-button");
+
+    function checkInputs() {
+        if (
+            nameInput.value.trim() !== "" &&
+            emailInput.value.trim() !== "" &&
+            otpInput.value.trim() !== "" &&
+            phoneInput.value.trim() !== "" &&
+            passwordInput.value.trim() !== "" &&
+            termsCheckbox.checked
+        ) {
+            signUpButton.disabled = false;
+            signUpButton.classList.remove("disabled-button");
+        } else {
+            signUpButton.disabled = true;
+            signUpButton.classList.add("disabled-button");
+        }
+    }
+
+    // Attach event listeners to input fields
+    nameInput.addEventListener("input", checkInputs);
+    emailInput.addEventListener("input", checkInputs);
+    otpInput.addEventListener("input", checkInputs);
+    phoneInput.addEventListener("input", checkInputs);
+    passwordInput.addEventListener("input", checkInputs);
+    termsCheckbox.addEventListener("change", checkInputs);
+
+    checkInputs(); // Initial check on page load
+});
+
+
        
     function userLoginShowModal(message, isSuccess = true) {
     const modal = document.getElementById('user-login-successModal');
@@ -382,7 +425,9 @@ function verifyOTP() {
         email: document.getElementById("signup-email-input").value,
         phone: document.getElementById("signup-phone-input").value,
         password: document.getElementById("signup-password-input").value,
-        otp: document.getElementById("signup-email-otp-input").value, // If required
+        otp: document.getElementById("signup-email-otp-input").value,
+        termAndCondition: document.getElementById("register-user-term-and-condition").value,
+         // If required
     };
 
     try {
