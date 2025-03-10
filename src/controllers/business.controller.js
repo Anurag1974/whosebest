@@ -170,7 +170,7 @@ export default class BusinessController {
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-            maxAge: 24 * 60 * 60 * 1000 // 24 hours
+            maxAge: 2 * 60 * 60 * 1000 // 2 hours
         });
 
         res.json({ success: true, message: "Login successful", token });

@@ -186,14 +186,16 @@
 /* Profile Content */
 .drivers-landing-page-info-card {
     display: flex;
+    /* align-items: center; */
     flex-direction: column;
     gap: 30px;
 }
 
 .drivers-landing-page-info-section {
+    margin-top: 20px;
     background: #f8fafc;
     border-radius: 12px;
-    padding: 24px;
+    /* padding: 24px; */
 }
 
 .drivers-landing-page-info-section h2 {
