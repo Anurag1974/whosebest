@@ -1,0 +1,88 @@
+.knoqdbest-service-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.knoqdbest-service-container h1 {
+    font-size: 32px;
+    margin-bottom: 15px;
+    color: #000000;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 10px;
+}
+
+.knoqdbest-service-container h2 {
+    font-size: 24px;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    color: #000000;
+    position: relative;
+}
+
+.knoqdbest-service-container h2::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 50px;
+    height: 3px;
+    background-color: #3498db;
+}
+
+.knoqdbest-service-container p {
+    margin: 15px 0;
+    color: #555;
+    font-size: 16px;
+}
+
+.knoqdbest-service-container ul {
+    padding-left: 25px;
+    margin: 10px 0;
+}
+
+.knoqdbest-service-container ul li {
+    margin-bottom: 10px;
+    color: #555;
+    font-size: 16px;
+}
+
+.knoqdbest-service-container a {
+    color: #004cff;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.knoqdbest-service-container a:hover {
+    text-decoration: underline;
+}
+
+.knoqdbest-service-container .footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 14px;
+    color: #7f8c8d;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .knoqdbest-service-container {
+        padding: 20px;
+    }
+
+    .knoqdbest-service-container h1 {
+        font-size: 28px;
+    }
+
+    .knoqdbest-service-container h2 {
+        font-size: 20px;
+    }
+
+    .knoqdbest-service-container p,
+    .knoqdbest-service-container ul li {
+        font-size: 14px;
+    }
+}

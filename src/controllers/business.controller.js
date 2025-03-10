@@ -1436,6 +1436,28 @@ getTermConditions(req, res) {
         res.status(500).send("An error occurred while loading the coming soon page.");
     }
 }
+showAboutUs(req, res) {
+    try {
+        res.render('about-us', { 
+            user: req.user, 
+            toggle: req.session.toggle 
+        });
+    } catch (error) {
+        console.error("Error in comingSoon:", error);
+        res.status(500).send("An error occurred while loading the coming soon page.");
+    }
+}
+showOurService(req, res) {
+    try {
+        res.render('service', { 
+            user: req.user, 
+            toggle: req.session.toggle 
+        });
+    } catch (error) {
+        console.error("Error in comingSoon:", error);
+        res.status(500).send("An error occurred while loading the coming soon page.");
+    }
+}
 
 
     

@@ -13,6 +13,8 @@ const router = express.Router();
 const businessController = new BusinessController();
 
 router.get("/",authMiddleware, categoryMiddleware,businessController.showHome)
+router.get('/about-us',authMiddleware,categoryMiddleware,businessController.showAboutUs)
+router.get('/services',authMiddleware,categoryMiddleware,businessController.showOurService)
 router.get('/add-name',  categoryMiddleware,businessController.showNamePage)
 router.get('/register-driver',authMiddleware, categoryMiddleware,businessController.showDriverRegistration)
 router.get('/register-pink-driver',authMiddleware,  categoryMiddleware,businessController.showPinkDriverRegistration)
