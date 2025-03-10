@@ -1,5 +1,23 @@
 
 <link rel="stylesheet" href="/login.css">
+<style>
+    .loader {
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid #3498db;
+        border-radius: 50%;
+        width: 15px;
+        height: 15px;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 5px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
 
 <div id="user-login-successModal" class="user-login-modal">
     <div class="user-login-modal-content">
@@ -323,17 +341,23 @@ async function generateOTP() {
     let button = document.getElementById("email-verify-button");
     let countdownElement = document.getElementById("countdown-timer");
 
-    if (!email ) {
-        userLoginShowModal("Please enter your  email.", false);
+    if (!email) {
+        userLoginShowModal("Please enter your email.", false);
         return;
     }
-    if ( !name) {
-        userLoginShowModal("Please enter your name ", false);
+    if (!name) {
+        userLoginShowModal("Please enter your name.", false);
         return;
     }
 
     // Store OTP locally
     localStorage.setItem("otp", otp);
+
+    // Show loader, disable button, and change style
+    button.innerHTML = `Sending... <span class="loader"></span>`;
+    button.disabled = true;
+    button.style.backgroundColor = "grey";
+    button.style.cursor = "not-allowed";
 
     try {
         let response = await fetch("/send-otp", {
@@ -348,12 +372,10 @@ async function generateOTP() {
         if (result.success) {
             userLoginShowModal("OTP sent successfully!", true);
 
-            // Disable button and start countdown only if OTP is sent successfully
-            button.disabled = true;
-            button.style.backgroundColor = "grey";
-            button.style.cursor = "not-allowed";
+            // Restore button text after OTP is sent
+            button.innerHTML = "Send OTP";
 
-            // Start Countdown
+            // Start Countdown (Displayed Separately)
             countdownElement.style.display = "block"; // Show the countdown
             let timeLeft = 60; // 60 seconds
 
@@ -363,7 +385,7 @@ async function generateOTP() {
 
                 if (timeLeft < 0) {
                     clearInterval(countdownInterval);
-                    countdownElement.style.display = "none"; // Hide the countdown
+                    countdownElement.style.display = "none"; // Hide countdown
                     button.disabled = false;
                     button.style.backgroundColor = ""; // Reset to default
                     button.style.cursor = "pointer";
@@ -371,11 +393,21 @@ async function generateOTP() {
             }, 1000); // Update every second
         } else {
             userLoginShowModal(result.message, false);
+            resetButton(button);
         }
     } catch (error) {
         console.error("Error sending OTP:", error);
         userLoginShowModal("An error occurred while sending OTP.", false);
+        resetButton(button);
     }
+}
+
+// Helper function to reset button state
+function resetButton(button) {
+    button.innerHTML = "Send OTP";
+    button.disabled = false;
+    button.style.backgroundColor = "";
+    button.style.cursor = "pointer";
 }
 
 
