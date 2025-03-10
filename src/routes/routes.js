@@ -18,8 +18,8 @@ router.get('/register-driver',authMiddleware, categoryMiddleware,businessControl
 router.get('/register-pink-driver',authMiddleware,  categoryMiddleware,businessController.showPinkDriverRegistration)
 router.get('/driver-dashboard',authMiddleware, categoryMiddleware,businessController.showDriverDashboard)
  router.get('/pink-driver-dashboard',authMiddleware,categoryMiddleware,businessController.showPinkDriverDashboard)
- router.get('/privacy-policy',categoryMiddleware,businessController.getPrivacyPolicy)
- router.get('/term-conditions',categoryMiddleware,businessController.getTermConditions)
+ router.get('/privacy-policy',categoryMiddleware,authMiddleware,businessController.getPrivacyPolicy)
+ router.get('/term-conditions',categoryMiddleware, authMiddleware,businessController.getTermConditions)
 
 
 // router.get('/business-login',authMiddleware, businessController.showbusinessLogin)

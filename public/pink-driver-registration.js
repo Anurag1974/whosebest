@@ -197,13 +197,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 async function registerPinkDriver(event) {
-    event.preventDefault(); // Prevent default form submission
+    event.preventDefault();
 
     const driverUserId = document.getElementById('cab-taxi-driver-forms-user-id').value;
     const name = capitalizeFirstLetter(document.getElementById('cab-taxi-driver-forms-name').value);
     const phone = document.getElementById('cab-taxi-driver-forms-phone').value.trim();
-    const email = document.getElementById('cab-taxi-driver-forms-email').value.trim(); // Added email
-
+    const email = document.getElementById('cab-taxi-driver-forms-email').value.trim();
     const age = document.getElementById('cab-taxi-driver-forms-age').value;
     const experience = document.getElementById('cab-taxi-driver-forms-experience').value;
     const city = capitalizeFirstLetter(document.getElementById('cab-taxi-driver-forms-city').value);
@@ -220,7 +219,6 @@ async function registerPinkDriver(event) {
     const licenseBack = document.getElementById('cab-taxi-driver-forms-license-back').files[0];
     const driverPhoto = document.getElementById('cab-taxi-driver-forms-driver-photo').files[0];
 
-    // Validate required fields
     if (!name || !phone || !email || !age || !experience || !city || !state ||
         !vehicleType || !vehicleName || !licensePlate || !currentAddress || !licenseAddress ||
         !licenseNumber || !vehicleImage || !licenseFront || !licenseBack || !driverPhoto) {
@@ -243,15 +241,23 @@ async function registerPinkDriver(event) {
     formData.append('currentAddress', currentAddress);
     formData.append('licenseAddress', licenseAddress);
     formData.append('licenseNumber', licenseNumber);
-
-    // Append files
     formData.append('vehicleImage', vehicleImage);
     formData.append('licenseFront', licenseFront);
     formData.append('licenseBack', licenseBack);
     formData.append('driverPhoto', driverPhoto);
 
     const submitButton = document.getElementById('register-btn');
-    submitButton.disabled = true; // Disable button to prevent multiple clicks
+    const originalText = submitButton.innerHTML; // Save original text
+    submitButton.disabled = true;
+    submitButton.innerHTML = `<div style="
+        width: 18px; 
+        height: 18px; 
+        border: 2px solid rgba(255,255,255,0.3);
+        border-radius: 50%; 
+        border-top: 2px solid white; 
+        animation: spin 1s linear infinite;
+        display: inline-block;
+    "></div>`;
 
     try {
         const res = await fetch('/update-pink-driver', {
@@ -262,12 +268,13 @@ async function registerPinkDriver(event) {
         if (res.ok) {
             const data = await res.json();
             pinkDriverShowModal('Pink Driver registered successfully', true);
-
-            if (data.redirectUrl) {
-                window.location.href = data.redirectUrl;
-            } else {
-                location.reload(); // Refresh page if no redirect URL is given
-            }
+            setTimeout(() => {
+                if (data.redirectUrl) {
+                    window.location.href = data.redirectUrl;
+                } else {
+                    location.reload();
+                }
+            }, 3000);
         } else {
             const errorData = await res.json();
             pinkDriverShowModal(`Failed to register driver: ${errorData.message}`, false);
@@ -276,9 +283,12 @@ async function registerPinkDriver(event) {
         console.error('Error:', error);
         pinkDriverShowModal('An error occurred while registering the driver', false);
     } finally {
-        submitButton.disabled = false; // Re-enable button after completion
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalText; // Restore button text
     }
 }
+
+
 
 
 function pinkDriverShowModal(message, isSuccess = true) {

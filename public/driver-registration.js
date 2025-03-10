@@ -298,7 +298,7 @@ document.addEventListener("DOMContentLoaded", function () {
 async function registerDriver(event) {
     event.preventDefault();
 
-    const driverUserId= document.getElementById('cab-taxi-driver-forms-user-id').value;
+    const driverUserId = document.getElementById('cab-taxi-driver-forms-user-id').value;
     const name = capitalizeFirstLetter(document.getElementById('cab-taxi-driver-forms-name').value);
     const phone = document.getElementById('cab-taxi-driver-forms-phone').value.trim();
     const email = document.getElementById('cab-taxi-driver-forms-email').value.trim();
@@ -348,7 +348,12 @@ async function registerDriver(event) {
     formData.append('driverPhoto', driverPhoto);
 
     const submitButton = document.getElementById('register-btn');
+
+    // Show loader and disable button
+    submitButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Processing...`;
     submitButton.disabled = true;
+    submitButton.style.backgroundColor = "grey";
+    submitButton.style.cursor = "not-allowed";
 
     try {
         const res = await fetch('/update-driver', {
@@ -359,6 +364,11 @@ async function registerDriver(event) {
         if (res.ok) {
             const data = await res.json();
             registerDriverShowModal('Driver registered successfully', true);
+
+            // Show success message on button
+            submitButton.innerHTML = `<i class="fas fa-check"></i> Registered`;
+            submitButton.style.backgroundColor = "green";
+
             setTimeout(() => {
                 if (data.redirectUrl) {
                     window.location.href = data.redirectUrl;
@@ -369,14 +379,32 @@ async function registerDriver(event) {
         } else {
             const errorData = await res.json();
             registerDriverShowModal(`Failed to register driver: ${errorData.message}`, false);
+            resetRegisterButton(submitButton);
         }
     } catch (error) {
         console.error('Error:', error);
         registerDriverShowModal('An error occurred while registering the driver', false);
-    } finally {
-        submitButton.disabled = false;
+        resetRegisterButton(submitButton);
     }
 }
+
+// Helper function to reset button state
+function resetRegisterButton(button) {
+    button.innerHTML = `<i class="fas fa-paper-plane"></i> Submit Registration`;
+    button.disabled = false;
+    button.style.backgroundColor = "";
+    button.style.cursor = "pointer";
+}
+
+
+// Helper function to reset button state
+function resetRegisterButton(button) {
+    button.innerHTML = `<i class="fas fa-paper-plane"></i> Submit Registration`;
+    button.disabled = false;
+    button.style.backgroundColor = "";
+    button.style.cursor = "pointer";
+}
+
 
 // Attach the function to the form submission event
 document.querySelector('.cab-taxi-driver-forms-registration-form').addEventListener('submit', registerDriver);

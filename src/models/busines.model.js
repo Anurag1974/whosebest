@@ -1197,7 +1197,7 @@ GROUP BY bd.id;
     static async getAvailableTaxis() {
         try {
             const [drivers] = await db.execute("SELECT * FROM driver_data WHERE status = 1 and verified=1");
-            // console.log(drivers)
+            //  console.log(drivers)
             return drivers; // Returns an array of available drivers
         } catch (error) {
             console.error("Error fetching available taxis:", error);
