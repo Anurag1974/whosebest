@@ -26,22 +26,22 @@
             <input id="cab-taxi-driver-forms-user-id" name="user-id" value="<%=userId%>" required type="hidden">
             <div class="cab-taxi-driver-forms-form-row">
                 <div class="cab-taxi-driver-forms-form-group">
-                    <label for="cab-taxi-driver-forms-name"><i class="fas fa-user-circle"></i> Full Name*</label>
+                    <label for="cab-taxi-driver-forms-name"><i class="fas fa-user-circle"></i> Full Name<span style="color: red;">*</span></label>
                     <input type="text" id="cab-taxi-driver-forms-name" name="name" placeholder="Enter your full name as per license" required>
                 </div>
                 <div class="cab-taxi-driver-forms-form-group">
-                    <label for="cab-taxi-driver-forms-phone"><i class="fas fa-phone"></i> Phone Number*</label>
+                    <label for="cab-taxi-driver-forms-phone"><i class="fas fa-phone"></i> Phone Number<span style="color: red;">*</span></label>
                     <input type="tel" id="cab-taxi-driver-forms-phone" name="phone" placeholder="Enter your 10-digit mobile number" required>
                 </div>
             </div>
             
             <div class="cab-taxi-driver-forms-form-row">
                 <div class="cab-taxi-driver-forms-form-group">
-                    <label for="cab-taxi-driver-forms-email"><i class="fas fa-envelope"></i> Email Address*</label>
+                    <label for="cab-taxi-driver-forms-email"><i class="fas fa-envelope"></i> Email Address<span style="color: red;">*</span></label>
                     <input type="email" id="cab-taxi-driver-forms-email" name="email" placeholder="Enter your active email address" required>
                 </div>
                 <div class="cab-taxi-driver-forms-form-group">
-                    <label for="cab-taxi-driver-forms-age"><i class="fas fa-birthday-cake"></i> Age*</label>
+                    <label for="cab-taxi-driver-forms-age"><i class="fas fa-birthday-cake"></i> Age<span style="color: red;">*</span></label>
                     <input type="number" id="cab-taxi-driver-forms-age" name="age" min="18" placeholder="Must be 18 or above" required>
                 </div>
             </div>
@@ -57,18 +57,18 @@
                     </select>
                 </div> -->
                 <div class="cab-taxi-driver-forms-form-group">
-                    <label for="cab-taxi-driver-forms-experience"><i class="fas fa-road"></i> Driving Experience (Years)*</label>
+                    <label for="cab-taxi-driver-forms-experience"><i class="fas fa-road"></i> Driving Experience (Years)<span style="color: red;">*</span></label>
                     <input type="number" id="cab-taxi-driver-forms-experience" name="experience" min="0" placeholder="Enter years of driving experience" required>
                 </div>
             </div>
 
             <div class="cab-taxi-driver-forms-form-row">
                 <div class="cab-taxi-driver-forms-form-group">
-                    <label for="cab-taxi-driver-forms-city"><i class="fas fa-city"></i> City*</label>
+                    <label for="cab-taxi-driver-forms-city"><i class="fas fa-city"></i> City<span style="color: red;">*</span></label>
                     <input type="text" id="cab-taxi-driver-forms-city" name="city" placeholder="Enter your city" required>
                 </div>
                 <div class="cab-taxi-driver-forms-form-group">
-                    <label for="cab-taxi-driver-forms-state"><i class="fas fa-map-marked-alt"></i> State*</label>
+                    <label for="cab-taxi-driver-forms-state"><i class="fas fa-map-marked-alt"></i> State<span style="color: red;">*</span></label>
                     <input type="text" id="cab-taxi-driver-forms-state" name="state" placeholder="Enter your state" required>
                 </div>
             </div>
@@ -80,7 +80,7 @@
                 <h2>Vehicle Information</h2>
             </div>
             <div class="cab-taxi-driver-forms-form-group">
-                <label for="cab-taxi-driver-forms-vehicle-type"><i class="fas fa-car-side"></i> Vehicle Type*</label>
+                <label for="cab-taxi-driver-forms-vehicle-type"><i class="fas fa-car-side"></i> Vehicle Type<span style="color: red;">*</span></label>
                 <select id="cab-taxi-driver-forms-vehicle-type" name="vehicle-type" required>
                     <option value="" disabled selected>Select vehicle type</option>
                     <option value="cab">Cab</option>
@@ -89,17 +89,17 @@
             </div>
 
             <div class="cab-taxi-driver-forms-form-group">
-                <label for="cab-taxi-driver-forms-vehicle-name"><i class="fas fa-tag"></i> Vehicle Name*</label>
+                <label for="cab-taxi-driver-forms-vehicle-name"><i class="fas fa-tag"></i> Vehicle Name<span style="color: red;">*</span></label>
                 <input type="text" id="cab-taxi-driver-forms-vehicle-name" name="vehicle-name" placeholder="Enter vehicle make and model" required>
             </div>
 
             <div class="cab-taxi-driver-forms-form-group">
-                <label for="cab-taxi-driver-forms-license-plate"><i class="fas fa-id-card"></i> License Plate Number*</label>
+                <label for="cab-taxi-driver-forms-license-plate"><i class="fas fa-id-card"></i> License Plate Number<span style="color: red;">*</span></label>
                 <input type="text" id="cab-taxi-driver-forms-license-plate" name="license-plate" placeholder="Enter vehicle registration number" required>
             </div>
 
             <div class="cab-taxi-driver-forms-form-group cab-taxi-driver-forms-file-input-group">
-                <label for="cab-taxi-driver-forms-vehicle-image"><i class="fas fa-camera"></i> Vehicle Image*</label>
+                <label for="cab-taxi-driver-forms-vehicle-image"><i class="fas fa-camera"></i> Vehicle Image<span style="color: red;">*</span></label>
                 <div class="cab-taxi-driver-forms-file-input-wrapper" onclick="document.getElementById('cab-taxi-driver-forms-vehicle-image').click();">
                     <input type="file" id="cab-taxi-driver-forms-vehicle-image" name="vehicle-image" accept="image/*" required >
                     <i class="fas fa-cloud-upload-alt"></i>
@@ -118,12 +118,12 @@
                 <h2>Address Information</h2>
             </div>
             <div class="cab-taxi-driver-forms-form-group">
-                <label for="cab-taxi-driver-forms-current-address"><i class="fas fa-home"></i> Current Address*</label>
+                <label for="cab-taxi-driver-forms-current-address"><i class="fas fa-home"></i> Current Address<span style="color: red;">*</span></label>
                 <textarea id="cab-taxi-driver-forms-current-address" name="current-address" placeholder="Enter your complete current residential address" required></textarea>
             </div>
 
             <div class="cab-taxi-driver-forms-form-group">
-                <label for="cab-taxi-driver-forms-license-address"><i class="fas fa-address-card"></i> Address on Driving License*</label>
+                <label for="cab-taxi-driver-forms-license-address"><i class="fas fa-address-card"></i> Address on Driving License<span style="color: red;">*</span></label>
                 <textarea id="cab-taxi-driver-forms-license-address" name="license-address" placeholder="Enter address exactly as shown on your driving license" required></textarea>
             </div>
         </div>
@@ -135,11 +135,11 @@
             </div>
 
             <div class="cab-taxi-driver-forms-form-group">
-                <label for="cab-taxi-driver-forms-license-number"><i class="fas fa-user-circle"></i> License Number</label>
+                <label for="cab-taxi-driver-forms-license-number"><i class="fas fa-user-circle"></i> License Number<span style="color: red;">*</span></label>
                 <input type="text" id="cab-taxi-driver-forms-license-number" name="licenseNumber" placeholder="Enter your license number" required>
             </div>
             <div class="cab-taxi-driver-forms-form-group cab-taxi-driver-forms-file-input-group">
-                <label for="cab-taxi-driver-forms-license-front"><i class="fas fa-id-card"></i> Driving License - Front Side*</label>
+                <label for="cab-taxi-driver-forms-license-front"><i class="fas fa-id-card"></i> Driving License - Front Side<span style="color: red;">*</span></label>
                 <div class="cab-taxi-driver-forms-file-input-wrapper" onclick="document.getElementById('cab-taxi-driver-forms-license-front').click();">
                     <input type="file" id="cab-taxi-driver-forms-license-front" name="license-front" accept="image/*" required hidden>
                     <i class="fas fa-cloud-upload-alt"></i>
@@ -151,7 +151,7 @@
             </div>
 
             <div class="cab-taxi-driver-forms-form-group cab-taxi-driver-forms-file-input-group">
-                <label for="cab-taxi-driver-forms-license-back"><i class="fas fa-id-card"></i> Driving License - Back Side*</label>
+                <label for="cab-taxi-driver-forms-license-back"><i class="fas fa-id-card"></i> Driving License - Back Side<span style="color: red;">*</span></label>
                 <div class="cab-taxi-driver-forms-file-input-wrapper" onclick="document.getElementById('cab-taxi-driver-forms-license-back').click();">
                     <input type="file" id="cab-taxi-driver-forms-license-back" name="license-back" accept="image/*" required hidden>
                     <i class="fas fa-cloud-upload-alt"></i>
@@ -164,7 +164,7 @@
             </div>
 
             <div class="cab-taxi-driver-forms-form-group cab-taxi-driver-forms-file-input-group">
-                <label for="cab-taxi-driver-forms-driver-photo"><i class="fas fa-user-circle"></i> Driver Current Photo*</label>
+                <label for="cab-taxi-driver-forms-driver-photo"><i class="fas fa-user-circle"></i> Driver Current Photo<span style="color: red;">*</span></label>
                 <div class="cab-taxi-driver-forms-file-input-wrapper" onclick="document.getElementById('cab-taxi-driver-forms-driver-photo').click();">
                     <input type="file" id="cab-taxi-driver-forms-driver-photo" name="driver-photo" accept="image/*" required hidden>
                     <i class="fas fa-cloud-upload-alt"></i>

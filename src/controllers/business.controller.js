@@ -502,7 +502,7 @@ export default class BusinessController {
             }
     
             // Calculate the remaining images
-            const maxImages = 7;
+            const maxImages = 6;
             const remainingImages = Math.max(maxImages - business.image_count, 0);
     
             // Fetch business hours and reviews

@@ -605,7 +605,7 @@ GROUP BY bd.id;
 `, 
                     [id]
                 );
-                // console.log(businessRows)
+                console.log(businessRows)
                 // console.log(businessRows)
                 
                 const [reviewRows] = await db.execute(`SELECT reviews.*, users.name, users.profile_image

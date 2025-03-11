@@ -707,3 +707,14 @@ popperOverlay.addEventListener('click', (e) => {
 });
 
 
+
+function acceptCookies() {
+    document.getElementById("cookiePopup").style.display = "none";
+    document.cookie = "cookiesAccepted=true; path=/; max-age=" + 60 * 60 * 24 * 30; // 30 days
+  }
+  
+  window.onload = function () {
+    if (!document.cookie.includes("cookiesAccepted=true")) {
+      document.getElementById("cookiePopup").style.display = "flex";
+    }
+  };

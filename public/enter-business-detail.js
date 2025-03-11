@@ -139,6 +139,13 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 async function addBusinessDetails() {
+    let button = document.querySelector(".submit-btn");
+    let originalHTML = button.innerHTML; // Save original button content
+
+    // Show loader
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
+    button.disabled = true;
+
     let businessName = document.getElementById('business-name').value;
     businessName = capitalizeFirstLetter(businessName); // Capitalize business name
 
@@ -162,6 +169,10 @@ async function addBusinessDetails() {
 
     if (!businessName || !capitalizedCity || !capitalizedState || !capitalizedAddress || !capitalizedPhone || !capitalizedCategory || !capitalizedEvCharging || !capitalizedWomenOwned) {
         enterBusinessDetailsShowModal('All fields are required except website', false); // Show error popup
+        
+        // Restore button state
+        button.innerHTML = originalHTML;
+        button.disabled = false;
         return;
     }
 
@@ -204,7 +215,12 @@ async function addBusinessDetails() {
         console.error('Error:', error);
         enterBusinessDetailsShowModal('An error occurred while adding business details', false); // Error popup
     }
+
+    // Restore button state after request is completed
+    button.innerHTML = originalHTML;
+    button.disabled = false;
 }
+
 
 document.addEventListener("DOMContentLoaded", function () {
     const dropdownBtn = document.querySelector(".enter-business-detail-dropdown-btn");

@@ -55,6 +55,11 @@
     text-decoration: none;
     transition: color 0.3s;
 }
+address a {
+    color: #3498db;
+    text-decoration: none;
+    transition: color 0.3s;
+}
 
 .privacy-policy a:hover {
     color: #e74c3c;

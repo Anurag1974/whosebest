@@ -40,15 +40,21 @@
             </p>
         </div>
         <div class="action-buttons">
-            <a href="tel:<%= businessDetails.phone %>" class="btn btn-primary">
-                <i class="fas fa-comments"></i> Enquire Now
-            </a>
+           
+            <% if (businessDetails.website) { %>
+                <a href="<%= businessDetails.website.startsWith('http') ? businessDetails.website : 'https://' + businessDetails.website %>" 
+                   class="btn btn-primary" target="_blank">
+                   <i class="fa-solid fa-globe"></i> Website
+                </a>
+            <% } %>
+             
             <a href="tel:<%= businessDetails.phone %>" class="btn btn-success">
                 <i class="fas fa-phone"></i> Call
             </a>
             <a href="https://wa.me/<%= businessDetails.phone %>" class="btn btn-outline" target="_blank">
                 <i class="fab fa-whatsapp"></i> WhatsApp
             </a>
+           
             
             <a href="https://www.google.com/maps/search/<%= businessDetails.address %>" target="_blank" class="btn btn-outline">
                 <i class="fa-solid fa-map-location-dot"></i> Map
