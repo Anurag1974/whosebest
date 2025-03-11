@@ -72,9 +72,10 @@
                                 <% if (business.website) { %>
                                     <p class="business-card-website">
                                         <strong>Website:</strong> 
-                                        <a href="<%= business.website %>" target="_blank">
+                                        <a href="<%= business.website.startsWith('http') ? business.website : 'https://' + business.website %>" target="_blank">
                                             <%= business.website %>
                                         </a>
+                                        
                                     </p>
                                 <% } %>
                             </div>
