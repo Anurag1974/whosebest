@@ -24,7 +24,7 @@ export default class BusinessController {
     async sendOTP(req, res) {
         try {
             let { name, email, otp } = req.body;
-            console.log(req.body);
+            // console.log(req.body);
             name = name.replace(/\b\w/g, (char) => char.toUpperCase());
     
             // Check if email and name are provided
@@ -38,7 +38,7 @@ export default class BusinessController {
             const htmlContent = `
                 <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4; text-align: center;">
                     <div style="max-width: 500px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
-                        <h2 style="color: #007bff;">Welcome to KnoqDbest, ${name}! 🎉</h2>
+                        <h2 style="color: #007bff;">Welcome to Knock D Best, ${name}! 🎉</h2>
                         <p style="font-size: 16px; color: #333;">We are thrilled to have you on board.</p>
                         
                         <div style="background: #007bff; color: white; font-size: 20px; font-weight: bold; padding: 10px; border-radius: 5px; display: inline-block; margin: 10px 0;">
@@ -60,7 +60,7 @@ export default class BusinessController {
             await transporter.sendMail({
                 from: process.env.EMAIL_USER,
                 to: email,
-                subject: "Welcome to KnoqDbest - Your OTP Code",
+                subject: "Welcome to Knock D Best - Your OTP Code",
                 html: htmlContent,
             });
     

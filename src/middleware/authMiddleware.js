@@ -4,17 +4,17 @@ import db from "../config/db.js";
 
 const authMiddleware = async (req, res, next) => {
     const token = req.cookies['token'];
-    console.log("Token received in middleware:", token);
+    // console.log("Token received in middleware:", token);
 
     if (!token) {
-        console.log("No token found, setting req.user to null");
+        // console.log("No token found, setting req.user to null");
         req.user = null;
         return next();
     }
 
     try {
         const decoded = verifyToken(token);
-        console.log("Decoded Token:", decoded);
+        // console.log("Decoded Token:", decoded);
 
         if (!decoded) {
             console.log("Invalid token, clearing cookie and setting req.user to null");
@@ -39,10 +39,10 @@ const authMiddleware = async (req, res, next) => {
             name :userResult[0].name
         };
 
-        console.log("User authenticated:", req.user);
+        // console.log("User authenticated:", req.user);
         next();
     } catch (error) {
-        console.error("Error in authMiddleware:", error);
+        // console.error("Error in authMiddleware:", error);
         res.clearCookie('token');
         req.user = null;
         next();
