@@ -20,14 +20,16 @@ export default class BusinessModel {
     // }
     static async getRegisteredBusiness(userId, toggles) {
         let sqlQuery = `
-            SELECT 
-                bd.*, 
-                c.category_name  -- Fetch category name from categories table
-            FROM 
-                business_detail bd
-            LEFT JOIN categories c ON bd.category = c.category_value  -- Join with categories table
-            WHERE 
-                bd.user_id = ?`;
+           SELECT DISTINCT 
+    bd.*, 
+    c.category_name 
+FROM 
+    business_detail bd
+LEFT JOIN categories c 
+    ON bd.category = c.category_value  
+WHERE 
+    bd.user_id = ?
+`;
     
         let queryParams = [userId];
     
@@ -150,11 +152,11 @@ export default class BusinessModel {
             throw new Error("Failed to insert user details"); // Ensures higher-level error handling
         }
     }
-    static async addBusinessDetails(businessName, address, category, phone, city, state, website, evCharging, womenOwned, userId, overview) {
+    static async addBusinessDetails(businessName, address, category, phone, city, state, website, evCharging, womenOwned, userId) {
         try {
             const [result] = await db.execute(
-                'INSERT INTO business_detail (business_name, address, category, phone, city, state, website, ev_station, women_owned, user_id, overview) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                [businessName, address, category, phone, city, state, website, evCharging, womenOwned, userId, overview]
+                'INSERT INTO business_detail (business_name, address, category, phone, city, state, website, ev_station, women_owned, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                [businessName, address, category, phone, city, state, website, evCharging, womenOwned, userId]
             );
     
             return result.insertId;
@@ -464,7 +466,7 @@ export default class BusinessModel {
         let conditions = [];
         let params = [];
     
-        // **Validate category**
+        // *Validate category*
         if (typeof category === 'string' && category.trim() !== '') {
             params.push(category);
         } else {
@@ -472,12 +474,12 @@ export default class BusinessModel {
             throw new Error("Invalid category parameter");
         }
     
-        // **Apply toggle conditions**
+        // *Apply toggle conditions*
         if (toggles?.ev) {
-            conditions.push(`bd.ev_station = 1`);
+            conditions.push('bd.ev_station = 1');
         }
         if (toggles?.women) {
-            conditions.push(`bd.women_owned = 1`);
+            conditions.push('bd.women_owned = 1');
         }
     
         if (conditions.length > 0) {
@@ -490,7 +492,7 @@ export default class BusinessModel {
             LIMIT ? OFFSET ?
         `;
     
-        // **Validate limit and offset before adding them**
+        // *Validate limit and offset before adding them*
         const parsedLimit = Number(limit);
         const parsedOffset = Number(offset);
     
@@ -509,15 +511,46 @@ export default class BusinessModel {
             console.log("Executing query:", query);
             console.log("With parameters:", params);
     
-            // **Explicitly use `db.query()` instead of `db.execute()`**
+            // *Execute the main query*
             const [results] = await db.query(query, params);
     
-            return { businesses: results };
+            // *Query to get total count of businesses matching the category and filters*
+            let countQuery = `
+                SELECT COUNT(*) AS total
+                FROM business_detail bd
+                LEFT JOIN reviews r ON bd.id = r.business_id
+                WHERE bd.category = ?
+            `;
+    
+            // Apply toggle conditions for count query too
+            let countParams = [category];  // Use `let` here to avoid the error when modifying
+            if (toggles?.ev) {
+                countQuery += ' AND bd.ev_station = 1';
+            }
+            if (toggles?.women) {
+                countQuery += ' AND bd.women_owned = 1';
+            }
+    
+            const [[{ total }]] = await db.query(countQuery, countParams);
+    
+            return {
+                businesses: results,
+                total,  // Add total count to the response for pagination
+                totalPages: Math.ceil(total / parsedLimit), // Calculate total pages
+                currentPage: Math.ceil((parsedOffset + 1) / parsedLimit) // Calculate current page based on offset
+            };
         } catch (error) {
             console.error('Database error:', error);
             throw error;
         }
     }
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -689,27 +722,47 @@ LIMIT 10;
             throw error;
         }
     }
+
     static async getBusinessDetailsById(id) {
         try {
-            const [businessRows] = await db.execute(
-                `SELECT 
-                    bd.*, 
-                    MAX(bh.opening_time) AS opening_time, 
-                    MAX(bh.closing_time) AS closing_time, 
-                    COALESCE(GROUP_CONCAT(DISTINCT bi.image_path SEPARATOR '||'), '') AS images,
-                    COUNT(DISTINCT bi.id) AS image_count  
-                FROM business_detail bd
-                LEFT JOIN business_hours bh ON bd.id = bh.business_id
-                LEFT JOIN business_images bi ON bd.id = bi.business_id
-                WHERE bd.id = ? 
-                  AND (bh.opening_time IS NULL OR bh.opening_time != '00:00:00') 
-                  AND (bh.closing_time IS NULL OR bh.closing_time != '00:00:00')
-                GROUP BY bd.id;
-                `, 
+            // Fetch business details (without reviews)
+            const [businessRows] = await db.query(
+                `SELECT bd.*, 
+                        c.category_name,
+                        COALESCE(GROUP_CONCAT(DISTINCT bi.image_path SEPARATOR '||'), '') AS images,
+                        COUNT(DISTINCT bi.id) AS image_count
+                 FROM business_detail bd
+                 LEFT JOIN categories c ON bd.category = c.category_value
+                 LEFT JOIN business_images bi ON bd.id = bi.business_id
+                 WHERE bd.id = ?
+                 GROUP BY bd.id, c.category_name`,  // Fix: Include category_name in GROUP BY
+                [id]
+            );
+            
+    
+            if (!businessRows || businessRows.length === 0) {
+                return null;
+            }
+    
+            const businessDetails = businessRows[0];
+    
+            // Fetch valid business hours only if they exist
+            const [businessHours] = await db.query(
+                `SELECT opening_time, closing_time 
+                 FROM business_hours 
+                 WHERE business_id = ? 
+                 AND opening_time IS NOT NULL AND opening_time != '00:00:00' 
+                 AND closing_time IS NOT NULL AND closing_time != '00:00:00'`, 
                 [id]
             );
     
-            const [reviewRows] = await db.execute(
+            if (businessHours.length > 0) {
+                businessDetails.opening_time = businessHours[0].opening_time;
+                businessDetails.closing_time = businessHours[0].closing_time;
+            }
+    
+            // Fetch reviews separately
+            const [reviewRows] = await db.query(
                 `SELECT reviews.*, users.name, users.profile_image
                  FROM reviews
                  JOIN users ON reviews.user_id = users.user_id
@@ -717,18 +770,62 @@ LIMIT 10;
                 [id]
             );
     
-            if (businessRows.length > 0) {
-                const businessDetails = businessRows[0];
-                businessDetails.reviews = reviewRows;
-                return businessDetails;
-            } else {
-                return null;
-            }
+            businessDetails.reviews = reviewRows.length > 0 ? reviewRows : [];
+    
+            // console.log(businessDetails);
+            return businessDetails;
         } catch (error) {
             console.error('Error fetching business details:', error);
             throw error;
         }
     }
+    
+    
+    
+    
+    
+    
+    
+    // static async getBusinessDetailsById(id) {
+    //     try {
+    //         const [businessRows] = await db.execute(
+    //             `SELECT 
+    //                 bd.*, 
+    //                 MAX(bh.opening_time) AS opening_time, 
+    //                 MAX(bh.closing_time) AS closing_time, 
+    //                 COALESCE(GROUP_CONCAT(DISTINCT bi.image_path SEPARATOR '||'), '') AS images,
+    //                 COUNT(DISTINCT bi.id) AS image_count  
+    //             FROM business_detail bd
+    //             LEFT JOIN business_hours bh ON bd.id = bh.business_id
+    //             LEFT JOIN business_images bi ON bd.id = bi.business_id
+    //             WHERE bd.id = ? 
+    //               AND (bh.opening_time IS NULL OR bh.opening_time != '00:00:00') 
+    //               AND (bh.closing_time IS NULL OR bh.closing_time != '00:00:00')
+    //             GROUP BY bd.id;
+    //             `, 
+    //             [id]
+    //         );
+    
+    //         const [reviewRows] = await db.execute(
+    //             `SELECT reviews.*, users.name, users.profile_image
+    //              FROM reviews
+    //              JOIN users ON reviews.user_id = users.user_id
+    //              WHERE reviews.business_id = ?`, 
+    //             [id]
+    //         );
+    
+    //         if (businessRows.length > 0) {
+    //             const businessDetails = businessRows[0];
+    //             businessDetails.reviews = reviewRows;
+    //             return businessDetails;
+    //         } else {
+    //             return null;
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching business details:', error);
+    //         throw error;
+    //     }
+    // }
     
     
     
@@ -908,32 +1005,34 @@ LIMIT 10;
             callback(err, null);
         }
     }
-    static async filterBusiness(city, category, toggles, limit, offset) {
-        let sqlQuery = `
-            SELECT bd.*, 
-                   COALESCE(AVG(r.rating), 0) AS avg_rating, 
-                   COUNT(r.review_id) AS total_ratings
-            FROM business_detail bd
-            LEFT JOIN reviews r ON bd.id = r.business_id
-            WHERE 1=1
-        `;
-        
-        let queryParams = [];
+
+ 
     
+    static async filterBusiness(city, category, toggles, limit, offset) {
         try {
-            // Apply city filter only if it's valid
+            let sqlQuery = `
+                SELECT bd.*, 
+                       COALESCE(AVG(r.rating), 0) AS avg_rating, 
+                       COUNT(r.review_id) AS total_ratings
+                FROM business_detail bd
+                LEFT JOIN reviews r ON bd.id = r.business_id
+                WHERE 1=1
+            `;
+            let queryParams = [];
+    
+            // Apply city filter if provided
             if (city && city.trim() !== "") {
                 sqlQuery += " AND bd.city = ?";
-                queryParams.push(city);
+                queryParams.push(String(city.trim()));
             }
     
-            // Apply category filter only if it's valid
+            // Apply category filter if provided
             if (category && category.trim() !== "") {
                 sqlQuery += " AND bd.category = ?";
-                queryParams.push(category);
+                queryParams.push(String(category.trim()));
             }
     
-            // Apply toggle filters for EV and Women-Owned
+            // Apply toggle filters for EV and Women-Owned if provided
             if (toggles?.ev) {
                 sqlQuery += " AND bd.ev_station = 1";
             }
@@ -941,26 +1040,22 @@ LIMIT 10;
                 sqlQuery += " AND bd.women_owned = 1";
             }
     
-            // Ensure LIMIT and OFFSET are valid numbers
-            limit = parseInt(limit) || 10;
-            offset = parseInt(offset) || 0;
-    
+            // Add GROUP BY and ORDER BY
             sqlQuery += ` 
                 GROUP BY bd.id
                 ORDER BY avg_rating DESC
-                LIMIT ? OFFSET ?
             `;
     
-            queryParams.push(limit, offset);
+            // Get total count before adding LIMIT
+            const [totalResult] = await db.query(sqlQuery, queryParams);
+            const total = totalResult.length;
     
-            console.log("Executing Query:", sqlQuery);
-            console.log("Query Params:", queryParams);
+            // Add LIMIT and OFFSET
+            sqlQuery += ` LIMIT ? OFFSET ?`;
+            queryParams.push(parseInt(limit) || 10, parseInt(offset) || 0);
     
-            // Execute query
-            const [businesses] = await db.execute(sqlQuery, queryParams);
-    
-            // Get total count
-            const [[{ total }]] = await db.execute("SELECT FOUND_ROWS() AS total");
+            // Get paginated results
+            const [businesses] = await db.query(sqlQuery, queryParams);
     
             return { businesses, total };
         } catch (error) {
@@ -968,6 +1063,16 @@ LIMIT 10;
             throw new Error("Failed to fetch businesses");
         }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 
 
@@ -1137,83 +1242,128 @@ LIMIT 10;
             throw new Error(error.message);
         }
     }
-
+ 
+    
     // Insert business hours for selected days
     static async insertBusinessHours(businessId, schedule) {
         try {
-            // Assuming you have a `business_hours` table
-            // Loop through the schedule to insert/update each day's hours
             for (const daySchedule of schedule) {
                 const { day, openingTime, closingTime } = daySchedule;
-                
-                // Assuming you're using SQL queries, adjust the query based on your DB
+    
+                // Convert "CLOSED" to "00:00:00"
+                const openTimeValue = (openingTime === "CLOSED") ? "00:00:00" : openingTime;
+                const closeTimeValue = (closingTime === "CLOSED") ? "00:00:00" : closingTime;
+    
                 const query = `
                     INSERT INTO business_hours (business_id, day_of_week, opening_time, closing_time)
                     VALUES (?, ?, ?, ?)
-                    ON DUPLICATE KEY UPDATE opening_time = ?, closing_time = ?;
+                    ON DUPLICATE KEY UPDATE opening_time = VALUES(opening_time), closing_time = VALUES(closing_time);
                 `;
-                const params = [businessId, day, openingTime, closingTime, openingTime, closingTime];
-
-                // Execute the query (this depends on your database client)
-                await db.query(query, params);  // Assuming db is your database connection object
+    
+                await db.query(query, [businessId, day, openTimeValue, closeTimeValue]);
             }
-
-            return { success: true }; // Return success status or any relevant data
-
+    
+            return { success: true };
+    
         } catch (error) {
             console.error("Error in insertBusinessHours:", error.message);
-            throw error;  // Rethrow the error to be handled by the controller
+            throw error;
         }
     }
+    
 
     // Update business hours for selected days
+    // static async updateBusinessHours(businessId, selectedDays, openingTime, closingTime) {
+    //     try {
+    //         // Log the parameters for debugging
+    //         console.log('Updating business hours with parameters:');
+    //         console.log('businessId:', businessId);
+    //         console.log('selectedDays:', selectedDays);
+    //         console.log('openingTime:', openingTime);
+    //         console.log('closingTime:', closingTime);
+    
+    //         // Ensure selectedDays is an array
+    //         if (!Array.isArray(selectedDays) || selectedDays.length === 0) {
+    //             throw new Error("selectedDays must be a non-empty array.");
+    //         }
+    
+    //         // Convert "CLOSED" to "00:00:00" for database storage
+    //         const openTimeValue = (openingTime === "CLOSED") ? "00:00:00" : openingTime;
+    //         const closeTimeValue = (closingTime === "CLOSED") ? "00:00:00" : closingTime;
+    
+    //         const updateQuery = `
+    //             UPDATE business_hours 
+    //             SET opening_time = ?, closing_time = ?
+    //             WHERE business_id = ? AND day_of_week = ?`;
+    
+    //         // Loop through each day and update the database
+    //         const updatePromises = selectedDays.map(async (dayOfWeek) => {
+    //             const [result] = await db.execute(updateQuery, [openTimeValue, closeTimeValue, businessId, dayOfWeek]);
+    
+    //             if (result.affectedRows === 0) {
+    //                 console.warn(`⚠️ No rows updated for ${dayOfWeek}. Possible reasons:`);
+    //                 console.warn(`   - No matching row found in database`);
+    //                 console.warn(`   - Data already matches (MySQL ignores unchanged updates)`);
+    //             }
+    //         });
+    
+    //         // Execute all updates
+    //         await Promise.all(updatePromises);
+    
+    //         return { message: "Business hours updated successfully for selected days" };
+    //     } catch (error) {
+    //         console.error("Database Update Error:", error);
+    //         throw new Error("Database Update Error: " + error.message);
+    //     }
+    // }
+    
     static async updateBusinessHours(businessId, selectedDays, openingTime, closingTime) {
         try {
-            // Log the parameters to verify their values and types
-            // console.log('Updating business hours with parameters:');
-            // console.log('businessId:', businessId);
-            // console.log('selectedDays:', selectedDays);
-            // console.log('openingTime:', openingTime);
-            // console.log('closingTime:', closingTime);
-
+            // Log the parameters for debugging
+            console.log('Updating business hours with parameters:');
+            console.log('businessId:', businessId);
+            console.log('selectedDays:', selectedDays);
+            console.log('openingTime:', openingTime);
+            console.log('closingTime:', closingTime);
+    
             // Ensure selectedDays is an array
             if (!Array.isArray(selectedDays) || selectedDays.length === 0) {
                 throw new Error("selectedDays must be a non-empty array.");
             }
-
+    
+            // Convert "CLOSED" to "00:00:00" for database storage
+            const openTimeValue = (openingTime === "CLOSED") ? "00:00:00" : openingTime;
+            const closeTimeValue = (closingTime === "CLOSED") ? "00:00:00" : closingTime;
+    
             const updateQuery = `
                 UPDATE business_hours 
                 SET opening_time = ?, closing_time = ?
                 WHERE business_id = ? AND day_of_week = ?`;
-
+    
             // Loop through each day and update the database
             const updatePromises = selectedDays.map(async (dayOfWeek) => {
-                // console.log("Executing Query:", updateQuery);
-                // console.log("Parameters:", [openingTime, closingTime, businessId, dayOfWeek]);
-
-                // return db.execute(updateQuery, [openingTime, closingTime, businessId, dayOfWeek]);
-                const [result] = await db.execute(updateQuery, [openingTime, closingTime, businessId, dayOfWeek]);
+                const [result] = await db.execute(updateQuery, [openTimeValue, closeTimeValue, businessId, dayOfWeek]);
     
-                // console.log(`✅ Update Result for ${dayOfWeek}:`, result);
-            
                 if (result.affectedRows === 0) {
                     console.warn(`⚠️ No rows updated for ${dayOfWeek}. Possible reasons:`);
                     console.warn(`   - No matching row found in database`);
                     console.warn(`   - Data already matches (MySQL ignores unchanged updates)`);
                 }
             });
-
+    
             // Execute all updates
             await Promise.all(updatePromises);
-
+    
             return { message: "Business hours updated successfully for selected days" };
         } catch (error) {
-            // Log the error for debugging
             console.error("Database Update Error:", error);
             throw new Error("Database Update Error: " + error.message);
         }
     }
-
+    
+    
+    
+    
 
     static async getUserByEmail(email) {
         try {

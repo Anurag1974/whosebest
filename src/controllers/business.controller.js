@@ -481,54 +481,99 @@ export default class BusinessController {
     }
 }
 
-
-    async showManageBusiness(req, res) {
-        try {
-            // Check if the user is logged in
-            if (!req.user) {
-                return res.redirect('/login');
-            }
-    
-            const businessId = req.params.id;
-    
-            // Get business details by ID
-            const business = await BusinessModel.getBusinessDetailsById(businessId);
-            const businessCategory=business.category;
-            // console.log(businessCategory)
-    
-            // Ensure the business exists and belongs to the logged-in user
-            if (!business || business.user_id !== req.user.id) {
-                return res.redirect('/login');
-            }
-    
-            // Calculate the remaining images
-            const maxImages = 6;
-            const remainingImages = Math.max(maxImages - business.image_count, 0);
-    
-            // Fetch business hours and reviews
-            const businessHours = await BusinessModel.getBusinessHours(businessId);
-            const businessReview = await BusinessModel.getBusinessReview(businessId);
-             const categoryByBusiness = await BusinessModel.getCategoryByBusiness(businessCategory);
-            //  console.log(categoryByBusiness)
-    
-            // Render the manage business page with the data
-            res.render('manage-business', { 
-                user: req.user, 
-                business: business, 
-                email: req.session.email || null, 
-                toggle: req.session.toggle, 
-                businessHours: businessHours,
-                reviews: businessReview,
-                categoryByBusiness,
-                
-                remainingImages: remainingImages  // Pass the remaining images count to the view
-            });
-    
-        } catch (error) {
-            console.error("Error in showManageBusiness:", error);
-            res.status(500).send("An error occurred while loading the business management page.");
+async showManageBusiness(req, res) {
+    try {
+        // Check if the user is logged in
+        if (!req.user) {
+            return res.redirect('/login');
         }
+
+        const businessId = req.params.id;
+
+        // Get business details by ID
+        const business = await BusinessModel.getBusinessDetailsById(businessId);
+
+        // Ensure the business exists and belongs to the logged-in user
+        if (!business || business.user_id !== req.user.id) {
+            return res.redirect('/login');
+        }
+
+        // Calculate the remaining images
+        const maxImages = 6;
+        const remainingImages = Math.max(maxImages - business.image_count, 0);
+
+        // Fetch business hours and reviews
+        const businessHours = await BusinessModel.getBusinessHours(businessId);
+        const businessReview = await BusinessModel.getBusinessReview(businessId);
+
+        // Fetch category details based on the category from business
+        const categoryByBusiness = await BusinessModel.getCategoryByBusiness(business.category);
+        
+        // Render the manage business page with the data
+        res.render('manage-business', { 
+            user: req.user, 
+            business: business, 
+            email: req.session.email || null, 
+            toggle: req.session.toggle, 
+            businessHours: businessHours,
+            reviews: businessReview,
+            categoryByBusiness: categoryByBusiness, // Pass the category details to the view
+            remainingImages: remainingImages  // Pass the remaining images count to the view
+        });
+
+    } catch (error) {
+        console.error("Error in showManageBusiness:", error);
+        res.status(500).send("An error occurred while loading the business management page.");
     }
+}
+
+    // async showManageBusiness(req, res) {
+    //     try {
+    //         // Check if the user is logged in
+    //         if (!req.user) {
+    //             return res.redirect('/login');
+    //         }
+    
+    //         const businessId = req.params.id;
+    
+    //         // Get business details by ID
+    //         const business = await BusinessModel.getBusinessDetailsById(businessId);
+    //         // const businessCategory=business.category;
+    //         // console.log(businessCategory)
+    
+    //         // Ensure the business exists and belongs to the logged-in user
+    //         if (!business || business.user_id !== req.user.id) {
+    //             return res.redirect('/login');
+    //         }
+    
+    //         // Calculate the remaining images
+    //         const maxImages = 6;
+    //         const remainingImages = Math.max(maxImages - business.image_count, 0);
+    
+    //         // Fetch business hours and reviews
+    //         const businessHours = await BusinessModel.getBusinessHours(businessId);
+    //         const businessReview = await BusinessModel.getBusinessReview(businessId);
+    //         //  const categoryByBusiness = await BusinessModel.getCategoryByBusiness(businessCategory);
+    //         //  console.log(categoryByBusiness)
+    
+    //         // Render the manage business page with the data
+    //         res.render('manage-business', { 
+    //             user: req.user, 
+    //             business: business, 
+    //             email: req.session.email || null, 
+    //             toggle: req.session.toggle, 
+    //             businessHours: businessHours,
+    //             reviews: businessReview,
+    //             // categoryByBusiness,
+                
+    //             remainingImages: remainingImages  // Pass the remaining images count to the view
+    //         });
+    
+    //     } catch (error) {
+    //         console.error("Error in showManageBusiness:", error);
+    //         res.status(500).send("An error occurred while loading the business management page.");
+    //     }
+    // }
     
    
     async showEnterBusinessDetails(req, res) {
@@ -544,24 +589,24 @@ export default class BusinessController {
         }
     }
     
-    async showBusinessDetails(req, res) {
-        const businessId = req.params.id;
-        let business;
-        if (!id) {
-            return res.status(400).send('Query parameter is required');
-        }
+    // async showBusinessDetails(req, res) {
+    //     const businessId = req.params.id;
+    //     let business;
+    //     if (!id) {
+    //         return res.status(400).send('Query parameter is required');
+    //     }
 
-        try {
-            business = await BusinessModel.getBusinessDetailsById(businessId);
-        }
-        catch (error) {
-            console.error('Database error:', error);
-            res.status(500).json({ error: "Failed to fetch business details" });
-        }
-        res.render('business-details', { business,user: req.user || null });
+    //     try {
+    //         business = await BusinessModel.getBusinessDetailsById(businessId);
+    //     }
+    //     catch (error) {
+    //         console.error('Database error:', error);
+    //         res.status(500).json({ error: "Failed to fetch business details" });
+    //     }
+    //     res.render('business-details', { business,user: req.user || null });
 
 
-    }
+    // }
 
     async getAllBusinessDetails(req, res) {
         if (!req.user) {
@@ -614,6 +659,7 @@ export default class BusinessController {
         try {
             // Fetch business details
             const businessDetails = await BusinessModel.getBusinessDetailsById(businessId); // No need for getBusinessImages
+            // console.log(businessDetails)
             const offDays = await BusinessModel.getOffDays(businessId);
             const reviewData = await BusinessModel.getReviewCount(businessId);
     
@@ -958,6 +1004,7 @@ async setupYourBusiness(req, res) {
             res.status(500).json({ error: error.message });
         }
     }
+   
     
     
     async updateBusinessHours(req, res) {
