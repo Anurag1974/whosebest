@@ -63,13 +63,12 @@ li{
     padding-bottom: 15px;
     border-bottom: 1px solid var(--gray);
 }
-.web-header-logo h5 {
-    font-size: 1.5rem;
-    font-weight: 700;
+.web-header-logo img {
+    height: 40px;
+    width: 170px;
     cursor: pointer;
-    background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    object-fit: contain;
+
 }
 
 
@@ -483,11 +482,10 @@ li{
     padding: 15px 20px;
 }
 
-.phone-header-main-logo a {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--primary-color);
-    text-decoration: none;
+.phone-header-main-logo img {
+    object-fit: contain;
+    height: 40px;
+    
 }
 
 .phone-header-login-signup-menu-dot {
@@ -520,9 +518,9 @@ li{
     transform: translateX(0);
 }
 
-.phone-who-best-title{
-    font-size: 1.5rem;
-    font-weight: 700;
+.phone-who-best-title img{
+   height: 40px;
+object-fit: contain;
     color: var(--primary-color);
     margin-bottom: 20px;
 }
