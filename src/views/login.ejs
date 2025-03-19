@@ -1,6 +1,125 @@
-
 <link rel="stylesheet" href="/login.css">
 <style>
+    .login-guide-popup {
+        display: none;
+        position: fixed;
+        top: 60%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        max-width: 400px;
+        width: 90%;
+    }
+
+    .login-guide-popup h3 {
+        color: #2196F3;
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .login-steps {
+        list-style: none;
+        padding: 0;
+    }
+
+    .login-steps li {
+        margin: 15px 0;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+    }
+
+    .step-number {
+        background: #2196F3;
+        color: white;
+        width: 32px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        font-size: 0.8rem;
+    }
+
+    .login-guide-popup .close-btn {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: #666;
+    }
+
+    .signup-guide-popup {
+        display: none;
+        position: fixed;
+        top: 60%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        max-width: 400px;
+        width: 90%;
+    }
+
+    .signup-guide-popup h3 {
+        color: #2196F3;
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .signup-steps {
+        list-style: none;
+        padding: 0;
+    }
+
+    .signup-steps li {
+        margin: 15px 0;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+    }
+
+    .step-number {
+        background: #2196F3;
+        color: white;
+        aspect-ratio: 1;
+        padding: 1em;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        font-size: 0.8rem;
+        min-width: 24px;
+        min-height: 24px;
+    }
+
+    .signup-guide-popup .close-btn {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: #666;
+    }
+
+
     .loader {
         border: 2px solid #f3f3f3;
         border-top: 2px solid #3498db;
@@ -14,8 +133,13 @@
     }
 
     @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
     }
 </style>
 
@@ -27,6 +151,52 @@
     </div>
 </div>
 
+<!-- login guide popup -->
+<div class="login-guide-popup" id="loginGuidePopup">
+    <span class="close-btn" onclick="closeLoginGuide()">&times;</span>
+    <h3>Welcome to KnockDBest!</h3>
+    <ul class="login-steps">
+        <li>
+            <span class="step-number">1</span>
+            <span>New User? Click on "Register" to create an account</span>
+        </li>
+        <li>
+            <span class="step-number">2</span>
+            <span>Existing User? Simply enter your email and password</span>
+        </li>
+    </ul>
+    <!-- <div class="guide-buttons">
+        <button class="get-started-btn signup-btn" onclick="startSignup()">Sign Up</button>
+        <button class="get-started-btn login-btn" onclick="closeSignupGuide()">Login</button>
+    </div> -->
+</div>
+<!-- sign up guide popup -->
+<div class="signup-guide-popup" id="signupGuidePopup">
+    <span class="close-btn" onclick="closeSignupGuide()">&times;</span>
+    <h3>Welcome to KnockDBest!</h3>
+    <ul class="signup-steps">
+        <li>
+            <span class="step-number">1</span>
+            <span>Enter your full name and email address</span>
+        </li>
+        <li>
+            <span class="step-number">2</span>
+            <span>Click "Send OTP" and verify your email</span>
+        </li>
+        <li>
+            <span class="step-number">3</span>
+            <span>Enter the OTP received in your email</span>
+        </li>
+        <li>
+            <span class="step-number">4</span>
+            <span>Complete registration with phone number and password</span>
+        </li>
+    </ul>
+    <!-- <div class="guide-buttons">
+        <button class="get-started-btn signup-btn" onclick="startSignup()">Sign Up</button>
+        <button class="get-started-btn login-btn" onclick="closeSignupGuide()">Login</button>
+    </div> -->
+</div>
 <div class="authentication-page-container">
     <div class="authentication-form-wrapper">
         <div class="authentication-form-header">
@@ -35,7 +205,7 @@
                     Login
                 </button>
                 <button class="authentication-toggle-button" data-form="signup">
-                    Sign Up
+                    Register
                 </button>
             </div>
         </div>
@@ -45,13 +215,8 @@
                 <label for="user-email-input" class="authentication-input-label">Email Address</label>
                 <div class="authentication-input-container">
                     <i class="authentication-input-icon authentication-email-icon"></i>
-                    <input 
-                        type="email" 
-                        id="user-email-input" 
-                        class="authentication-input-field" 
-                        placeholder="Enter your email" 
-                        required
-                    >
+                    <input type="email" id="user-email-input" class="authentication-input-field"
+                        placeholder="Enter your email" required>
                 </div>
                 <span class="authentication-input-error" id="email-validation-error">
                     Please enter a valid email address
@@ -62,13 +227,8 @@
                 <label for="user-password-input" class="authentication-input-label">Password</label>
                 <div class="authentication-input-container">
                     <i class="authentication-input-icon authentication-password-icon"></i>
-                    <input 
-                        type="password" 
-                        id="user-password-input" 
-                        class="authentication-input-field" 
-                        placeholder="Enter your password" 
-                        required
-                    >
+                    <input type="password" id="user-password-input" class="authentication-input-field"
+                        placeholder="Enter your password" required>
                     <!-- <button 
                         type="button" 
                         class="authentication-password-toggle-visibility"
@@ -82,10 +242,7 @@
             </div>
 
             <div class="authentication-form-actions">
-                <button 
-                    type="submit" 
-                    class="authentication-primary-action-button"
-                >
+                <button type="submit" class="authentication-primary-action-button">
                     Sign In
                 </button>
             </div>
@@ -101,19 +258,14 @@
             </div> -->
         </form>
 
-        <form class="authentication-signup-form authentication-form" id="signup-authentication-form" action="/signup" method="post">
+        <form class="authentication-signup-form authentication-form" id="signup-authentication-form" action="/signup"
+            method="post">
             <div class="authentication-input-group">
                 <label for="signup-username-input" class="authentication-input-label">Name</label>
                 <div class="authentication-input-container">
                     <i class="authentication-input-icon authentication-username-icon"></i>
-                    <input 
-                        type="text" 
-                        id="signup-username-input" 
-                        class="authentication-input-field" 
-                        placeholder=" Full name as per govt records " 
-                        required
-                        
-                    >
+                    <input type="text" id="signup-username-input" class="authentication-input-field"
+                        placeholder=" Full name as per govt records " required>
                 </div>
                 <span class="authentication-input-error" id="username-validation-error">
                     Username must be at least 3 characters long
@@ -124,19 +276,11 @@
                 <label for="signup-email-input" class="authentication-input-label">Email Address</label>
                 <div class="authentication-input-container authentication-email-verification-container">
                     <i class="authentication-input-icon authentication-email-icon"></i>
-                    <input 
-                        type="email" 
-                        id="signup-email-input" 
-                        class="authentication-input-field" 
-                        placeholder="Enter your email" 
-                        required
-                    >
-                    
-                    <button 
-                        type="button" 
-                        id="email-verify-button" 
-                        class="authentication-email-verify-button" onclick="generateOTP()"
-                    >
+                    <input type="email" id="signup-email-input" class="authentication-input-field"
+                        placeholder="Enter your email" required>
+
+                    <button type="button" id="email-verify-button" class="authentication-email-verify-button"
+                        onclick="generateOTP()">
                         send OTP
                     </button>
                     <!-- <p id="countdown-timer" style="display: none; color: red; font-weight: bold;"></p> -->
@@ -153,29 +297,20 @@
                 </label>
                 <div class="authentication-input-container authentication-otp-container">
                     <i class="authentication-input-icon authentication-otp-icon"></i>
-                    <input 
-                        type="text" 
-                        id="signup-email-otp-input" 
-                        class="authentication-input-field" 
-                        placeholder="6-digit OTP" 
-                        maxlength="6"
-                        required
-                    >
-                    <button 
-                        type="button" 
-                        id="email-otp-confirm-button" 
-                        class="authentication-otp-confirm-button" onclick="verifyOTP()"
-                    >
+                    <input type="text" id="signup-email-otp-input" class="authentication-input-field"
+                        placeholder="6-digit OTP" maxlength="6" required>
+                    <button type="button" id="email-otp-confirm-button" class="authentication-otp-confirm-button"
+                        onclick="verifyOTP()">
                         Confirm
                     </button>
                 </div>
                 <span class="authentication-input-error" id="signup-email-otp-validation-error">
                     Please enter a valid 6-digit OTP
                 </span>
-               
+
                 <div class="authentication-otp-resend-container">
-                     <span id="otp-countdown-timer"></span>
-                   
+                    <span id="otp-countdown-timer"></span>
+
                 </div>
             </div>
 
@@ -183,13 +318,8 @@
                 <label for="signup-phone-input" class="authentication-input-label">Phone Number</label>
                 <div class="authentication-input-container">
                     <i class="authentication-input-icon authentication-phone-icon"></i>
-                    <input 
-                        type="tel" 
-                        id="signup-phone-input" 
-                        class="authentication-input-field" 
-                        placeholder="Enter your phone number" 
-                        required
-                    >
+                    <input type="tel" id="signup-phone-input" class="authentication-input-field"
+                        placeholder="Enter your phone number" required>
                 </div>
                 <span class="authentication-input-error" id="signup-phone-validation-error">
                     Please enter a valid 10-digit phone number
@@ -200,13 +330,8 @@
                 <label for="signup-password-input" class="authentication-input-label">Password</label>
                 <div class="authentication-input-container">
                     <i class="authentication-input-icon authentication-password-icon"></i>
-                    <input 
-                        type="password" 
-                        id="signup-password-input" 
-                        class="authentication-input-field" 
-                        placeholder="Create a password" 
-                        required
-                    >
+                    <input type="password" id="signup-password-input" class="authentication-input-field"
+                        placeholder="Create a password" required>
                     <!-- <button 
                         type="button" 
                         class="authentication-password-toggle-visibility"
@@ -239,13 +364,10 @@
 
             <div class="authentication-form-actions">
 
-              
-                <button 
-                    type="submit" 
-                    class="authentication-primary-action-button"
-                    id="authentication-primary-action-button-sign-up-button"
-                >
-                    Sign Up
+
+                <button type="submit" class="authentication-primary-action-button"
+                    id="authentication-primary-action-button-sign-up-button">
+                    Register
                 </button>
             </div>
         </form>
@@ -254,181 +376,181 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-    const nameInput = document.getElementById("signup-username-input");
-    const emailInput = document.getElementById("signup-email-input");
-    const otpInput = document.getElementById("signup-email-otp-input");
-    const phoneInput = document.getElementById("signup-phone-input");
-    const passwordInput = document.getElementById("signup-password-input");
-    const termsCheckbox = document.getElementById("register-user-term-and-condition");
-    const signUpButton = document.getElementById("authentication-primary-action-button-sign-up-button");
+        const nameInput = document.getElementById("signup-username-input");
+        const emailInput = document.getElementById("signup-email-input");
+        const otpInput = document.getElementById("signup-email-otp-input");
+        const phoneInput = document.getElementById("signup-phone-input");
+        const passwordInput = document.getElementById("signup-password-input");
+        const termsCheckbox = document.getElementById("register-user-term-and-condition");
+        const signUpButton = document.getElementById("authentication-primary-action-button-sign-up-button");
 
-    function checkInputs() {
-        if (
-            nameInput.value.trim() !== "" &&
-            emailInput.value.trim() !== "" &&
-            otpInput.value.trim() !== "" &&
-            phoneInput.value.trim() !== "" &&
-            passwordInput.value.trim() !== "" &&
-            termsCheckbox.checked
-        ) {
-            signUpButton.disabled = false;
-            signUpButton.classList.remove("disabled-button");
-        } else {
-            signUpButton.disabled = true;
-            signUpButton.classList.add("disabled-button");
+        function checkInputs() {
+            if (
+                nameInput.value.trim() !== "" &&
+                emailInput.value.trim() !== "" &&
+                otpInput.value.trim() !== "" &&
+                phoneInput.value.trim() !== "" &&
+                passwordInput.value.trim() !== "" &&
+                termsCheckbox.checked
+            ) {
+                signUpButton.disabled = false;
+                signUpButton.classList.remove("disabled-button");
+            } else {
+                signUpButton.disabled = true;
+                signUpButton.classList.add("disabled-button");
+            }
         }
-    }
 
-    // Attach event listeners to input fields
-    nameInput.addEventListener("input", checkInputs);
-    emailInput.addEventListener("input", checkInputs);
-    otpInput.addEventListener("input", checkInputs);
-    phoneInput.addEventListener("input", checkInputs);
-    passwordInput.addEventListener("input", checkInputs);
-    termsCheckbox.addEventListener("change", checkInputs);
+        // Attach event listeners to input fields
+        nameInput.addEventListener("input", checkInputs);
+        emailInput.addEventListener("input", checkInputs);
+        otpInput.addEventListener("input", checkInputs);
+        phoneInput.addEventListener("input", checkInputs);
+        passwordInput.addEventListener("input", checkInputs);
+        termsCheckbox.addEventListener("change", checkInputs);
 
-    checkInputs(); // Initial check on page load
-});
+        checkInputs(); // Initial check on page load
+    });
 
 
-       
+
     function userLoginShowModal(message, isSuccess = true) {
-    const modal = document.getElementById('user-login-successModal');
-    const messageElement = document.getElementById('user-login-modalMessage');
-    const iconElement = document.getElementById('user-login-modalIcon');
+        const modal = document.getElementById('user-login-successModal');
+        const messageElement = document.getElementById('user-login-modalMessage');
+        const iconElement = document.getElementById('user-login-modalIcon');
 
-    if (messageElement) {
-        messageElement.innerHTML = message; // Set dynamic message
-    }
-
-    // Change icon based on success or error
-    if (iconElement) {
-        if (isSuccess) {
-            iconElement.innerHTML = "✔"; // Success checkmark
-            iconElement.style.color = "#4CAF50"; // Green color for success
-        } else {
-            iconElement.innerHTML = "Error!"; // Error cross mark
-            iconElement.style.color = "#F44336"; // Red color for errors
+        if (messageElement) {
+            messageElement.innerHTML = message; // Set dynamic message
         }
-    }
 
-    modal.style.display = 'block';
+        // Change icon based on success or error
+        if (iconElement) {
+            if (isSuccess) {
+                iconElement.innerHTML = "✔"; // Success checkmark
+                iconElement.style.color = "#4CAF50"; // Green color for success
+            } else {
+                iconElement.innerHTML = "Error!"; // Error cross mark
+                iconElement.style.color = "#F44336"; // Red color for errors
+            }
+        }
 
-    // Close modal when clicking on "X"
-    document.querySelector('.user-login-close').onclick = function () {
-        modal.style.display = 'none';
-    };
+        modal.style.display = 'block';
 
-    // Close modal when clicking outside of it
-    window.onclick = function (event) {
-        if (event.target === modal) {
+        // Close modal when clicking on "X"
+        document.querySelector('.user-login-close').onclick = function () {
             modal.style.display = 'none';
+        };
+
+        // Close modal when clicking outside of it
+        window.onclick = function (event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        // Auto-hide modal after 3 seconds
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 3000);
+    }
+
+
+
+    async function generateOTP() {
+        let otp = Math.floor(100000 + Math.random() * 900000).toString();
+        let name = document.getElementById("signup-username-input").value;
+        let email = document.getElementById("signup-email-input").value;
+        let button = document.getElementById("email-verify-button");
+        let countdownElement = document.getElementById("countdown-timer");
+
+        if (!email) {
+            userLoginShowModal("Please enter your email.", false);
+            return;
         }
-    };
+        if (!name) {
+            userLoginShowModal("Please enter your name.", false);
+            return;
+        }
 
-    // Auto-hide modal after 3 seconds
-    setTimeout(() => {
-        modal.style.display = 'none';
-    }, 3000);
-}
+        // Store OTP locally
+        localStorage.setItem("otp", otp);
 
-    
-    
-async function generateOTP() {
-    let otp = Math.floor(100000 + Math.random() * 900000).toString();
-    let name = document.getElementById("signup-username-input").value;
-    let email = document.getElementById("signup-email-input").value;
-    let button = document.getElementById("email-verify-button");
-    let countdownElement = document.getElementById("countdown-timer");
+        // Show loader, disable button, and change style
+        button.innerHTML = `Sending... <span class="loader"></span>`;
+        button.disabled = true;
+        button.style.backgroundColor = "grey";
+        button.style.cursor = "not-allowed";
 
-    if (!email) {
-        userLoginShowModal("Please enter your email.", false);
-        return;
-    }
-    if (!name) {
-        userLoginShowModal("Please enter your name.", false);
-        return;
-    }
+        try {
+            let response = await fetch("/send-otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, email, otp }),
+            });
 
-    // Store OTP locally
-    localStorage.setItem("otp", otp);
+            let result = await response.json();
+            console.log("Server Response:", result);
 
-    // Show loader, disable button, and change style
-    button.innerHTML = `Sending... <span class="loader"></span>`;
-    button.disabled = true;
-    button.style.backgroundColor = "grey";
-    button.style.cursor = "not-allowed";
+            if (result.success) {
+                userLoginShowModal("OTP sent successfully!", true);
 
-    try {
-        let response = await fetch("/send-otp", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, email, otp }),
-        });
+                // Restore button text after OTP is sent
+                button.innerHTML = "Send OTP";
 
-        let result = await response.json();
-        console.log("Server Response:", result);
+                // Start Countdown (Displayed Separately)
+                countdownElement.style.display = "block"; // Show the countdown
+                let timeLeft = 60; // 60 seconds
 
-        if (result.success) {
-            userLoginShowModal("OTP sent successfully!", true);
+                let countdownInterval = setInterval(() => {
+                    countdownElement.textContent = `Retry in ${timeLeft} seconds`;
+                    timeLeft--;
 
-            // Restore button text after OTP is sent
-            button.innerHTML = "Send OTP";
-
-            // Start Countdown (Displayed Separately)
-            countdownElement.style.display = "block"; // Show the countdown
-            let timeLeft = 60; // 60 seconds
-
-            let countdownInterval = setInterval(() => {
-                countdownElement.textContent = `Retry in ${timeLeft} seconds`;
-                timeLeft--;
-
-                if (timeLeft < 0) {
-                    clearInterval(countdownInterval);
-                    countdownElement.style.display = "none"; // Hide countdown
-                    button.disabled = false;
-                    button.style.backgroundColor = ""; // Reset to default
-                    button.style.cursor = "pointer";
-                }
-            }, 1000); // Update every second
-        } else {
-            userLoginShowModal(result.message, false);
+                    if (timeLeft < 0) {
+                        clearInterval(countdownInterval);
+                        countdownElement.style.display = "none"; // Hide countdown
+                        button.disabled = false;
+                        button.style.backgroundColor = ""; // Reset to default
+                        button.style.cursor = "pointer";
+                    }
+                }, 1000); // Update every second
+            } else {
+                userLoginShowModal(result.message, false);
+                resetButton(button);
+            }
+        } catch (error) {
+            console.error("Error sending OTP:", error);
+            userLoginShowModal("An error occurred while sending OTP.", false);
             resetButton(button);
         }
-    } catch (error) {
-        console.error("Error sending OTP:", error);
-        userLoginShowModal("An error occurred while sending OTP.", false);
-        resetButton(button);
     }
-}
 
-// Helper function to reset button state
-function resetButton(button) {
-    button.innerHTML = "Send OTP";
-    button.disabled = false;
-    button.style.backgroundColor = "";
-    button.style.cursor = "pointer";
-}
+    // Helper function to reset button state
+    function resetButton(button) {
+        button.innerHTML = "Send OTP";
+        button.disabled = false;
+        button.style.backgroundColor = "";
+        button.style.cursor = "pointer";
+    }
 
 
-function verifyOTP() {
-    let email = document.getElementById("signup-email-input").value;
-    let otp = document.getElementById("signup-email-otp-input").value;
+    function verifyOTP() {
+        let email = document.getElementById("signup-email-input").value;
+        let otp = document.getElementById("signup-email-otp-input").value;
 
-    fetch("/verify-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp }),
-    })
-    .then((res) => res.json())
-    .then((data) => {
-        userLoginShowModal(data.message, data.success); // Show popup with success/failure indication
-    })
-    .catch((error) => {
-        console.error("Error verifying OTP:", error);
-        userLoginShowModal("An error occurred while verifying OTP", false);
-    });
-}
+        fetch("/verify-otp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, otp }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                userLoginShowModal(data.message, data.success); // Show popup with success/failure indication
+            })
+            .catch((error) => {
+                console.error("Error verifying OTP:", error);
+                userLoginShowModal("An error occurred while verifying OTP", false);
+            });
+    }
 
     const toggleButtons = document.querySelectorAll('.authentication-toggle-button');
     const forms = document.querySelectorAll('.authentication-form');
@@ -446,92 +568,145 @@ function verifyOTP() {
     });
 
     document.addEventListener("DOMContentLoaded", function () {
-    const signupForm = document.getElementById("signup-authentication-form");
+        const signupForm = document.getElementById("signup-authentication-form");
 
-    signupForm.addEventListener("submit", async function (event) {
-    event.preventDefault(); // Prevent default form submission
+        signupForm.addEventListener("submit", async function (event) {
+            event.preventDefault(); // Prevent default form submission
 
-    // Get form values
-    const formData = {
-        username: capitalizeFirstLetter(document.getElementById("signup-username-input").value),
-        email: document.getElementById("signup-email-input").value,
-        phone: document.getElementById("signup-phone-input").value,
-        password: document.getElementById("signup-password-input").value,
-        otp: document.getElementById("signup-email-otp-input").value,
-        termAndCondition: document.getElementById("register-user-term-and-condition").value,
-         // If required
-    };
+            // Get form values
+            const formData = {
+                username: capitalizeFirstLetter(document.getElementById("signup-username-input").value),
+                email: document.getElementById("signup-email-input").value,
+                phone: document.getElementById("signup-phone-input").value,
+                password: document.getElementById("signup-password-input").value,
+                otp: document.getElementById("signup-email-otp-input").value,
+                termAndCondition: document.getElementById("register-user-term-and-condition").value,
+                // If required
+            };
 
-    try {
-        const response = await fetch("/signup", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json", // Send data as JSON
-            },
-            body: JSON.stringify(formData), // Convert to JSON string
+            try {
+                const response = await fetch("/signup", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json", // Send data as JSON
+                    },
+                    body: JSON.stringify(formData), // Convert to JSON string
+                });
+
+                const result = await response.json();
+                console.log("Server Response:", result);
+
+                if (result.success) {
+                    userLoginShowModal(" SignUp successful! Redirecting...", true);
+                    setTimeout(() => {
+                        window.location.href = "/login"; // Redirect after showing modal
+                    }, 2000);
+                } else {
+                    userLoginShowModal(`SignUp failed: ${result.message}`, false);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                userLoginShowModal(" An error occurred while signing up.", false);
+            }
         });
 
-        const result = await response.json();
-        console.log("Server Response:", result);
+    });
+    // login 
 
-        if (result.success) {
-            userLoginShowModal(" SignUp successful! Redirecting...", true);
-            setTimeout(() => {
-                window.location.href = "/login"; // Redirect after showing modal
-            }, 2000);
-        } else {
-            userLoginShowModal(`SignUp failed: ${result.message}`, false);
-        }
-    } catch (error) {
-        console.error("Error:", error);
-        userLoginShowModal(" An error occurred while signing up.", false);
-    }
-});
+    document.addEventListener("DOMContentLoaded", function () {
+        const loginForm = document.getElementById("login-authentication-form");
 
-});
-// login 
+        loginForm.addEventListener("submit", async function (event) {
+            event.preventDefault(); // Prevent default form submission
 
-document.addEventListener("DOMContentLoaded", function () {
-    const loginForm = document.getElementById("login-authentication-form");
+            // Get form values
+            const formData = {
+                email: document.getElementById("user-email-input").value,
+                password: document.getElementById("user-password-input").value,
+            };
 
-    loginForm.addEventListener("submit", async function (event) {
-        event.preventDefault(); // Prevent default form submission
+            try {
+                const response = await fetch("/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json", // Ensure JSON data is sent
+                    },
+                    body: JSON.stringify(formData), // Convert data to JSON string
+                });
 
-        // Get form values
-        const formData = {
-            email: document.getElementById("user-email-input").value,
-            password: document.getElementById("user-password-input").value,
-        };
+                const result = await response.json();
+                console.log("Server Response:", result);
 
-        try {
-            const response = await fetch("/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json", // Ensure JSON data is sent
-                },
-                body: JSON.stringify(formData), // Convert data to JSON string
-            });
-
-            const result = await response.json();
-            console.log("Server Response:", result);
-
-            if (result.success) {
-                userLoginShowModal("Login successful!", true); // Show success popup
-                setTimeout(() => {
-                    window.location.href = "/"; // Redirect to homepage or dashboard
-                }, 2000);
-            } else {
-                userLoginShowModal(`Login failed: ${result.message}`, false); // Show error popup
+                if (result.success) {
+                    userLoginShowModal("Login successful!", true); // Show success popup
+                    setTimeout(() => {
+                        window.location.href = "/"; // Redirect to homepage or dashboard
+                    }, 2000);
+                } else {
+                    userLoginShowModal(`Login failed: ${result.message}`, false); // Show error popup
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                userLoginShowModal(" An error occurred while logging in. Please try again.", false);
             }
-        } catch (error) {
-            console.error("Error:", error);
-            userLoginShowModal(" An error occurred while logging in. Please try again.", false);
+        });
+    });
+
+    function showLoginGuide() {
+        document.getElementById('loginGuidePopup').style.display = 'block';
+    }
+
+    function closeLoginGuide() {
+        document.getElementById('loginGuidePopup').style.display = 'none';
+    }
+
+    function startLogin() {
+        closeLoginGuide();
+        // Switch to signup form
+        document.querySelector('[data-form="login"]').click();
+    }
+
+    // Show popup when "Sign Up" is clicked
+    // Remove the click event listener and add this code
+    document.addEventListener("DOMContentLoaded", function () {
+        // Check if we're on the login route
+        if (window.location.pathname === '/login') {
+            showLoginGuide();
         }
     });
-});
 
 
 
+    function showSignupGuide() {
+        document.getElementById('signupGuidePopup').style.display = 'block';
+    }
 
-   
+    function closeSignupGuide() {
+        document.getElementById('signupGuidePopup').style.display = 'none';
+    }
+
+    function startSignup() {
+        closeSignupGuide();
+        // Switch to signup form
+        document.querySelector('[data-form="signup"]').click();
+    }
+
+    // Show popup when "Sign Up" is clicked
+    // Remove the click event listener and add this code
+    document.querySelector('[data-form="signup"]').addEventListener('click', function () {
+
+        showSignupGuide();
+
+    });
+
+    // document.querySelector('[data-form="login"]').addEventListener('click', function() {
+
+    // showSignupGuide();
+
+    // });
+
+    // Rest of your existing code remains the same
+
+
+
 </script>

@@ -4,6 +4,33 @@
 
 <link rel="stylesheet" href="/styles.css">
 <link rel="stylesheet" href="/home.css">
+<style>
+    .popper-search {
+        position: relative;
+        margin: 10px 0;
+        padding: 0 15px;
+    }
+
+    .popper-search input {
+        width: 100%;
+        padding: 10px 35px 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .popper-search .search-icon {
+        position: absolute;
+        right: 25px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+    }
+
+    .category.hidden {
+        display: none;
+    }
+</style>
 </head>
 
 <section>
@@ -171,27 +198,31 @@
             <div class="popper-overlay" id="popper-overlay">
                 <div class="popper">
                     <button class="close-popper" id="close-popper">&times;</button>
+                    <!-- Add search input -->
+                    <div class="popper-search">
+                        <input type="text" id="categorySearch" placeholder="Search categories..." onkeyup="filterCategories()">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
                     <div class="categories">
                         <% if (popperCategories && popperCategories.length > 0) { %>
                             <% popperCategories.forEach(category => { %>
                                 <a href="/search-category?category=<%= category.category_value %>" class="category">
                                     <div class="category-icon">
-                                        <%- category.category_icon %>  <!-- Renders <i> properly -->
+                                        <%- category.category_icon %>
                                     </div>
                                     <h2><%= category.category_name %></h2>
-                                    <p>
-                                        <%= businessCounts[category.category_value] || 0 %> listings
-                                    </p>
+                                    <p><%= businessCounts[category.category_value] || 0 %> listings</p>
                                 </a>
                             <% }) %>
                         <% } else { %>
                             <p>No categories found.</p>
                         <% } %>
                     </div>
-                    
-                    
                 </div>
             </div>
+        </div>
+        <div class="home-slide-hint-arrow">
+            <p>Swipe left for more categories &nbsp;<i class="fa-solid fa-arrow-right"></i> </p>
         </div>
     </section>
 
@@ -245,6 +276,9 @@
                     <% }) %>
 
             </div>
+        </div>
+        <div class="home-slide-hint-arrow home-slide-top-rated">
+            <p>Swipe left for more top categories &nbsp;<i class="fa-solid fa-arrow-right"></i> </p>
         </div>
     </div>
     <!-- how its work -->
@@ -467,16 +501,17 @@
 
     <!-- FOLLOW US SECTION -->
 
-    <!-- <div class="follow-us-section">
+    <div class="follow-us-section">
         <div class="follow-us-container">
             <h1>Follow Us On:</h1>
             <div class="social-icons">
-                <a href="#" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
-                <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+                <a href="https://www.facebook.com/people/Knock-D-Best/61573957034966/" class="social-icon" target="_blank"><i class="fa-brands fa-facebook" ></i></a>
+                <a href="https://www.linkedin.com/showcase/106405518/admin/dashboard/" class="social-icon" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
+                <a href="https://www.instagram.com/knockdbest?igsh=MWdydnQzdGxpMDUzag==" class="social-icon" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                <!-- <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a> -->
             </div>
         </div>
-    </div> -->
+    </div>
 
     <!-- SERVICES SECTION -->
     <div class="services-section">
@@ -797,6 +832,21 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDials();
     setInterval(updateDials, 1000);
 });
+
+function filterCategories() {
+    const searchInput = document.getElementById('categorySearch');
+    const filter = searchInput.value.toLowerCase();
+    const categories = document.querySelectorAll('.category');
+
+    categories.forEach(category => {
+        const categoryName = category.querySelector('h2').textContent.toLowerCase();
+        if (categoryName.includes(filter)) {
+            category.classList.remove('hidden');
+        } else {
+            category.classList.add('hidden');
+        }
+    });
+}
 
 </script>
    

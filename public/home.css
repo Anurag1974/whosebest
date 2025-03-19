@@ -194,6 +194,12 @@ h1 {
     animation: blink 0.4s infinite;
     color: #0d1b2a;
 }
+.project-name-heading h2 {
+    font-size: clamp(0.875rem, 3vw, 1rem);
+    font-weight: 200;
+    letter-spacing: 0.3125rem;
+    text-transform: uppercase;
+}
 
 @keyframes blink {
 
@@ -236,7 +242,7 @@ h1 {
 
     .project-name-heading h2 {
         font-size: clamp(0.7rem, 2.5vw, 0.875rem);
-        letter-spacing: 0.2rem;
+        /* letter-spacing: 0.1rem; */
     }
 }
 
@@ -253,7 +259,7 @@ h1 {
 
     .project-name-heading h2 {
         font-size: clamp(0.6rem, 2vw, 0.75rem);
-        letter-spacing: 0.15rem;
+        /* letter-spacing: 0.15rem; */
     }
 }
 
@@ -262,12 +268,6 @@ h1 {
     text-align: center;
 }
 
-.project-name-heading h2 {
-    font-size: clamp(0.875rem, 3vw, 1rem);
-    font-weight: 200;
-    letter-spacing: 0.3125rem;
-    text-transform: uppercase;
-}
 
 
 /* ------------------------------------------ */
@@ -2499,11 +2499,41 @@ h1 {
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
-
+.home-slide-hint-arrow{
+    display: none;
+}
+.home-slide-top-rated{
+    display: block;
+    text-align: center;
+    /* animation: shifting-arrow 1s infinite linear; */
+}
+.home-slide-top-rated p i{
+    
+    animation: shifting-arrow 1s infinite linear;
+}
+@keyframes shifting-arrow {
+    0% {
+        transform: translateX(0);
+    }
+    100%{
+        transform: translateX(20px);
+    }
+    
+}
 /* Responsive Breakpoints */
 @media (max-width: 1024px) {
     .works {
         padding: 80px 15px;
+    }
+    .home-slide-hint-arrow{
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        /* animation: shifting-arrow 1s infinite linear; */
+    }
+    .home-slide-hint-arrow p i{
+        
+        animation: shifting-arrow 1s infinite linear;
     }
 
     .works-content {

@@ -1131,39 +1131,75 @@ LIMIT 10;
     
     //checked
     static async getTopRatedBusinessPerCategory() {
+        // const query = `
+        //    WITH ranked_businesses AS (
+        //         SELECT 
+        //             bd.id, 
+        //             bd.business_name, 
+        //             bd.address, 
+        //             bd.phone,
+        //             bd.image_source, 
+        //             bd.category, 
+        //             u.profile_image,  -- Fetch profile image from users table
+        //             AVG(r.rating) AS average_rating,
+        //             ROW_NUMBER() OVER (PARTITION BY bd.category ORDER BY AVG(r.rating) DESC) AS \`rank\`
+        //         FROM 
+        //             business_detail bd
+        //         JOIN reviews r ON bd.id = r.business_id
+        //         LEFT JOIN users u ON bd.user_id = u.user_id  -- Join users table based on user_id
+        //         GROUP BY 
+        //             bd.id, bd.category, u.profile_image
+        //     )
+        //     SELECT 
+        //         id, 
+        //         business_name, 
+        //         address, 
+        //         phone,
+        //         image_source, 
+        //         category, 
+        //         profile_image,  -- Include profile image in the final output
+        //         average_rating
+        //     FROM 
+        //         ranked_businesses
+        //     WHERE 
+        //         \`rank\` = 1;
+        // `;
         const query = `
-           WITH ranked_businesses AS (
-                SELECT 
-                    bd.id, 
-                    bd.business_name, 
-                    bd.address, 
-                    bd.phone,
-                    bd.image_source, 
-                    bd.category, 
-                    u.profile_image,  -- Fetch profile image from users table
-                    AVG(r.rating) AS average_rating,
-                    ROW_NUMBER() OVER (PARTITION BY bd.category ORDER BY AVG(r.rating) DESC) AS \`rank\`
-                FROM 
-                    business_detail bd
-                JOIN reviews r ON bd.id = r.business_id
-                LEFT JOIN users u ON bd.user_id = u.user_id  -- Join users table based on user_id
-                GROUP BY 
-                    bd.id, bd.category, u.profile_image
-            )
-            SELECT 
-                id, 
-                business_name, 
-                address, 
-                phone,
-                image_source, 
-                category, 
-                profile_image,  -- Include profile image in the final output
-                average_rating
-            FROM 
-                ranked_businesses
-            WHERE 
-                \`rank\` = 1;
-        `;
+    WITH ranked_businesses AS (
+        SELECT 
+            bd.id, 
+            bd.business_name, 
+            bd.address, 
+            bd.phone,
+            bd.image_source, 
+            bd.category, 
+            c.category_name,  -- Added category_name
+            u.profile_image,
+            AVG(r.rating) AS average_rating,
+            ROW_NUMBER() OVER (PARTITION BY bd.category ORDER BY AVG(r.rating) DESC) AS \`rank\`
+        FROM 
+            business_detail bd
+        JOIN reviews r ON bd.id = r.business_id
+        LEFT JOIN users u ON bd.user_id = u.user_id
+        LEFT JOIN categories c ON bd.category = c.category_value  -- Added join with categories table
+        GROUP BY 
+            bd.id, bd.category, c.category_name, u.profile_image
+    )
+    SELECT 
+        id, 
+        business_name, 
+        address, 
+        phone,
+        image_source, 
+        category,
+        category_name,  -- Added to final output
+        profile_image,
+        average_rating
+    FROM 
+        ranked_businesses
+    WHERE 
+        \`rank\` = 1;
+`;
     
         try {
             const [businesses] = await db.execute(query);  // Assuming `db.execute` works similarly to your MySQL connection
