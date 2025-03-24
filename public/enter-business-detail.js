@@ -183,8 +183,9 @@ async function addBusinessDetails() {
     formData.append('phone', capitalizedPhone);
     formData.append('evCharging', capitalizedEvCharging);
     formData.append('womenOwned', capitalizedWomenOwned);
-    formData.append('city', capitalizedCity);
-    formData.append('state', capitalizedState);
+    formData.append('city', capitalizedCity.trim());
+    formData.append('state', capitalizedState.trim());
+    
 
     if (website) {
         formData.append('website', website);
@@ -290,3 +291,66 @@ function enterBusinessDetailsShowModal(message, isSuccess = true) {
 }
 
 
+document.addEventListener('DOMContentLoaded', function() {
+    const dropdownBtn = document.querySelector('.enter-business-detail-dropdown-btn');
+    const dropdownContent = document.querySelector('.enter-business-detail-dropdown-content');
+    const searchInput = document.querySelector('.category-search');
+    const dropdownList = document.querySelector('.enter-business-detail-dropdown-list');
+    const hiddenInput = document.querySelector('#business-category');
+
+    // Toggle dropdown
+    dropdownBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdownContent.classList.toggle('active');
+        dropdownList.style.display = 'block';
+        if (dropdownContent.classList.contains('active')) {
+            searchInput.focus();
+        }
+    });
+
+    // Search functionality
+    searchInput.addEventListener('click', function(e) {
+        e.stopPropagation(); // Prevent click from closing dropdown
+    });
+
+    searchInput.addEventListener('input', function(e) {
+        e.stopPropagation();
+        const searchText = e.target.value.toLowerCase();
+        const items = dropdownList.getElementsByTagName('li');
+        
+        Array.from(items).forEach(item => {
+            const text = item.textContent.toLowerCase();
+            item.style.display = text.includes(searchText) ? '' : 'none';
+        });
+    });
+
+    // Handle item selection
+    dropdownList.addEventListener('click', function(e) {
+        if (e.target.tagName === 'LI') {
+            const selectedValue = e.target.getAttribute('data-value');
+            const selectedText = e.target.textContent;
+            dropdownBtn.textContent = selectedText;
+            hiddenInput.value = selectedValue;
+            dropdownContent.classList.remove('active');
+            dropdownList.style.display = 'none';
+            searchInput.value = '';
+            // Reset visibility of all items
+            Array.from(dropdownList.getElementsByTagName('li')).forEach(item => {
+                item.style.display = '';
+            });
+        }
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!dropdownContent.contains(e.target) && !dropdownBtn.contains(e.target)) {
+            dropdownContent.classList.remove('active');
+            dropdownList.style.display = 'none';
+            searchInput.value = '';
+            // Reset visibility of all items
+            Array.from(dropdownList.getElementsByTagName('li')).forEach(item => {
+                item.style.display = '';
+            });
+        }
+    });
+});

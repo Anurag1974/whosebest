@@ -1,123 +1,152 @@
 <link rel="stylesheet" href="/login.css">
 <style>
-    .login-guide-popup {
-        display: none;
-        position: fixed;
-        top: 60%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: white;
-        padding: 25px;
-        border-radius: 15px;
-        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-        z-index: 1000;
-        max-width: 400px;
-        width: 90%;
-    }
+   .login-guide-popup,
+.signup-guide-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    z-index: 1000;
+    max-width: 380px;
+    width: 90%;
+}
 
-    .login-guide-popup h3 {
-        color: #2196F3;
-        margin-bottom: 20px;
-        font-size: 1.5rem;
-        text-align: center;
-    }
+.login-guide-popup h3,
+.signup-guide-popup h3 {
+    color: #2196F3;
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+}
 
-    .login-steps {
-        list-style: none;
-        padding: 0;
-    }
+.login-steps,
+.signup-steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
 
-    .login-steps li {
-        margin: 15px 0;
-        padding: 10px;
-        background: #f8f9fa;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-    }
+.login-steps li,
+.signup-steps li {
+    margin: 12px 0;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    border: 1px solid #e9ecef;
+}
 
-    .step-number {
-        background: #2196F3;
-        color: white;
-        width: 32px;
-        height: 24px;
-        border-radius: 50%;
-        display: flex;
+.login-steps li:hover,
+.signup-steps li:hover {
+    background: #f1f3f5;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+}
 
-        align-items: center;
-        justify-content: center;
-        margin-right: 10px;
-        font-size: 0.8rem;
-    }
+.step-number {
+    background: #2196F3;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 3px 8px rgba(33, 150, 243, 0.15);
+    flex-shrink: 0;
+}
 
-    .login-guide-popup .close-btn {
-        position: absolute;
-        right: 15px;
-        top: 15px;
-        cursor: pointer;
-        font-size: 1.2rem;
-        color: #666;
-    }
+.login-steps li span:not(.step-number),
+.signup-steps li span:not(.step-number) {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: #495057;
+}
 
+.login-guide-popup .close-btn,
+.signup-guide-popup .close-btn {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #adb5bd;
+    transition: color 0.3s ease;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f8f9fa;
+}
+
+.login-guide-popup .close-btn:hover,
+.signup-guide-popup .close-btn:hover {
+    color: #495057;
+    background: #e9ecef;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+    .login-guide-popup,
     .signup-guide-popup {
-        display: none;
-        position: fixed;
-        top: 60%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: white;
-        padding: 25px;
-        border-radius: 15px;
-        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-        z-index: 1000;
-        max-width: 400px;
-        width: 90%;
+        padding: 15px;
+        width: 95%;
     }
 
+    .login-guide-popup h3,
     .signup-guide-popup h3 {
-        color: #2196F3;
-        margin-bottom: 20px;
-        font-size: 1.5rem;
-        text-align: center;
+        font-size: 1.3rem;
+        margin-bottom: 15px;
     }
 
-    .signup-steps {
-        list-style: none;
-        padding: 0;
-    }
-
+    .login-steps li,
     .signup-steps li {
-        margin: 15px 0;
-        padding: 10px;
-        background: #f8f9fa;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
+        padding: 8px;
+        margin: 10px 0;
     }
 
     .step-number {
-        background: #2196F3;
-        color: white;
-        aspect-ratio: 1;
-        padding: 1em;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 10px;
-        font-size: 0.8rem;
-        min-width: 24px;
-        min-height: 24px;
+        width: 24px;
+        height: 24px;
+        font-size: 0.85rem;
+        margin-right: 8px;
     }
 
-    .signup-guide-popup .close-btn {
-        position: absolute;
-        right: 15px;
-        top: 15px;
-        cursor: pointer;
-        font-size: 1.2rem;
-        color: #666;
+    .login-steps li span:not(.step-number),
+    .signup-steps li span:not(.step-number) {
+        font-size: 0.85rem;
     }
+}
+.popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 999;
+}
+
+.login-guide-popup {
+    /* Update z-index to be higher than overlay */
+    z-index: 1001;
+}
 
 
     .loader {
@@ -152,6 +181,7 @@
 </div>
 
 <!-- login guide popup -->
+<div class="popup-overlay" id="popupOverlay"></div>
 <div class="login-guide-popup" id="loginGuidePopup">
     <span class="close-btn" onclick="closeLoginGuide()">&times;</span>
     <h3>Welcome to KnockDBest!</h3>
@@ -165,10 +195,7 @@
             <span>Existing User? Simply enter your email and password</span>
         </li>
     </ul>
-    <!-- <div class="guide-buttons">
-        <button class="get-started-btn signup-btn" onclick="startSignup()">Sign Up</button>
-        <button class="get-started-btn login-btn" onclick="closeSignupGuide()">Login</button>
-    </div> -->
+    
 </div>
 <!-- sign up guide popup -->
 <div class="signup-guide-popup" id="signupGuidePopup">
@@ -654,10 +681,12 @@
 
     function showLoginGuide() {
         document.getElementById('loginGuidePopup').style.display = 'block';
+        document.getElementById('popupOverlay').style.display = 'block';
     }
 
     function closeLoginGuide() {
         document.getElementById('loginGuidePopup').style.display = 'none';
+        document.getElementById('popupOverlay').style.display = 'none';
     }
 
     function startLogin() {
@@ -675,14 +704,31 @@
         }
     });
 
+    document.addEventListener('click', function(event) {
+    const popup = document.getElementById('loginGuidePopup');
+    const overlay = document.getElementById('popupOverlay');
+    const isClickInside = popup.contains(event.target);
+    
+    if (!isClickInside && popup.style.display === 'block') {
+        closeLoginGuide();
+    }
+});
+
+// Prevent popup from closing when clicking inside
+document.getElementById('loginGuidePopup').addEventListener('click', function(event) {
+    event.stopPropagation();
+});
+
 
 
     function showSignupGuide() {
         document.getElementById('signupGuidePopup').style.display = 'block';
+        document.getElementById('popupOverlay').style.display = 'block';
     }
 
     function closeSignupGuide() {
         document.getElementById('signupGuidePopup').style.display = 'none';
+        document.getElementById('popupOverlay').style.display = 'none';
     }
 
     function startSignup() {
@@ -698,6 +744,20 @@
         showSignupGuide();
 
     });
+
+    window.addEventListener('click', function(event) {
+    const signupPopup = document.getElementById('signupGuidePopup');
+    const overlay = document.getElementById('popupOverlay');
+    
+    if (event.target === overlay) {
+        closeSignupGuide();
+    }
+});
+
+// Prevent closing when clicking inside the popup
+document.getElementById('signupGuidePopup').addEventListener('click', function(event) {
+    event.stopPropagation();
+});
 
     // document.querySelector('[data-form="login"]').addEventListener('click', function() {
 

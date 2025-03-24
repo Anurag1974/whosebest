@@ -372,8 +372,8 @@ function updateBusinessDetails(event) {
     formData.append('category', category);
     formData.append('phone', phone);
     formData.append('website', website);
-    formData.append('city', city);
-    formData.append('state', state);
+    formData.append('city', city.trim());
+    formData.append('state', state.trim());
     formData.append('overview', overview);
     formData.append('usp', usp);
 

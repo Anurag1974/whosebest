@@ -1173,6 +1173,7 @@ LIMIT 10;
             bd.phone,
             bd.image_source, 
             bd.category, 
+            bd.website,
             c.category_name,  -- Added category_name
             u.profile_image,
             AVG(r.rating) AS average_rating,
@@ -1192,6 +1193,7 @@ LIMIT 10;
         phone,
         image_source, 
         category,
+        website,
         category_name,  -- Added to final output
         profile_image,
         average_rating

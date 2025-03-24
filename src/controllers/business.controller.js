@@ -423,7 +423,7 @@ export default class BusinessController {
 
             res.status(201).json({
                 message: 'Business details added successfully',
-                redirectUrl: '/', // Update with your desired redirect route
+                redirectUrl: `/your-business/${userId}`, // Update with your desired redirect route
             });
         } catch (error) {
             console.error('Error adding business details:', error);
@@ -1503,6 +1503,17 @@ showOurService(req, res) {
     } catch (error) {
         console.error("Error in comingSoon:", error);
         res.status(500).send("An error occurred while loading the coming soon page.");
+    }
+}
+async show404(req, res) {
+    try {
+        res.status(404).render('404', {
+            user: req.user || null,
+            toggle: req.session.toggle
+        });
+    } catch (error) {
+        console.error("Error in show404:", error);
+        res.status(500).send("An error occurred while loading the 404 page.");
     }
 }
 

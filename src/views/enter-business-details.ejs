@@ -29,15 +29,16 @@
                     <label for="business-category">
                         <i class="fas fa-briefcase"></i> Category<span style="color: red;">*</span>
                     </label>
-                    <div class="enter-business-detail-dropdown-wrapper">
+                                     <div class="enter-business-detail-dropdown-wrapper">
                         <button class="enter-business-detail-dropdown-btn">Select Category</button>
-                        <ul class="enter-business-detail-dropdown-list">
-                            <% businessCategory.forEach(category => { %>
-                                <li data-value="<%= category.category_value %>"><%= category.category_name %></li>
-                            <% }); %>
-                        </ul>
-                        
-                        
+                        <div class="enter-business-detail-dropdown-content">
+                            <input type="text" class="category-search" placeholder="Search category...">
+                            <ul class="enter-business-detail-dropdown-list">
+                                <% businessCategory.forEach(category => { %>
+                                    <li data-value="<%= category.category_value %>"><%= category.category_name %></li>
+                                <% }); %>
+                            </ul>
+                        </div>
                         <input type="hidden" id="business-category" name="category" required>
                     </div>
                 </div>

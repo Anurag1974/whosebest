@@ -127,4 +127,7 @@ router.put('/update-pink-driver-status', authMiddleware, businessController.upda
 
 // router.post('/update-driver')
 
+
+router.get('*', authMiddleware,categoryMiddleware,businessController.show404);
+
 export default router;

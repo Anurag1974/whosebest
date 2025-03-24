@@ -57,7 +57,7 @@
                 <div class="card-image-container-1 "></div>
                 <div class="card-arrow">
                     <a href="/search-category?category=Restaurants">
-                        <p>Explore</p>
+                        <p>Look More</p>
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
@@ -70,7 +70,7 @@
                 <div class="card-image-container-2"></div>
                 <div class="card-arrow">
                     <a href="/search-category?category=Hotels">
-                        <p>Explore</p>
+                        <p>Look More</p>
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
@@ -83,7 +83,7 @@
                 <div class="card-image-container-3"></div>
                 <div class="card-arrow">
                     <a href="/search-category?category=Colleges">
-                        <p>Explore</p>
+                        <p>Look More</p>
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
@@ -96,7 +96,7 @@
                 <div class="card-image-container-4"></div>
                 <div class="card-arrow">
                     <a href="/search-category?category=ACService">
-                        <p>Explore</p>
+                        <p>Look More</p>
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
@@ -109,7 +109,7 @@
                 <div class="card-image-container-5"></div>
                 <div class="card-arrow">
                     <a href="/search-category?category=Gym">
-                        <p>Explore</p>
+                        <p>Look More</p>
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
@@ -121,7 +121,7 @@
 
 
     <section id="list-topics" class="list-topics">
-        <div class="row list-topic-content">
+        <div class="list-topic-content">
             <a href="/search-category?category=Restaurants" class="single-list-topic-content">
                 <div class="single-list-topics-icon">
                     <i class="fa-solid fa-utensils fa-2xl"></i>
@@ -263,7 +263,13 @@
                                     <a href="https://wa.me/<%= business.phone %>" target="_blank" title="Whatsapp">
                                         <i class="fa-brands fa-whatsapp"></i>
                                     </a>
-                                    <a href="<%=business.website%>" target="_blank" title="website"><i class="fa-solid fa-globe"></i></a>
+                                    <% if (business.website) { %>
+                                        <a href="<%= business.website.startsWith('http') ? business.website : 'https://' + business.website %>" target="_blank" title="website">
+                                            <i class="fa-solid fa-globe"></i>
+                                        </a>
+                                    <% } %>
+                                    
+                                    
                                     <a href="https://www.google.com/maps/search/<%=business.address%>" target="_blank" title="View on Map">
                                         <i class="fa-solid fa-map-location-dot"></i>
                                     </a>
@@ -278,7 +284,7 @@
             </div>
         </div>
         <div class="home-slide-hint-arrow home-slide-top-rated">
-            <p>Swipe left for more top categories &nbsp;<i class="fa-solid fa-arrow-right"></i> </p>
+            <p>Swipe left for more listing &nbsp;<i class="fa-solid fa-arrow-right"></i> </p>
         </div>
     </div>
     <!-- how its work -->
@@ -417,45 +423,7 @@
         </div>
     </div>
 
-    <div class="business-profile-free-listing"> 
-        <h1>Free Listing</h1>
-        <section class="dial-section">
-        
-        <div class="dial-container">
-            <div class="dial">
-                <svg viewBox="0 0 100 100">
-                    <circle class="dial-bg" cx="50" cy="50" r="45" />
-                    <circle class="dial-progress" cx="50" cy="50" r="45" id="days-dial" />
-                </svg>
-                <span class="dial-value" id="days-value">180</span>
-                <span class="dial-label">Days</span>
-            </div>
-            <div class="dial">
-                <svg viewBox="0 0 100 100">
-                    <circle class="dial-bg" cx="50" cy="50" r="45" />
-                    <circle class="dial-progress" cx="50" cy="50" r="45" id="hours-dial" />
-                </svg>
-                <span class="dial-value" id="hours-value">23</span>
-                <span class="dial-label">Hours</span>
-            </div>
-            <div class="dial">
-                <svg viewBox="0 0 100 100">
-                    <circle class="dial-bg" cx="50" cy="50" r="45" />
-                    <circle class="dial-progress" cx="50" cy="50" r="45" id="minutes-dial" />
-                </svg>
-                <span class="dial-value" id="minutes-value">59</span>
-                <span class="dial-label">Minutes</span>
-            </div>
-            <div class="dial">
-                <svg viewBox="0 0 100 100">
-                    <circle class="dial-bg" cx="50" cy="50" r="45" />
-                    <circle class="dial-progress" cx="50" cy="50" r="45" id="seconds-dial" />
-                </svg>
-                <span class="dial-value" id="seconds-value">59</span>
-                <span class="dial-label">Seconds</span>
-            </div>
-        </div>
-    </section></div>
+  
 
     <!-- USER REVIEWS SECTION -->
 

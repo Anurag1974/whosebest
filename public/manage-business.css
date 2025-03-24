@@ -513,7 +513,9 @@
       padding: 20px;
       border-radius: var(--border-radius);
     }
-    
+    .time-picker-container-business-hours h3{
+      margin: 0;
+    }
     .heading-tertiary-business-operating-hours {
       font-size: 1.2rem;
       color: var(--primary-color);
